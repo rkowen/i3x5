@@ -2,10 +2,18 @@
 // DESC: options frame, shows access level and selection options,
 // DESC: displays the help information when clicked upon elsewhere
 	include_once "user.inc";
-
 	session_start();
-
+	include_once "session.inc";
 	include_once "cards.inc";
+	if (isset($_GET["bid"])) {
+		$bid = $_GET["bid"];
+	}
+	if (isset($_GET["property"])) {
+		$property = $_GET["property"];
+	}
+	if (isset($_GET["help"])) {
+		$help = $_GET["help"];
+	}
 print <<<PAGE
 <HTML>
 <BODY $help_bg>
@@ -25,12 +33,16 @@ EOT;
 	}
 	if ($user->level >= $level_write) {
 	print <<< EOT
-<A HREF="batches.php" TARGET="main">Batch Properties</A><BR>
-$indent<A HREF="new_batch.php?example=card" TARGET="main">New Batch</A><BR>
+Batch Properties:<BR>
+$indent
+<A HREF="new_batch.php?batch_select=New&example=card" TARGET="main">Create</A>
+or
+<A HREF="new_batch.php?batch_select=Update&example=card" TARGET="main">Update</A>
+Batch<BR>
 EOT;
 	} else {
 	print <<< EOT
-Batch Properties<BR>
+Batch Properties:<BR>
 EOT;
 	}
 	if ($user->level >= $level_admin) {
@@ -48,7 +60,7 @@ $indent
 	<A HREF="view_cards.php?view_edit=list" TARGET="main">View</A>
 EOT;
 	if ($user->level >= $level_write) {
-		print "&nbsp;/&nbsp;";
+		print "&nbsp;or&nbsp;";
 		print <<< EOT
 	<A HREF="view_cards.php?view_edit=edit" TARGET="main">Edit</A>
 EOT;

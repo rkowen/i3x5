@@ -1,9 +1,8 @@
 <?php
 // DESC: starting ``results'' page
 	include_once "user.inc";
-
 	session_start();
-
+	include_once "session.inc";
 	include_once "cards.inc";
 
 print <<<PAGE

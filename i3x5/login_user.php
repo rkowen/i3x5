@@ -141,9 +141,11 @@ NOT_LOGGED_IN;
 <A HREF="indexF.php" TARGET="_parent"><BLINK>Click Here To Continue</BLINK></A>
 </H2>
 </CENTER>
+PAGE;
+		if ($phpinfo) { phpinfo(); }
+		print <<<PAGE
 </BODY>
 </HTML>
-
 PAGE;
 		return;
 

@@ -2,6 +2,7 @@
 	include_once "user.inc";
 
 	session_start();
+	include_once "session.inc";
 
 	include_once "cards.inc";
 	include_once "3x5_db.inc";

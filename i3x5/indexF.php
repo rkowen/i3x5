@@ -4,7 +4,7 @@
 
 	include_once "cards.inc";
 
-	if ($user) {
+	if (isset($_SESSION["user"])) {
 		$what = "indexM.php";
 	} else {
 		$what = "login_user.php";

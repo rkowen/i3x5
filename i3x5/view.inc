@@ -377,6 +377,14 @@ function br (&$card) {
 	return preg_replace("/\n/","<BR>\n",$card);
 }
 
+// rest the session values
+function session () {
+	if (isset($_SESSION["view"])) {
+		$_SESSION["view"] = $view;
+	}
+}
+
+// dump all the view object values
 function dump() {
 
 	$a = get_object_vars($this);

@@ -33,6 +33,10 @@ rko_db.inc
 	include:	(none)
 	action:		(none)
 
+session.inc
+	include:	(none)
+	action:		(none)
+
 user.inc
     user class for managing uid and batch mappings
 	include:	(none)
@@ -43,14 +47,6 @@ view.inc
     and viewing the card batches
 	include:	user.inc
 			cards.inc
-			one_batch.inc
-	action:		(none)
-
-batches.php
-    select batch operations
-	include:	cards.inc
-			user.inc
-			3x5_db.inc
 			one_batch.inc
 	action:		(none)
 
@@ -73,6 +69,7 @@ del_batch.php
     Delete a whole batch from the DB
 	include:	cards.inc
 			user.inc
+			session.inc
 			3x5_db.inc
 	action:		(none)
 
@@ -80,14 +77,13 @@ indexB.php
     options frame, shows access level and selection options,
     displays the help information when clicked upon elsewhere
 	include:	user.inc
+			session.inc
 			cards.inc
 			3x5_db.inc
 	action:		update_user.php
-			batches.php
 			del_batch.php
 			list_batches.php
 			sel_batches.php
-			view_cards.php
 			csv_cards.php
 
 indexF.php
@@ -101,6 +97,7 @@ indexF.php
 indexM.php
     starting ``results'' page
 	include:	user.inc
+			session.inc
 			cards.inc
 	action:		login_user.php
 			create_user.php
@@ -109,6 +106,7 @@ indexT.php
     title frame, shows username
 	include:	user.inc
 			cards.inc
+			session.inc
 	action:		create_user.php
 			logout_user.php
 
@@ -116,6 +114,7 @@ list_batches.php
     List batch properties as a table
 	include:	cards.inc
 			user.inc
+			session.inc
 			3x5_db.inc
 	action:		indexM.php
 
@@ -130,6 +129,7 @@ login_user.php
 logout_user.php
     logs out the user and resets most values
 	include:	user.inc
+			session.inc
 			cards.inc
 	action:		Location: indexM.php
 			Location: indexM.php
@@ -138,14 +138,16 @@ new_batch.php
     create a batch or update batch properties
 	include:	cards.inc
 			user.inc
+			session.inc
 			3x5_db.inc
 			one_batch.inc
-	action:		batches.php
+	action:		new_batch.php
 
 sel_batches.php
     select which batch or set of batches for card handling
 	include:	user.inc
 			view.inc
+			session.inc
 			cards.inc
 			many_batch.inc
 			3x5_db.inc
@@ -153,6 +155,7 @@ sel_batches.php
 
 update_user.php
 	include:	user.inc
+			session.inc
 			cards.inc
 			3x5_db.inc
 			create_update_user.inc
@@ -162,6 +165,7 @@ view_cards.php
     view the individual cards as selected by the batch
 	include:	user.inc
 			view.inc
+			session.inc
 			cards.inc
 			3x5_db.inc
 	action:		(none)

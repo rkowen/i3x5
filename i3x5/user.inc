@@ -18,6 +18,12 @@ class User {
 		$this->bids = $bids;
 	}
 
+// rest the session values
+	function session () {
+		if (isset($_SESSION["user"])) {
+			$_SESSION["user"] = $user;
+		}
+	}
 // reset array of bids
 	function update_bids (&$bids) {
 		reset($bids);
@@ -26,6 +32,7 @@ class User {
 			  $bids[$k]["selected"] = $this->bids[$k]["selected"];
 			}
 		}
+		unset($this->bids);
 		$this->bids = $bids;
 	}
 // provide count of selected arrays

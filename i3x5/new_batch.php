@@ -4,6 +4,7 @@
 	include_once "user.inc";
 
 	session_start();
+	include_once "session.inc";
 
 	include_once "3x5_db.inc";
 	include_once "one_batch.inc";
@@ -78,11 +79,15 @@
 // set name if GET
 if ($_GET["name"]) {
 	$_POST["name"] = $_GET["name"];
-	$name = $_GET["name"];
 }
 if ($_GET["name_help"]) {
 	$_POST["name_help"] = $_GET["name_help"];
-	$name_help = $_GET["name_help"];
+}
+if ($_GET["batch_select"]) {
+	$_POST["batch_select"] = $_GET["batch_select"];
+}
+if ($_POST["batch_select"]) {
+	$batch_select = $_POST["batch_select"];
 }
 
 //-----------------------------------------------------
@@ -97,6 +102,7 @@ if ($_GET["example"]) {
 	if ($_GET["example"] == "card") {
 // print "-----card<BR>\n";
 		$_POST["name"] = $_GET["name"];
+		$_POST["name_help"] = $_GET["name_help"];
 		$_POST["number"] = "Number";
 		$_POST["title"] = "Title";
 		$_POST["card"] = "Card";
@@ -124,7 +130,7 @@ if ($_GET["example"]) {
 		$_POST["card_help"] =
 			"Address, Phone, Misc Information";
 	} elseif ($_GET["example"] == "recipe") {
-// print "-----people<BR>\n";
+// print "-----recipe<BR>\n";
 		$_POST["number"] = "Calories";
 		$_POST["title"] = "Recipe";
 		$_POST["card"] = "Ingredients";
@@ -199,15 +205,12 @@ if ($_GET["example"]) {
 // see which radio button should be CHECKED as to type
 	$check = "Check_".$batch_select;
 	$$check = "CHECKED";
-	if ($Check_Update) { $Check_New = "CHECKED"; }
 	if ($batch_select == "New") {
 		$header = "{$user->project} - Create New Batch";
 		$hhelp = sendhelp($header,"create batch");
-		$button = "Create";
 	} else {
 		$header = "{$user->project} - Update Existing Batch";
 		$hhelp = sendhelp($header,"update batch");
-		$button = "Update";
 	}
 //------------ clear fields (if asked) --------------
 	if ($_POST["clear"]) {
@@ -244,10 +247,11 @@ if ($_GET["example"]) {
 	}
 
 //{------------ update/insert to DB --------------
-if ("Create" == $_POST["create_batch"]
-||  "Update" == $_POST["create_batch"]) {
+if ("Submit" == $_POST["create_batch"]) {
 // looks OK ... add it into DB
-	if ($batch_select == "New" || $batch_select == "Copy") {
+	if ($batch_select == "New"
+	||  $batch_select == "Update"
+	||  $batch_select == "Copy") {
 		if ($insert) {
 			$sql = 
 "INSERT INTO i3x5_batch (uid,batch,num_name,title_name,card_name,\n".
@@ -313,28 +317,25 @@ print <<<PAGE
 <CENTER>
 PAGE;
 
-$back="batches.php";
-if ($bid) {
-	$back .= "?b_select=Update&one_batch__=$bid";
-} else {
-	$back .= "?b_select=New&new_batch=".urlencode($name);
-}
+$hnew = sendhelp("New","create batch");
+$hupdate = sendhelp("Update","update batch");
 $hcopy = sendhelp("Copy","batch copy");
 $hrelate = sendhelp("Relate","batch relate");
 print <<<PAGE
 <!--{-->
 <TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
-<TR><TH><A HREF="$back"><IMG SRC="back.gif" ALT="back to properties" BORDER="0" ></A>
-</TH><TH>$hhelp</TD></TR>
-<TR><TH COLSPAN=2>
-	<FORM ACTION="$PHP_SELF" METHOD="POST">
+<TR><TH>$hhelp</TH></TR>
+<TR><TH>
+	<FORM ACTION="new_batch.php" METHOD="POST">
 	<!--{-->
 	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
 	<TR><TH COLSPAN=3>
 		<!--{-->
 		<TABLE BORDER=1><TR><TD>
 		<INPUT NAME="batch_select" $Check_New TYPE="radio" VALUE="New">
-		New/Update</TD><TD>
+		$hnew
+		<INPUT NAME="batch_select" $Check_Update TYPE="radio" VALUE="Update">
+		$hupdate</TD><TD>
 		  <!--{-->
 		  <TABLE><TR><TD>
 		  <INPUT NAME="batch_select" $Check_Copy TYPE="radio" VALUE="Copy">
@@ -372,7 +373,7 @@ while(list($k,$v) = each($list)) {
 
 print <<<PAGE
 	<TR><TH COLSPAN=3>
-	<INPUT NAME="create_batch"		TYPE="submit"	value="$button">
+	<INPUT NAME="create_batch"		TYPE="submit"	value="Submit">
 	<INPUT NAME="check"			TYPE="submit"	value="Check" >
 	<INPUT NAME="reset"			TYPE="reset"	value="Reset" >
 	<INPUT NAME="clear"			TYPE="submit"	value="Clear" >
@@ -387,12 +388,12 @@ if ($sqlmsg) {
 	print row(cell(inform("<H2>".$sqlmsg."</H2>"),"COLSPAN=2"));
 }
 
-$url= "$PHP_SELF?name=".urlencode($_POST["name"])
+$url= "new_batch.php?name=".urlencode($_POST["name"])
 	."&name_help=".urlencode($_POST["name_help"])
 	."&batch_select=".$batch_select
 	."&example";
 
-print "<TR><TD COLSPAN=2>\n";
+print "<TR><TD>\n";
 print "Empty fields will not be shown in {$user->project}<BR>\n";
 print sendhelp("Card","card example")
 	." <A HREF=\"$url=card\">".inform("Example")."</A>(default)<BR>\n";
@@ -407,7 +408,7 @@ print "</TD></TR>\n";
 
 if (! $non_blank) {
 	print row(cell(warn(
-	"You must have at least 1 non-blank {$user->project} field"),"COLSPAN=2"));
+	"You must have at least 1 non-blank {$user->project} field")));
 }
 
 print <<<PAGE

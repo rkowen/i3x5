@@ -4,12 +4,25 @@
 	include_once "user.inc";
 
 	session_start();
+	include_once "session.inc";
 
 	include_once "3x5_db.inc";
 
 	$db = new i3x5_DB($schema);
 	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
 
+if (isset($_POST["del_batch"])) {
+	$del_batch = $_POST["del_batch"];
+}
+if (isset($_POST["delete"])) {
+	$delete = $_POST["delete"];
+}
+if (isset($_POST["do_delete"])) {
+	$do_delete = $_POST["do_delete"];
+}
+if (isset($_GET["msg"])) {
+	$msg = $_GET["msg"];
+}
 // check if batch properties are linked to
 if ($del_batch) {
 	$rid = $db->sql(
