@@ -1,0 +1,74 @@
+This document gives some of the relevant details related to the 3x5 card
+project.
+
+Project Name:
+3x5 Cards
+
+Purpose:
+The 3x5 Cards project provides an intuitive web interface to a
+database.  The metaphor is the 3"x5" index card.
+Each card has a number, a title, and the contents of the card itself.
+The cards can be arranged by either the number or the title, and
+can be collected in batches.  Unlike the 3"x5" index card ... the
+3x5 card can exist in multiple batches, and the characteristics
+of batches can be related together.
+
+Access can be granted, through a password mechanism, to allow
+full administrative access, writing and creating cards,
+appending information to existing cards only, or the most
+restrictive of read-only.
+
+Requires:
+	Apache		- web server
+	PHP4		- embedded scripting and display
+	Postgres 7.x	- database
+		(with plpgsql - Postgres procedural language - for triggers)
+
+
+Principle Author:	R.K. Owen, Ph.D.
+Initial Date:		05/12/2002
+
+The current version number is given in the cards.inc file.
+All configurable color and site values are given in cards.inc .
+
+
+INSTALLATION:
+Postgres -
+Needs the procedural language to be loaded, which is not loaded
+by default.  If you use the >7.2 rpms, then just do the following command:
+	createlang plpgsql template1
+else read src/pl/plpgsql/src/INSTALL in the PostgreSQL sources for further
+info.
+
+PHP4 - 
+The configuration options are given here (tailor the path to your own site)
+
+configure \
+	--with-apxs --prefix=/php_path/php/4.0.6 \
+	--with-config-file-path=/php_path/php/4.0.6/lib \
+	--with-exec-dir=/php_path/php/4.0.6/bin --with-openssl \
+	--without-pear --enable-xml --enable-wddx \
+	--with-pgsql --with-gdbm
+
+Web page layout: page and frame
+				indexF.php
+				_parent
++----------------+-----------------------------------------------------+
+|                |                                                     |
+|  indexT.php    |                    indexM.php                       |
+|    title       |                  (and all other)                    |
+|                |                      main                           |
++----------------+                                                     |
+|                |                                                     |
+|                |                                                     |
+|  indexB.php    |                                                     |
+|    options     |                                                     |
+|                |                                                     |
+|                |                                                     |
+|                |                                                     |
+|                |                                                     |
+|                |                                                     |
+|                |                                                     |
+|                |                                                     |
++----------------+-----------------------------------------------------+
+
