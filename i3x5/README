@@ -33,12 +33,38 @@ All configurable color and site values are given in cards.inc .
 
 
 INSTALLATION:
+Apache -
+Should be running as user/group "nobody", but some out-of-the-box
+distributions (such as RedHat 7.2) have it set to user/group "apache".
+This can be changed by editing the httpd.conf and editing it to:
+	User nobody
+	Group nobody
+
+Or if this is not feasible then edit the 3x5.sql file replacing
+"nobody" with whatever user the httpd daemon runs as.
+
 Postgres -
 Needs the procedural language to be loaded, which is not loaded
 by default.  If you use the >7.2 rpms, then just do the following command:
 	createlang plpgsql template1
 else read src/pl/plpgsql/src/INSTALL in the PostgreSQL sources for further
 info.
+
+Create the database with (must be a user that can do this ... if
+not as yourself, then as the postgres user.)
+	createdb i3x5
+
+Create a user "nobody", the default user the httpd daemon user,
+which will be given access to the i3x5 schema:
+	createuser -D -A nobody
+
+Create tables by starting the PostgreSQL interactive terminal
+and invoking the sql scripts.  The prompt is given as "i3x5=#".
+	psql i3x5
+	i3x5=# \i 3x5.sql	(ignore the errors if starting from scratch)
+	i3x5=# \i 3x5_help.sql
+	i3x5=# \q
+
 
 PHP4 - 
 The configuration options are given here (tailor the path to your own site)
@@ -50,25 +76,25 @@ configure \
 	--without-pear --enable-xml --enable-wddx \
 	--with-pgsql --with-gdbm
 
-Web page layout: page and frame
+Web page layout: page and (frame)
 				indexF.php
-				_parent
+				(_parent)
 +----------------+-----------------------------------------------------+
 |                |                                                     |
 |  indexT.php    |                    indexM.php                       |
-|    title       |                  (and all other)                    |
-|                |                      main                           |
+|    (title)     |                  and all others                     |
+|                |                      (main)                         |
 +----------------+                                                     |
 |                |                                                     |
 |                |                                                     |
 |  indexB.php    |                                                     |
-|    options     |                                                     |
+|   (options)    |                                                     |
 |                |                                                     |
+|      and       |                                                     |
 |                |                                                     |
-|                |                                                     |
-|                |                                                     |
-|                |                                                     |
-|                |                                                     |
+|    context     |                                                     |
+|   sensitive    |                                                     |
+|     help       |                                                     |
 |                |                                                     |
 +----------------+-----------------------------------------------------+
 
