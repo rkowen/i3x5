@@ -15,6 +15,7 @@ class RKO_DB {
 	var $schema;
 	var $query;
 	var $debug;
+	var $showerr;
 	var $errno;
 	var $errmsg;			// append errmsgs only
 	var $dbconn;
@@ -31,6 +32,7 @@ class RKO_DB {
 //////////////////////////////////////////////////////////////////////////
 function RKO_DB ($schema) {
 	$this->debug = 0;
+	$this->showerr = 0;
 	$this->errno = 0;
 	$this->errmsg = "RKO_DB: ";
 	$this->schema = $schema;
@@ -207,12 +209,16 @@ function sql($q) {
 		echo "RKO_DB::sql($this,$q)<BR>\n";
 	}
 	if (! $this->query($q)) {
+		if ($this->showerr) {
 		print "RKO_DB::sql->query:".$this->errmsg()."<BR>\n"; 
+		} else { print "QUERY error 0<br>\n"; }
 		exit;
 	}
 
 	if (! $this->exec()) {
+		if ($this->showerr) {
 		print "RKO_DB::sql->exec:".$this->errmsg()."<BR>\n";
+		} else { print "EXEC error 0<br>\n"; }
 		exit;
 	}
 	if ($data = $this->fetch()) {
@@ -234,12 +240,16 @@ function &multi_col ($col, $sql) {
 	}
 
 	if (! $this->query($sql)) {
+		if ($this->showerr) {
 		print "RKO_DB::multi_col->query:".$this->errmsg()."<BR>\n"; 
+		} else { print "QUERY error 1<br>\n"; }
 		exit;
 	}
 
 	if (! $this->exec()) {
+		if ($this->showerr) {
 		print "RKO_DB::multi_col->exec:".$this->errmsg()."<BR>\n";
+		} else { print "EXEC error 1<br>\n"; }
 		exit;
 	}
 
@@ -263,12 +273,16 @@ function &two_col ($col1, $col2, $sql) {
 
 
 	if (! $this->query($sql)) {
+		if ($this->showerr) {
 		print "RKO_DB::two_col->query:".$this->errmsg()."<BR>\n"; 
+		} else { print "QUERY error 2<br>\n"; }
 		exit;
 	}
 
 	if (! $this->exec()) {
+		if ($this->showerr) {
 		print "RKO_DB::two_col->exec:".$this->errmsg()."<BR>\n";
+		} else { print "EXEC error 2<br>\n"; }
 		exit;
 	}
 
@@ -288,12 +302,16 @@ function &one_row ($sql) {
 	}
 
 	if (! $this->query($sql)) {
+		if ($this->showerr) {
 		print "RKO_DB::one_row->query:".$this->errmsg()."<BR>\n"; 
+		} else { print "QUERY error 3<br>\n"; }
 		exit;
 	}
 
 	if (! $this->exec()) {
+		if ($this->showerr) {
 		print "RKO_DB::one_row->exec:".$this->errmsg()."<BR>\n";
+		} else { print "EXEC error 3<br>\n"; }
 		exit;
 	}
 

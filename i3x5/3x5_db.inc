@@ -17,6 +17,7 @@ class i3x5_DB extends RKO_DB {
 //////////////////////////////////////////////////////////////////////////
 function i3x5_DB ($schema = "3x5") {
 	// $this->debug = 1;
+	// $this->showerr = 1;
 	$this->errno = 0;
 	$this->errmsg = "i3x5_DB: ";
 	$this->schema = $schema;
