@@ -146,7 +146,7 @@ function exec () {
 	if ($this->debug > 0) {
 		echo "RKO_DB::exec($this)<BR>\n";
 	}
-	$this->dbresult = pg_exec($this->dbconn,$this->query);
+	$this->dbresult = pg_query($this->dbconn,$this->query);
 	if (!$this->dbresult) {
 		$this->errmsg.="failed exec of query($this->query)";
 		$this->errno=-2;
@@ -154,11 +154,11 @@ function exec () {
 	}
 	$this->dbrow = 0;
 	// can't rely on all RDBS to give num of rows
-	$this->dbfnum = pg_numfields($this->dbresult);
-	$this->dbrnum = pg_numrows($this->dbresult);
+	$this->dbfnum = pg_num_fields($this->dbresult);
+	$this->dbrnum = pg_num_rows($this->dbresult);
 	$this->dbfields = array();
 	for ($col = 0; $col < $this->dbfnum; $col++) {
-		$this->dbfields[$col] = pg_fieldname($this->dbresult,$col);
+		$this->dbfields[$col] = pg_field_name($this->dbresult,$col);
 	}
 	$this->dbfset = false;
 	return true;
@@ -301,6 +301,15 @@ function &one_row ($sql) {
 	$one_row_data = (array) $this->fetch();
 
 	return $one_row_data;		// return array reference
+}
+
+// escapes the PostgreSQL special characters
+function escape($q) {
+	$qq = pg_escape_string($q);
+	if ($this->debug > 0) {
+		echo "RKO_DB::escape($this,$q)=>$qq<BR>\n";
+	}
+	return $qq;
 }
 
 // converts \'s to '		-- for select outputs

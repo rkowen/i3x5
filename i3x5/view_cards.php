@@ -18,51 +18,51 @@ if (! $view) {
 //
 
 // process a global change only for real cards (not relations)
-if (in_array("upd_all",$HTTP_POST_VARS)
-&& $HTTP_POST_VARS["upd_all"]=="Update All Cards"
-&& is_array($HTTP_POST_VARS["c_rid"])) {
-	reset($HTTP_POST_VARS["c_rid"]);
-	while (list($k,$v) = each($HTTP_POST_VARS["c_rid"])) {
+if (array_key_exists("upd_all", $_POST)
+&& $_POST["upd_all"]=="Update All Cards"
+&& is_array($_POST["c_rid"])) {
+	reset($_POST["c_rid"]);
+	while (list($k,$v) = each($_POST["c_rid"])) {
 		if (! $v) {
 			if ($user->level >= $level_write) {
 				$db->update_card($k,$v,
 				array(
-				"num"=>$HTTP_POST_VARS["c_num"][$k],
-				"title"=>$HTTP_POST_VARS["c_title"][$k],
-				"card"=>$HTTP_POST_VARS["c_card"][$k],
-				"formatted"=>$HTTP_POST_VARS["c_formatted"][$k]
+				"num"=>$_POST["c_num"][$k],
+				"title"=>$_POST["c_title"][$k],
+				"card"=>$_POST["c_card"][$k],
+				"formatted"=>$_POST["c_formatted"][$k]
 				));
 			} else { 	// append only
 				$db->append_card($k, $v,
-					$HTTP_POST_VARS["c_card"][$k]);
+					$_POST["c_card"][$k]);
 			}
 		}
 	}
 }
 // process a selective update change
-elseif (in_array("upd_",$HTTP_POST_VARS)
-&& is_array($HTTP_POST_VARS["upd_"])) {
+elseif (array_key_exists("upd_", $_POST)
+&& is_array($_POST["upd_"])) {
 	// only one value
-	reset($HTTP_POST_VARS["upd_"]);
-	list($k,$v) = each($HTTP_POST_VARS["upd_"]);
+	reset($_POST["upd_"]);
+	list($k,$v) = each($_POST["upd_"]);
 	if ($v == "Append") {
 		$db->append_card($k,
-			$HTTP_POST_VARS["c_rid"][$k],
-			$HTTP_POST_VARS["c_card"][$k]);
+			$_POST["c_rid"][$k],
+			$_POST["c_card"][$k]);
 	} else {
 		// get one_batch info
 		$onebatch = new OneBatch("[$k]");
 		$ops = $onebatch->get_ops_batch();
 		$bid = $onebatch->get_one_batch();
-		$rid = $HTTP_POST_VARS["c_rid"][$k];
+		$rid = $_POST["c_rid"][$k];
 		$id = ( $rid ? $rid : $k);
 		if ($ops == "NONE") {
 			$db->update_card($k,
-				$HTTP_POST_VARS["c_rid"][$k],
-				array(	"num"=>$HTTP_POST_VARS["c_num"][$k],
-				"title"=>$HTTP_POST_VARS["c_title"][$k],
-				"card"=>$HTTP_POST_VARS["c_card"][$k],
-				"formatted"=>$HTTP_POST_VARS["c_formatted"][$k]
+				$_POST["c_rid"][$k],
+				array(	"num"=>$_POST["c_num"][$k],
+				"title"=>$_POST["c_title"][$k],
+				"card"=>$_POST["c_card"][$k],
+				"formatted"=>$_POST["c_formatted"][$k]
 				));
 		} elseif ($ops == "COPY") {
 			$db->copy_card($id,$bid);
@@ -74,23 +74,23 @@ elseif (in_array("upd_",$HTTP_POST_VARS)
 	}
 }
 // process a selective delete change
-elseif (in_array("del_",$HTTP_POST_VARS)
-&& is_array($HTTP_POST_VARS["del_"])) {
-	reset($HTTP_POST_VARS["del_"]);
+elseif (array_key_exists("del_", $_POST)
+&& is_array($_POST["del_"])) {
+	reset($_POST["del_"]);
 	/* only one value */
-	list($k,$v) = each($HTTP_POST_VARS["del_"]);
+	list($k,$v) = each($_POST["del_"]);
 	if ($v == "Delete" || $v == "Delete All") {
 		$db->delete_card($k);
 	}
 }
 // insert a card
-elseif (in_array("ins__",$HTTP_POST_VARS)
-&& $HTTP_POST_VARS["ins__"]=="Insert") {
-	$db->insert_card($HTTP_POST_VARS["one_batch_i"],
-		array(	"num"=>$HTTP_POST_VARS["i_num"],
-			"title"=>$HTTP_POST_VARS["i_title"],
-			"card"=>$HTTP_POST_VARS["i_card"],
-			"formatted"=>$HTTP_POST_VARS["i_formatted"]
+elseif (array_key_exists("ins__", $_POST)
+&& $_POST["ins__"]=="Insert") {
+	$db->insert_card($_POST["one_batch_i"],
+		array(	"num"=>$_POST["i_num"],
+			"title"=>$_POST["i_title"],
+			"card"=>$_POST["i_card"],
+			"formatted"=>$_POST["i_formatted"]
 		),
 		($user->level >= $level_write ? false : "append"));
 }

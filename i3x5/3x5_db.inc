@@ -122,13 +122,15 @@ function insert_card ($bid, $object, $append = false) {
 		}
 		if (! $object["num"]) { $object["num"] = "NULL"; }
 		if (! $object["title"]) { $object["title"] = "NULL"; }
-		else { $object["title"] = "'".$object["title"]."'";}
+		else { $object["title"]
+			= "'".$this->escape($object["title"])."'";}
 		if (! $object["card"]) { $object["card"] = "NULL"; }
 		elseif ($append) {
 			$object["card"] = 
 "'<<<'||to_char(CURRENT_TIMESTAMP,'YYYY/MM/DD HH24:MI:SS')||'>>>\n".
-			$object["card"]."' "; }
-		else { $object["card"] = "'".$object["card"]."'";}
+			$this->escape($object["card"])."' "; }
+		else { $object["card"]
+			= "'".$this->escape($object["card"])."'";}
 		if (! $object["formatted"]) { $object["formatted"] = "false"; }
 
 		$id = $this->sql("SELECT nextval('i3x5_cards_id_seq')");
@@ -162,9 +164,11 @@ function update_card ($id, $rid, $object) {
 	if ($rid) {$id = $rid;}
 	// prepare query
 	$q = "";
-	if ($object["num"]) { $q.="num={$object[num]},"; }
-	if ($object["title"]) { $q.="title='".$object["title"]."',";}
-	if ($object["card"]) { $q.="card='".$object["card"]."',";}
+	if ($object["num"]) { $q.="num={$object["num"]},"; }
+	if ($object["title"]) { $q.="title='"
+			.$this->escape($object["title"])."',";}
+	if ($object["card"]) { $q.="card='"
+			.$this->escape($object["card"])."',";}
 	if ($object["formatted"]) { $q.="formatted=".$object["formatted"].",";}
 	else { $q.="formatted=false,";}
 	// strip final ,
@@ -190,7 +194,7 @@ function append_card ($id, $rid, $card_append) {
 	// get previous card value
 	$oldcard = $this->sql("SELECT card FROM i3x5_cards WHERE id=$id");
 	// strip off trailing newline
-	$oldcard = $this->quote(preg_replace("/\n$/","",$oldcard));
+	$oldcard = $this->escape(preg_replace("/\n$/","",$oldcard));
 	$this->sql(
 "UPDATE i3x5_cards SET card='$oldcard\n<<<'".
 "||to_char(CURRENT_TIMESTAMP,'YYYY/MM/DD HH24:MI:SS')||'>>>\n$card_append' ".

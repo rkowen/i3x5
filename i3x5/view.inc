@@ -40,8 +40,6 @@ function View (	$edit	= "edit",	// or "list"
 // retrieve the posted values and update attributes as needed
 function get_buttons() {
 
-	global $HTTP_POST_VARS;
-
 	$view_stuff = array (	"edit",
 				"body",
 				"key",
@@ -53,8 +51,8 @@ function get_buttons() {
 	reset($view_stuff);
 	while (list($k,$v) = each($view_stuff)) {
 		$t = "view_".$v;
-		if ($HTTP_POST_VARS[$t]) {
-			$this->$v = $HTTP_POST_VARS[$t];
+		if ($_POST[$t]) {
+			$this->$v = $_POST[$t];
 		}
 	}
 }
@@ -282,7 +280,7 @@ if ($this->edit == "list") {
 				,$v["bid"],"card")
 				,"WIDTH=10% BGCOLOR=\"$head_color\" "
 				."VALIGN=\"TOP\"")
-			.cell(textarea("c_card[$k]",$v[card],
+			.cell(textarea("c_card[$k]",$v["card"],
 				"COLS=80 ROWS=$lines")
 				,"WIDTH=90% COLSPAN=4")) : "")
 	,$entrytableopt)

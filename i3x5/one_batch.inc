@@ -23,21 +23,18 @@ function OneBatch (	$id	= "_",
 // retrieve the posted values and update attributes as needed
 function get_one_batch() {
 
-	global $HTTP_POST_VARS;
-	global $HTTP_GET_VARS;
-
 	// This code snippet handles retrieving the one_batch_* selectors
 	$t = "one_batch_".$this->id;
-	if ($HTTP_GET_VARS[$t]) {
-		$HTTP_POST_VARS[$t] = $HTTP_GET_VARS[$t];
+	if (array_key_exists($t,$_GET) && $_GET[$t]) {
+		$_POST[$t] = $_GET[$t];
 	}
-	if ($HTTP_POST_VARS[$t]) {
-		$this->bid = $HTTP_POST_VARS[$t];
+	if (array_key_exists($t,$_POST) && $_POST[$t]) {
+		$this->bid = $_POST[$t];
 	}
 	// maybe something fancy (id="[...]" array)
 	$f = preg_replace("/[\[\]]/","",$this->id);
-	if (($f != $this->id) and is_array($HTTP_POST_VARS["one_batch_"])) {
-		$this->bid = $HTTP_POST_VARS["one_batch_"][$f];
+	if (($f != $this->id) and is_array($_POST["one_batch_"])) {
+		$this->bid = $_POST["one_batch_"][$f];
 	}
 
 	return $this->bid;
@@ -71,17 +68,15 @@ function show_one_batch($selected = false) {
 // retrieve the posted values and update attributes as needed
 function get_ops_batch() {
 
-	global $HTTP_POST_VARS;
-
 	// This code snippet handles retrieving the one_batch_* selectors
 	$t = "ops_batch_".$this->id;
-	if ($HTTP_POST_VARS[$t]) {
-		$this->ops = $HTTP_POST_VARS[$t];
+	if (array_key_exists($t,$_POST) && $_POST[$t]) {
+		$this->ops = $_POST[$t];
 	}
 	// maybe something fancy (id="[...]" array)
 	$f = preg_replace("/[\[\]]/","",$this->id);
-	if (($f != $this->id) and is_array($HTTP_POST_VARS["ops_batch_"])) {
-		$this->ops = $HTTP_POST_VARS["ops_batch_"][$f];
+	if (($f != $this->id) and is_array($_POST["ops_batch_"])) {
+		$this->ops = $_POST["ops_batch_"][$f];
 	}
 
 	return $this->ops;
