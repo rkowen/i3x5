@@ -19,8 +19,8 @@ CREATE TABLE i3x5_userpass (
 	email		TEXT,			-- email for notification
 	challenge	TEXT,			-- secure reminder
 	response	TEXT,			-- secure authentication
-	createdate	timestamp DEFAULT 'now',
-	moddate		timestamp DEFAULT 'now',
+	createdate	timestamp DEFAULT now(),
+	moddate		timestamp DEFAULT now(),
 	PRIMARY KEY(uid)
 );
 
@@ -43,8 +43,8 @@ CREATE TABLE i3x5_batch (
 	card_name	TEXT,		-- card field name
 	card_help	TEXT DEFAULT 'nothing helpful',	
 					-- card field helpful description
-	createdate	timestamp DEFAULT 'now',
-	moddate		timestamp DEFAULT 'now',
+	createdate	timestamp DEFAULT now(),
+	moddate		timestamp DEFAULT now(),
 	PRIMARY KEY(bid),
 	FOREIGN KEY(uid) REFERENCES i3x5_userpass(uid)
 );
@@ -58,8 +58,8 @@ CREATE TABLE i3x5_cards (
 	title		TEXT,		-- title of card
 	card		TEXT,		-- card contents
 	formatted	BOOLEAN DEFAULT false,	-- use <PRE> formatting
-	createdate	timestamp DEFAULT 'now',
-	moddate		timestamp DEFAULT 'now',
+	createdate	timestamp DEFAULT now(),
+	moddate		timestamp DEFAULT now(),
 	PRIMARY KEY (id),
 	FOREIGN KEY(bid) REFERENCES i3x5_batch(bid)
 );
@@ -74,19 +74,17 @@ CREATE TABLE i3x5_help (
 --  updating moddate for any update
 --
 
-DROP FUNCTION uf_userpass();
 DROP TRIGGER ut_userpass ON i3x5_userpass;
-DROP FUNCTION uf_batch();
+DROP FUNCTION uf_userpass();
 DROP TRIGGER ut_batch ON i3x5_batch;
-DROP FUNCTION uf_cards();
+DROP FUNCTION uf_batch();
 DROP TRIGGER ut_cards ON i3x5_cards;
-DROP FUNCTION uf_crypt();
-DROP TRIGGER ut_crypt ON i3x5_crypt;
+DROP FUNCTION uf_cards();
 
 CREATE FUNCTION uf_userpass()
-RETURNS OPAQUE AS '
+RETURNS TRIGGER AS '
 BEGIN
-	NEW.moddate:=''now'';
+	NEW.moddate:=now();
 	RETURN NEW;
 END;
 ' LANGUAGE 'plpgsql';
@@ -96,9 +94,9 @@ CREATE TRIGGER ut_userpass BEFORE UPDATE
 	EXECUTE PROCEDURE uf_userpass();
 
 CREATE FUNCTION uf_batch()
-RETURNS OPAQUE AS '
+RETURNS TRIGGER AS '
 BEGIN
-	NEW.moddate:=''now'';
+	NEW.moddate:=now();
 	RETURN NEW;
 END;
 ' LANGUAGE 'plpgsql';
@@ -108,9 +106,9 @@ CREATE TRIGGER ut_batch BEFORE UPDATE
 	EXECUTE PROCEDURE uf_batch();
 
 CREATE FUNCTION uf_cards()
-RETURNS OPAQUE AS '
+RETURNS TRIGGER AS '
 BEGIN
-	NEW.moddate:=''now'';
+	NEW.moddate:=now();
 	RETURN NEW;
 END;
 ' LANGUAGE 'plpgsql';
