@@ -5,28 +5,34 @@
 $running_under_some_shell=0;
 
 my (@php,@files);
-my ($file);
+my ($f);
 
 # get list of php files
 
-opendir DIR,"." || die "Can not open current directory\n";
-
-while ($_ = readdir DIR) {
-	if (/\.php$/) {
-		push @php, $_;
-	} elsif (/\.inc$/) {
-		push @files, $_;
+if (scalar @ARGV) {
+	# given a list of files
+	foreach $f ( @ARGV ) {
+		push @files, $f if -r $f;
 	}
+} else {
+	opendir DIR,"." || die "Can not open current directory\n";
+
+	while ($_ = readdir DIR) {
+		if (/\.php$/) {
+			push @php, $_;
+		} elsif (/\.inc$/) {
+			push @files, $_;
+		}
+	}
+
+	closedir DIR;
+
+	@files = sort @files;
+	@php = sort @php;
+	push @files, @php;
 }
-
-closedir DIR;
-
-@files = sort @files;
-@php = sort @php;
-push @files, @php;
 # print join("\n",@files),"\n";
 
-my ($f);
 foreach $f (@files) {
 	my (@com,@php,@inc);
 	open FILE, "<$f" || die "Can not open $f\n";

@@ -1,5 +1,6 @@
 <?php
-// DESC: options frame, shows access level and selection options
+// DESC: options frame, shows access level and selection options,
+// DESC: displays the help information when clicked upon elsewhere
 	include_once "user.inc";
 
 	session_start();

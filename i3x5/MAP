@@ -76,7 +76,8 @@ del_batch.php
 	action:		(none)
 
 indexB.php
-    options frame, shows access level and selection options
+    options frame, shows access level and selection options,
+    displays the help information when clicked upon elsewhere
 	include:	user.inc
 			cards.inc
 			3x5_db.inc
