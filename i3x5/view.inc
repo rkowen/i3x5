@@ -113,7 +113,7 @@ function sort(&$cards) {
 } 
 
 // display the cards according to view parameters
-function cards(&$cards, $batch_op = false) {
+function cards(&$cards, $check_all = false) {
 	global $user;
 	global $form_color;
 	global $relate_color;
@@ -135,7 +135,6 @@ function cards(&$cards, $batch_op = false) {
 	.sendhelp(inform("only non-relation cards") ,"update relation").")"));
 
 	$bheader = "";
-	if (! $batch_op) {
 //{ insert card
 	reset($user->bids);
 	// get first selected batch
@@ -170,7 +169,6 @@ function cards(&$cards, $batch_op = false) {
 	,$entrytableopt)
 	."</TD></TR>\n";
 //}
-	}
 	}
 	while (list($k,$v) = each($cards)) {
 		$c_nrid = $v["nrid"];
@@ -252,7 +250,8 @@ if ($this->edit == "list") {
 				"SIZE=16 MAXLENGTH")
 				,"BGCOLOR=\"$xcolor\" WIDTH=30%")
 			: cell("&nbsp;","COLSPAN=2 WIDTH=40%") )
-			.cell(input("checkbox","c_check[$k]","true")
+			.cell(input("checkbox","c_check[$k]","true",
+				($check_all?"CHECKED":""))
 				.$xid,"WIDTH=10% ALIGN=\"CENTER\"")
 			.head(	 $cbatch[$k]->string_ops_batch()
 				.$cbatch[$k]->string_one_batch()

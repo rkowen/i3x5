@@ -8,6 +8,7 @@
 
 	$db = new i3x5_DB($schema);
 	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	$check_all = false;
 
 if (! $view) {
 	$view = new View();
@@ -114,6 +115,14 @@ elseif (array_key_exists("a_submit", $_POST)
 		}
 	}
 }
+elseif (array_key_exists("a_submit", $_POST)
+&& $_POST["a_submit"]=="Check All") {
+	$check_all = true;
+}
+elseif (array_key_exists("a_submit", $_POST)
+&& $_POST["a_submit"]=="Uncheck All") {
+	$check_all = false;
+}
 
 // get cards from db
 $cards = $db->cards($user->bids);
@@ -147,11 +156,13 @@ PAGE;
 	print "</B></TD></TR>\n";
 	$abatch = new OneBatch("a");
 	print	row(head(sendhelp("Help","batch ops")
-		.$abatch->string_ops_batch(true)
-		.$abatch->string_one_batch(false)
-		.input("submit","a_submit","Batch Submit")
-		))."<TR><TH>\n";
-	$view->cards($cards);
+			.$abatch->string_ops_batch(true)
+			.$abatch->string_one_batch(false)
+			.input("submit","a_submit","Batch Submit")))
+		.row(head(input("submit","a_submit","Check All")
+			.input("submit","a_submit","Uncheck All")))
+		."<TR><TH>\n";
+	$view->cards($cards,$check_all);
 	print "</TH></TR>\n"
 		.row(head(sendhelp("Help","batch ops")
 			.input("submit","a_submit","Batch Submit")));
