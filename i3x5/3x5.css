@@ -216,7 +216,7 @@ table.cardview {
 }
 table.cardview_relate {
 	text-align: center;
-	border: double 2pt;
+	border: solid 1pt;
 	padding: 0;
 	margin: 0;
 	width: 100%;
