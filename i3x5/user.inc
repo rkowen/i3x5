@@ -28,5 +28,16 @@ class User {
 		}
 		$this->bids = $bids;
 	}
+// provide count of selected arrays
+	function selected_count() {
+		$count = 0;
+		if (is_array($this->bids) ) {
+			reset($this->bids);
+			while (list($k,$v) = each($this->bids)) {
+				  if ($this->bids[$k]["selected"]) {$count++;}
+			}
+		}
+		return $count;
+	}
 }
 ?>

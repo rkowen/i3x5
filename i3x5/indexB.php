@@ -39,8 +39,10 @@ EOT;
 	print <<< EOT
 $indent<A HREF="list_batches.php" TARGET="main">List Batches</A><BR>
 EOT;
+	$csvhelp = sendhelp("(help)", "csv file");
 	print <<< EOT
 <A HREF="sel_batches.php" TARGET="main">Select Batches</A><BR>
+$indent<A HREF="csv_cards.php" TARGET="main">CSV file</A> $csvhelp<BR>
 EOT;
 
 }
@@ -52,10 +54,10 @@ EOT;
 
 	if ($help) {
 		print "<H4>Help</H4>\n";
-		print "<P ALIGN=justify>".help($db->helpmsg($help))."\n";
+		print "<P ALIGN=left>".help($db->helpmsg($help))."\n";
 	} elseif ($bid) {
 		print "<H4>Project Help</H4>\n";
-		print "<P ALIGN=justify>"
+		print "<P ALIGN=left>"
 			.help($db->helpdesc($bid,$property))."\n";
 	}
 	

@@ -3,7 +3,7 @@
 //
 // values
 //
-	$schema		= "3x5";
+	$schema		= "i3x5";
 	$version	= "0.7.0";
 	$phpinfo	= 0;
 	$result_bg	= "BGCOLOR=\"#EFEFEF\"";

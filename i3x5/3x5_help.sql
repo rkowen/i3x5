@@ -288,8 +288,22 @@ edited.  Cards can be updated individually or collectively (with
 some restrictions).<BR>
 Be aware of fields with differing colors
 these usually denotes an exceptional condition.<BR>
-Listing cards creates a more printer friendly web page with
-the option to create a CSV file.
+Listing cards creates a more printer friendly web page
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'csv file','
+Comma Separated Values - a common ASCII flatfile format.<BR>
+For lack of a authorative definition.  The following will be used.
+Each field is followed by a comma except the last in a record.
+Each record is followed by a newline.  Values are double quoted if they
+contain commas(,), double quotes ("), or newlines (\\n).<BR>
+
+Values which contain double quotes (") each are expanded to
+a pair of double quotes ("").<BR>
+Values which contain embedded newlines are reduced to the (\\n) characters,
+and it is up to the importing program to handle them correctly.<BR>
+The first line usually has the field names, which will be defined
+by the first card''s batch field names.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'xxx','
