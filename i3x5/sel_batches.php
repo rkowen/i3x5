@@ -31,8 +31,12 @@ if (isset($_POST["submit"]) && ($_POST["submit"] == "Submit")) {
 		$errmsg = "Nothing to view! Select some batches.";
 	} else {
 		$manybid->set_user_selected();
-#		header("Location: view_cards.php");
-		print <<<PAGE
+		if (isset($view->edit)) {
+			session_write_close();
+			header("Location: view_cards.php?view_edit="
+				.$view->edit);
+		} else {
+			print <<<PAGE
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="3x5.css">
@@ -45,10 +49,11 @@ Pick a ``Select Batches'' operation from left menu<BR>
 </h2>
 </center>
 PAGE;
-	if ($phpinfo) {phpinfo(); $view->dump();}
-		print "</body>\n";
-		return;
+			if ($phpinfo) {phpinfo(); $view->dump(); }
+			print "</body>\n";
+		}
 	}
+	return;
 }
 
 $hhead = sendhelp("{$user->project} - Select Batches", "batch select");
