@@ -132,7 +132,7 @@ function cards(&$cards, $batch_op = false) {
 	if ($this->edit == "edit") {
 		$lines = 3;
 		print row(head(
-	"<INPUT NAME=\"upd_all\" TYPE=\"submit\" value=\"Update All Cards\"> ("
+	input("submit","upd_all","Update All Cards")." ("
 	.sendhelp(inform("only non-relation cards") ,"update relation").")"));
 
 	$bheader = "";
@@ -150,27 +150,23 @@ function cards(&$cards, $batch_op = false) {
 	.table(
 		row(	cell(senddesc($fn["num"],$k,"num")
 				,"BGCOLOR=\"$head_color\" WIDTH=10% ")
-			.cell("\n<INPUT NAME=\"i_num\" TYPE=\"text\" "
-				."SIZE=16 MAXLENGTH=20>\n"
+			.cell(
+			  input("text","i_num","","SIZE=16 MAXLENGTH=20")."\n"
 				,"WIDTH=40% COLSPAN=2")
 			.head($ibatch->string_one_batch(true)
 				,"WIDTH=25%")
-			.cell("\n<INPUT NAME=\"ins__\" TYPE=\"submit\" "
-				."VALUE=\"Insert\""
+			.cell(input("submit","ins__","Insert")."\n"
 				,"WIDTH=25% ALIGN=\"CENTER\""))
 		.row(	cell(senddesc($fn["title"],$k,"title")
 				,"BGCOLOR=\"$head_color\" WIDTH=10%")
-			.cell("\n<INPUT NAME=\"i_title\" TYPE=\"text\" "
-				."SIZE=80 MAXLENGTH=80>\n"
+			.cell(input("text","i_title","","SIZE=80 MAXLENGTH=80")
 				,"WIDTH=90% COLSPAN=3")
-			.cell("\n<INPUT NAME=\"i_formatted\" TYPE=\"checkbox\" "
-				."VALUE=\"true\">"
+			.cell(input("checkbox","i_formatted","true")
 				.sendhelp("Formatted","formatted")."\n"
 				,"WIDTH=10% COLSPAN=1"))
 		.row(	cell(senddesc($fn["card"],$k,"card")
 			,"WIDTH=10% BGCOLOR=\"$head_color\" VALIGN=\"top\"")
-			.cell("\n<TEXTAREA NAME=\"i_card\" COLS=80 ROWS=$lines>"
-				."</TEXTAREA>"
+			.cell(textarea("i_card","","COLS=80 ROWS=$lines")
 				,"WIDTH=90% COLSPAN=4"))
 	,$entrytableopt)
 	."</TD></TR>\n";
@@ -253,8 +249,8 @@ if ($this->edit == "list") {
 		row(	(! ereg("^$",$user->bids[$v["bid"]]["num"])
 			?cell(senddesc($user->bids[$v["bid"]]["num"],$v["bid"],
 				"num"),"BGCOLOR=\"$head_color\" WIDTH=10%")
-			.cell("<INPUT NAME=\"c_num[$k]\" TYPE=\"text\" "
-				."VALUE=\"".$v["num"]."\" SIZE=16 MAXLENGTH=20>"
+			.cell(input("text","c_num[$k]",$v["num"],
+				"SIZE=16 MAXLENGTH")
 				,"BGCOLOR=\"$xcolor\" WIDTH=30%")
 			: cell("&nbsp;","COLSPAN=2 WIDTH=40%") )
 			.cell($xid,"WIDTH=10% ALIGN=\"CENTER\"")
@@ -286,9 +282,8 @@ if ($this->edit == "list") {
 				,$v["bid"],"card")
 				,"WIDTH=10% BGCOLOR=\"$head_color\" "
 				."VALIGN=\"TOP\"")
-			.cell(
-			"<TEXTAREA NAME=\"c_card[$k]\" COLS=80 ROWS=$lines>"
-			.$v["card"]."</TEXTAREA>"
+			.cell(textarea("c_card[$k]",$v[card],
+				"COLS=80 ROWS=$lines")
 				,"WIDTH=90% COLSPAN=4")) : "")
 	,$entrytableopt)
 	."</TD></TR>\n";
@@ -300,10 +295,9 @@ if ($this->edit == "list") {
 				"num"),"WIDTH=10% BGCOLOR=\"$head_color\"")
 			 .cell($v["num"],"WIDTH=40%")
 			: cell(" ","WIDTH=50% COLSPAN=2") )
-			.cell(
-	 "<INPUT NAME=\"c_rid[$k]\" TYPE=\"hidden\" value=\"$c_rid\">\n"
-	."<INPUT NAME=\"c_nrid[$k]\" TYPE=\"hidden\" value=\"$c_nrid\">\n"
-	."<INPUT NAME=\"upd_[$k]\" TYPE=\"submit\" value=\"Append\">\n"
+			.cell(	 input("hidden","c_rid[$k]",$c_rid)
+				.input("hidden","c_nrid[$k]",$c_nrid)
+				.input("submit","upd_[$k]","Append")
 				,"COLSPAN=2 WIDTH=40% ALIGN=\"CENTER\"")
 			.cell($xid,"WIDTH=10% ALIGN=\"RIGHT\"") )
 	.(! ereg("^$",$user->bids[$v["bid"]]["title"])
@@ -319,8 +313,7 @@ if ($this->edit == "list") {
 				,"WIDTH=10% BGCOLOR=\"$head_color\" "
 				."VALIGN=\"TOP\"")
 			.cell($card."<BR>"
-			."<TEXTAREA NAME=\"c_card[$k]\" COLS=80 ROWS=2>"
-			."</TEXTAREA>"
+			.textarea("c_card[$k]",$v[card],"COLS=80 ROWS=2")
 				,"WIDTH=90% BGCOLOR=\"$xcolor\" COLSPAN=4"))
 		: "")
 	,$entrytableopt)
@@ -330,7 +323,7 @@ if ($this->edit == "list") {
 	}
 	if ($this->edit == "edit") {
 		print row(head(
-	"<INPUT NAME=\"upd_all\" TYPE=\"submit\" value=\"Update All Cards\"> ("
+	input("submit","upd_all","Update All Cards")." ("
 	.sendhelp(inform("only non-relation cards") ,"update relation").")"));
 	}
 	print "</TABLE>\n";
