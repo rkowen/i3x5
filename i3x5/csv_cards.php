@@ -1,4 +1,5 @@
 <?php
+// DESC: output the selected batches as a CSV file
 	include_once "user.inc";
 	include_once "view.inc";
 	session_start();

@@ -57,6 +57,7 @@ CREATE TABLE i3x5_cards (
 	num		INT8,		-- user numbering of card
 	title		TEXT,		-- title of card
 	card		TEXT,		-- card contents
+	formatted	BOOLEAN DEFAULT false,	-- use <PRE> formatting
 	createdate	timestamp DEFAULT 'now',
 	moddate		timestamp DEFAULT 'now',
 	PRIMARY KEY (id),

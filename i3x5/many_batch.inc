@@ -1,6 +1,6 @@
 <?php
 //
-// many batch selector
+// DESC: many batch selector class
 //
 
 include_once "user.inc";

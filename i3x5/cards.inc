@@ -1,5 +1,5 @@
 <?php
-// common values, functions, and classes
+// DESC: common values, functions, and classes
 //
 // values
 //

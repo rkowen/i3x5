@@ -1,4 +1,5 @@
 <?php
+// DESC: sets up frames title/options/main
 	session_start();
 
 	include_once "cards.inc";

@@ -1,0 +1,61 @@
+:
+# use perl
+    eval 'exec perl -S $0 ${1+"$@"}'
+        if $running_under_some_shell;
+$running_under_some_shell=0;
+
+my (@php,@files);
+my ($file);
+
+# get list of php files
+
+opendir DIR,"." || die "Can not open current directory\n";
+
+while ($_ = readdir DIR) {
+	if (/\.php$/) {
+		push @php, $_;
+	} elsif (/\.inc$/) {
+		push @files, $_;
+	}
+}
+
+closedir DIR;
+
+@files = sort @files;
+@php = sort @php;
+push @files, @php;
+# print join("\n",@files),"\n";
+
+my ($f);
+foreach $f (@files) {
+	my (@com,@php,@inc);
+	open FILE, "<$f" || die "Can not open $f\n";
+	while (<FILE>) {
+		chomp;
+		if (/DESC:/) {
+			s{.*DESC:\s*(.*)$}{$1};
+			push @com, $_;
+		} elsif (/"[^"]*\.php"/) {
+			s{^.*"([^"]*\.php)".*$}{$1}; # "
+			push @php, $_;
+		} elsif (/include/) {
+			s{^.*include.*"([^"]*)".*$}{$1}; # "
+			push @inc, $_;
+		}
+	}
+	close FILE;
+	print "\n",$f,"\n";
+	if (scalar @com) {
+		print "    ",join("\n    ",@com),"\n";
+	}
+	if (scalar @inc) {
+		print "\tinclude:\t",join("\n\t\t\t",@inc),"\n";
+	} else {
+		print "\tinclude:\t(none)\n";
+	}
+	if (scalar @php) {
+		print "\taction:\t\t",join("\n\t\t\t",@php),"\n";
+	} else {
+		print "\taction:\t\t(none)\n";
+	}
+}

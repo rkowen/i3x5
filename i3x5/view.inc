@@ -1,6 +1,6 @@
 <?php
 //
-// View class handles the batch view properties
+// DESC: View class handles the batch view properties
 //
 
 include_once "user.inc";

@@ -1,4 +1,5 @@
 <?php 
+// DESC: title frame, shows username
 	include_once "user.inc";
 	include_once "cards.inc";
 

@@ -1,4 +1,5 @@
 <?php
+// DESC: create a batch or update batch properties
 	include_once "cards.inc";
 	include_once "user.inc";
 

@@ -1,6 +1,6 @@
-<?
+<?php
 //
-// user class
+// DESC: user class for managing uid and batch mappings
 //
 class User {
 	var $uid;

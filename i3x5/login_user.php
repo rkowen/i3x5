@@ -1,4 +1,5 @@
 <?php
+// DESC: prompts for username and password
 	include_once "user.inc";
 
 	session_start();

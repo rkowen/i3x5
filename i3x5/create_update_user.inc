@@ -1,6 +1,6 @@
 <?php
 //
-// create_update_user class to handle user info processing
+// DESC: create_update_user class to handle user info processing
 //
 
 include_once "cards.inc";

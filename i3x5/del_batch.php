@@ -1,5 +1,5 @@
 <?php
-
+// DESC: Delete a whole batch from the DB
 	include_once "cards.inc";
 	include_once "user.inc";
 

@@ -1,4 +1,5 @@
 <?php
+// DESC: select batch operations
 
 	include_once "cards.inc";
 	include_once "user.inc";

@@ -1,4 +1,5 @@
 <?php
+// DESC: Create a new user and insert into DB
 	session_start();
 
 	include_once "cards.inc";

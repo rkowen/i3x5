@@ -1,4 +1,5 @@
 <?php
+// DESC: starting ``results'' page
 	include_once "user.inc";
 
 	session_start();

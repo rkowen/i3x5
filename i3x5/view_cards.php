@@ -1,4 +1,5 @@
 <?php
+// DESC: view the individual cards as selected by the batch
 	include_once "user.inc";
 	include_once "view.inc";
 	session_start();

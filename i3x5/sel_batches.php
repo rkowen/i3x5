@@ -1,4 +1,5 @@
 <?php
+// DESC: select which batch or set of batches for card handling
 	include_once "user.inc";
 	include_once "view.inc";
 	session_start();
@@ -19,13 +20,26 @@ if ($view) {
 	$view = new View();
 }
 // process batches if given view go-ahead
-if ($HTTP_POST_VARS["submit"] == "View") {
+if ($HTTP_POST_VARS["submit"] == "Submit") {
 	if ( (! is_array($HTTP_POST_VARS["many_batch__"]))
 	|| (count($HTTP_POST_VARS["many_batch__"]) == 0)) {
 		$errmsg = "Nothing to view! Select some batches.";
 	} else {
 		$manybid->set_user_selected();
-		header("Location: view_cards.php");
+#		header("Location: view_cards.php");
+		print <<<PAGE
+<HTML>
+<HEAD>
+<TITLE>{$user->project} - Selected Batches</TITLE>
+<BODY $result_bg>
+<P>
+<CENTER>
+<H2>
+Pick a ``Select Batches'' operation from left menu<BR>
+</H2>
+</CENTER>
+</BODY>
+PAGE;
 		return;
 	}
 }
@@ -62,7 +76,7 @@ PAGE;
 	print "</TH></TR>\n";
 	print <<<PAGE
 	<TR><TH>
-	<INPUT NAME="submit"	TYPE="submit"	value="View" >
+	<INPUT NAME="submit"	TYPE="submit"	value="Submit" >
 	<INPUT NAME="submit"	TYPE="submit"	value="Check" >
 	<INPUT NAME="reset"	TYPE="reset"	value="Reset" >
 	<INPUT NAME="clear"	TYPE="submit"	value="Clear" >

@@ -1,4 +1,5 @@
 <?php
+// DESC: options frame, shows access level and selection options
 	include_once "user.inc";
 
 	session_start();
@@ -42,6 +43,7 @@ EOT;
 	$csvhelp = sendhelp("(help)", "csv file");
 	print <<< EOT
 <A HREF="sel_batches.php" TARGET="main">Select Batches</A><BR>
+$indent<A HREF="view_cards.php" TARGET="main">View/Edit individually</A><BR>
 $indent<A HREF="csv_cards.php" TARGET="main">CSV file</A> $csvhelp<BR>
 EOT;
 

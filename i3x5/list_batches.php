@@ -1,4 +1,5 @@
 <?php
+// DESC: List batch properties as a table
 	include_once "cards.inc";
 	include_once "user.inc";
 

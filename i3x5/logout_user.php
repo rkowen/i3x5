@@ -1,4 +1,5 @@
 <?php
+// DESC: logs out the user and resets most values
 	include_once "user.inc";
 
 	session_start();
