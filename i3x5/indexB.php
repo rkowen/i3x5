@@ -15,59 +15,63 @@
 		$help = $_GET["help"];
 	}
 print <<<PAGE
-<HTML>
-<BODY $help_bg>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+</head>
+<body class="options">
 
 PAGE;
-if ($user) {
+if (isset($user)) {
 	print "<H4>".sendhelp($level_names[$user->level],
 		$level_names[$user->level])
 		." Access Menus</H4>\n";
 //	print "access level = $access_level\n";
 
+	print "<ul>\n";
+
 	if ($user->level >= $level_admin) {
 		print <<< EOT
-View/Update:<BR>
-<A HREF="update_user.php" TARGET="main">User Info</A><BR>
+<li> View/Update:
+  <ul>
+  <li> <A HREF="update_user.php" TARGET="main">User Info</A><BR>
+  </ul>
 EOT;
 	}
+	print "<li> Batch Properties\n  <ul>\n";
+
 	if ($user->level >= $level_write) {
-	print <<< EOT
-Batch Properties:<BR>
-$indent
-<A HREF="new_batch.php?batch_select=New&example=card" TARGET="main">Create</A>
-or
-<A HREF="batches.php" TARGET="main">Update</A>
-Batch<BR>
-EOT;
-	} else {
-	print <<< EOT
-Batch Properties:<BR>
+		print <<< EOT
+  <li> <a href="new_batch.php?batch_select=New&example=card" target="main">Create</a>
+   or <a href="batches.php" target="main">Update</a> Batch
 EOT;
 	}
 	if ($user->level >= $level_admin) {
 		print <<< EOT
-$indent<A HREF="del_batch.php" TARGET="main">Delete Batch</A><BR>
+  <li> <a href="del_batch.php" target="main">Delete Batch</a>
 EOT;
 	}
 	print <<< EOT
-$indent<A HREF="list_batches.php" TARGET="main">List Batches</A><BR>
+  <li> <a href="list_batches.php" target="main">List Batches</a>
+  </ul>
 EOT;
 	$csvhelp = sendhelp("(help)", "csv file");
 	print <<< EOT
-<A HREF="sel_batches.php" TARGET="main">Select Batches</A><BR>
-$indent
-	<A HREF="view_cards.php?view_edit=list" TARGET="main">View</A>
+<li> <a href="sel_batches.php" target="main">Select Batches</a>
+  <ul>
+  <li> <a href="view_cards.php?view_edit=list" target="main">View</a>
 EOT;
-	if ($user->level >= $level_write) {
+	if ($user->level >= $level_append) {
 		print "&nbsp;or&nbsp;";
 		print <<< EOT
-	<A HREF="view_cards.php?view_edit=edit" TARGET="main">Edit</A>
+  <a href="view_cards.php?view_edit=edit" target="main">Edit</a>
 EOT;
 	}
 	print <<< EOT
-	 Batches<BR>
-$indent<A HREF="csv_cards.php" TARGET="main">CSV file</A> $csvhelp<BR>
+	 Batches
+  <li> <a href="csv_cards.php" target="main">CSV file</a> $csvhelp
+  </ul>
+</ul>
 EOT;
 
 }
@@ -79,16 +83,15 @@ EOT;
 
 	if (isset($help)) {
 		print "<H4>Help</H4>\n";
-		print "<P ALIGN=left>".help($db->helpmsg($help))."\n";
+		print "<P class=\"help\">".help($db->helpmsg($help))."\n";
 	} elseif (isset($bid)) {
 		print "<H4>Project Help</H4>\n";
-		print "<P ALIGN=left>"
+		print "<P class=\"help\">"
 			.help($db->helpdesc($bid,$property))."\n";
 	}
 	
 print <<<PAGE
-</BODY>
-</HTML>
-
+</body>
+</html>
 PAGE;
 ?>

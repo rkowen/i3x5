@@ -7,13 +7,14 @@
 	include_once "session.inc";
 
 	include_once "3x5_db.inc";
+	include_once "one_batch.inc";
+
+	$onebid = new OneBatch();
+	$one_batch__ = $onebid->get_one_batch();
 
 	$db = new i3x5_DB($schema);
 	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
 
-if (isset($_POST["del_batch"])) {
-	$del_batch = $_POST["del_batch"];
-}
 if (isset($_POST["delete"])) {
 	$delete = $_POST["delete"];
 }
@@ -24,13 +25,13 @@ if (isset($_GET["msg"])) {
 	$msg = $_GET["msg"];
 }
 // check if batch properties are linked to
-if (isset($del_batch)) {
+if (isset($one_batch__) && $one_batch__) {
 	$rid = $db->sql(
-	"SELECT count(*) FROM i3x5_batch WHERE rid=$del_batch");
+	"SELECT count(*) FROM i3x5_batch WHERE rid=$one_batch__");
 	if ($rid) {
-		$msg = "Batch {$user->bids[$del_batch]["batch"]} is "
+		$msg = "Batch {$user->bids[$one_batch__]["batch"]} is "
 		."linked to from $rid other batch".($rid==1?"":"es");
-		$del_batch = false;
+		$one_batch__ = false;
 	}
 }
 
@@ -65,92 +66,48 @@ if (isset($do_delete) && $delete=="Delete") {
 
 	$hdel = sendhelp("{$user->project} - Delete Batch","delete batch");
 	print <<<PAGE
-<HTML>
-<HEAD>
-<TITLE>{$user->project} - Delete Batch</TITLE>
-<BODY $result_bg>
-<CENTER>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+<title>{$user->project} - Delete Batch</title>
+</head>
+<body class="main">
+<center>
 PAGE;
 
-if (isset($del_batch)) {
-	print <<<PAGE
-<!--{-->
-<TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
-<TR><TH>$hdel</TH></TR>
-<TR><TH>
-	<FORM ACTION="{$_SERVER['PHP_SELF']}" METHOD="POST">
-	<!--{-->
-	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
-	<TR><TH>
-PAGE;
-	print warn("All non-linked cards<BR>will be deleted with batch")
-		."</TH></TR>\n";
-	if (isset($msg)) {
-		print row(cell(warn($msg)))."\n";
-	}
-	$hbatch = senddesc("{$user->bids[$del_batch]["batch"]}",
-		$del_batch,"batch");
-	print <<<PAGE
-	<TR><TH>
-	<BIG>$hbatch</BIG>
-	</TH></TR>
-	<TR><TH>
-	<INPUT NAME="delete"		TYPE="submit"	value="Delete" >
-	<INPUT NAME="delete"		TYPE="submit"	value="Skip" >
-	<INPUT NAME="do_delete"		TYPE="hidden"	value="$del_batch" >
-	</TH></TR>
-	</TABLE> <!--}-->
-	</FORM>
-</TH></TR>
-</TABLE> <!--}-->
-PAGE;
-
-} else { 
-	print <<<PAGE
-<!--{-->
-<TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
-<TR><TH>$hdel</TH></TR>
-<TR><TH>
-	<FORM ACTION="{$_SERVER['PHP_SELF']}" METHOD="POST">
-	<!--{-->
-	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
-PAGE;
-	if (isset($msg)) {
-		print row(cell(warn("<BIG>$msg</BIG>"),
-			"ALIGN=CENTER"))."\n";
-	}
-	print <<<PAGE
-	<TR><TH>
-	<SELECT NAME="del_batch" SIZE=1>
-PAGE;
-	// list batches owned by user
-	reset($user->bids);
-	while (list($k,$v) = each($user->bids)) {
-		$sel_ = ((isset($del_batch) && $del_batch == $k)
-			? "SELECTED" : "" );
-		print "<OPTION ".$sel_." VALUE=\"$k\">{$v["batch"]}</OPTION>\n";
-	}
-
-	print <<<PAGE
-		</SELECT>
-	</TH></TR>
-	<TR><TH>
-	<INPUT NAME="delete"			TYPE="submit"	value="Delete" >
-	<INPUT NAME="reset"			TYPE="reset"	value="Reset" >
-	</TH></TR>
-	</TABLE> <!--}-->
-	</FORM>
-</TH></TR>
-</TABLE> <!--}-->
-PAGE;
+if (isset($one_batch__) && $one_batch__) {
+	$hbatch = senddesc("{$user->bids[$one_batch__]["batch"]}",
+		$one_batch__,"batch");
+	print form($_SERVER['PHP_SELF'],
+	"<!--{-->".table(row(head($hdel))
+		.row(head("<!--{-->".table(
+			row(head(warn(
+"All non-linked cards<BR>will be deleted with batch")))
+			.(isset($msg)?row(head(warn($msg))):"")
+			.row(head($hbatch))
+			.row(head(
+				input("submit","delete","Delete")
+				.input("submit","delete","Skip")
+				.input("hidden","do_delete",$one_batch__)))
+		,"class=\"form\"")."<!--}-->\n"))."\n"
+	,"class=\"tight\"")."<!--}-->\n")."\n";
+} else {
+	print form($_SERVER['PHP_SELF'],
+	"<!--{-->".table(row(head($hdel))
+		.row(head("<!--{-->".table(
+			row(cell("Delete ").cell($onebid->string_one_batch()))
+			.row(head(
+				input("submit","delete","Delete")
+				.input("reset","reset","Reset"),"colspan=2"))
+		,"class=\"form\"")."<!--}-->\n"))."\n"
+		.(isset($msg)?row(head(inform($msg))):"")
+	,"class=\"tight\"")."<!--}-->\n")."\n";
 }
-	print <<<PAGE
-</CENTER>
-PAGE;
 	if ($phpinfo) {phpinfo();}
 	print <<<PAGE
-</BODY>
-</HTML>
+</center>
+</body>
+</html>
 PAGE;
 
 ?>

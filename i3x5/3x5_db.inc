@@ -185,9 +185,9 @@ function update_card ($id, $rid, $object) {
 
 // append to a card, given the card id,rid,card_append
 // returns false if bad input else id or card appended to
-function append_card ($id, $rid, $card_append) {
+function append_card ($id, $rid, $card_append, $card_formatted) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::append_card($this,$rid,$card_append)<BR>\n";
+		echo "3x5_DB::append_card($this,$rid,$card_append,$card_formatted)<BR>\n";
 	}
 	if (! ($id || $card_append)) {
 		return false;
@@ -201,9 +201,12 @@ function append_card ($id, $rid, $card_append) {
 	$oldcard = $this->sql("SELECT card FROM i3x5_cards WHERE id=$id");
 	// strip off trailing newline
 	$oldcard = $this->escape(preg_replace("/\n$/","",$oldcard));
+	// set the formatting
+	if (! $card_formatted) { $card_formatted = "false"; }
 	$this->sql(
 "UPDATE i3x5_cards SET card='$oldcard\n<<<'".
-"||to_char(CURRENT_TIMESTAMP,'YYYY/MM/DD HH24:MI:SS')||'>>>\n$card_append' ".
+"||to_char(CURRENT_TIMESTAMP,'YYYY/MM/DD HH24:MI:SS')||'>>>\n$card_append', ".
+"formatted=$card_formatted ".
 "WHERE id=$id");
 	return $id;
 }

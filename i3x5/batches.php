@@ -30,41 +30,30 @@
 	$thelp = sendhelp("{$user->project} - batch properties",
 		"batch properties");
 	print <<<PAGE
-<HTML>
-<HEAD>
-<TITLE>{$user->project} - batches</TITLE>
-<BODY $result_bg>
-<CENTER>
-<!--{-->
-<TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
-<TR><TH>$thelp</TH></TR>
-<TR><TH>
-	<FORM ACTION="{$_SERVER['PHP_SELF']}" METHOD="POST">
-	<!--{-->
-	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
-	<TR><TD>Update</TD><TD>
-
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+<title>{$user->project} - batches</title>
+</head>
+<body class="main">
+<center>
 PAGE;
-	$onebid->show_one_batch();
-
-	print <<<PAGE
-		</SELECT>
-	</TD></TR>
-	<TR><TH COLSPAN=4>
-	<INPUT NAME="submit"			TYPE="submit"	value="Submit" >
-	<INPUT NAME="reset"			TYPE="reset"	value="Reset" >
-	<INPUT NAME="clear"			TYPE="submit"	value="Clear" >
-	</TD></TR>
-	</FORM>
-	</TABLE> <!--}-->
-</TH></TR>
-</TABLE> <!--}-->
-</CENTER>
-PAGE;
+print "<!--{-->".form($_SERVER['PHP_SELF'],
+	table(row(head($thelp))
+	.row(head(
+	"<!--{-->".table(row(cell("Update").cell($onebid->string_one_batch()))
+	.row(head(
+		input("submit","submit","Submit")
+		.input("reset","reset","Reset")
+		.input("submit","clear","Clear")
+	,"colspan=2"))
+	,"class=\"form\"")."<!--}-->\n"))
+,"class=\"tight\"")."<!--}-->\n");
 	if ($phpinfo) {phpinfo();}
 	print <<<PAGE
-</BODY>
-</HTML>
+</center>
+</body>
+</html>
 PAGE;
 
 ?>

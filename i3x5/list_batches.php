@@ -14,12 +14,12 @@
  
 	// list of fields
 	$list = array(
-	"bid"	=> "Batch<BR>Id",
+	"bid"	=> "Batch<BR>Id (bid)",
 	"name"	=> "Batch<BR>Name",
 	"number"=> "Number<BR>Field",
 	"title"	=> "Title<BR>Field",
 	"card"	=> "Card<BR>Field",
-	"misc"	=> inform("Relation"),
+	"misc"	=> inform("Relation (bid)"),
 	"count"	=> "Card<BR>Count"
 	);
 	$help = array(
@@ -38,7 +38,7 @@
 		$rbid = $db->sql("SELECT rid FROM i3x5_batch WHERE bid=$bid");
 
 		if ($rbid) {
-			return inform("Related to '".$_SESSION['user']->bids[$rbid]["batch"]
+			return inform(" -> '".$_SESSION['user']->bids[$rbid]["batch"]
 				."' ($rbid)") ;
 		}
 		return;
@@ -55,51 +55,52 @@
 
 	$hhead = sendhelp("{$_SESSION['user']->project} - List Batches", "list batches");
 print <<<PAGE
-<HTML>
-<HEAD>
-<TITLE>{$_SESSION['user']->project} - List Batches</TITLE>
-<BODY $result_bg>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+<title>{$_SESSION['user']->project} - List Batches</title>
+</head>
+<body class="main">
 <CENTER>
 <!--{-->
-<TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
-<TR><TH><A HREF="indexM.php"><IMG SRC="back.gif" ALT="back" BORDER="0" ></A>
-</TH><TH>$hhead</TD></TR>
-<TR><TH COLSPAN=2>
+<table class="tight">
+<tr><th>$hhead</th></tr>
+<tr><th>
 	<!--{-->
-	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
+	<table class="form" border=1>
 PAGE;
-	print "<TR>\n";
+	print "<tr>\n";
 	reset($list);
 	$sp = "  ";
 	while(list($k,$v) = each($list)) {
 		$hv = sendhelp($v,$help[$k]);
-		print $sp."<TH BGCOLOR=\"$head_color\">$hv</TH>\n";
+		print $sp."<td class=\"h_form\">$hv</td>\n";
 		$sp .= "  ";
 	}
-	print "</TR>\n";
+	print "</tr>\n";
 
 // list batches owned by user
 reset($_SESSION['user']->bids);
 while (list($k,$v) = each($_SESSION['user']->bids)) {
 	$fn = $db->batch_fieldnames($k);
-print	row(cell($k,"ALIGN=\"RIGHT\" BGCOLOR=\"$head_color\"")
-	."\n  ".cell(senddesc($v["batch"],$k,"batch"))
-	."\n    ".cell(senddesc($fn["num"],$k,"num"))
-	."\n      ".cell(senddesc($fn["title"],$k,"title"))
-	."\n        ".cell(senddesc($fn["card"],$k,"card"))
-	."\n          ".cell(related_bid($k))
-	."\n            ".cell(count_bid($k),"ALIGN=\"RIGHT\""));
+print	row(cell($k,"class=\"h_form\" id=\"right\"")
+	."\n  ".cell(senddesc($v["batch"],$k,"batch"),"class=\"b_form\"")
+	."\n    ".cell(senddesc($fn["num"],$k,"num"),"class=\"b_form\"")
+	."\n      ".cell(senddesc($fn["title"],$k,"title"),"class=\"b_form\"")
+	."\n        ".cell(senddesc($fn["card"],$k,"card"),"class=\"b_form\"")
+	."\n          ".cell(related_bid($k),"class=\"b_form\"")
+	."\n            ".cell(count_bid($k),"class=\"b_form\" id=\"right\""));
 }
 
 print <<<PAGE
-	</TABLE><!--}-->
-</TH></TR>
-</TABLE><!--}-->
+	</table><!--}-->
+</th></tr>
+</table><!--}-->
 PAGE;
 	if ($phpinfo) {phpinfo();}
 print <<<PAGE
-</BODY>
-</HTML>
+</body>
+</html>
 PAGE;
 
 ?>

@@ -42,7 +42,7 @@
 	function validate_text( $q, &$msg ) {
 		global $non_blank;
 		if (strlen($q) == 0) {
-			$msg = cell(warn("this field will be blanked out"));
+			$msg = cell(warn("blank fields are ignored"));
 			// but it's OK
 		} else {
 			$non_blank = 1;
@@ -65,7 +65,7 @@
 		if ($bid) {
 			if ("Update" == $batch_select) {
 				$msg = cell(warn(
-			"pre-existing batch name ... may be updated"));
+			"may update a pre-existing batch name"));
 				$insert = false;
 				return 1;	// it's OK anyways
 			} else {
@@ -344,48 +344,43 @@ $db->escape($_POST["card_help"])."')";
 //}
 
 print <<<PAGE
-<HTML>
-<HEAD>
-<TITLE>$header</TITLE>
-<BODY $result_bg>
-<CENTER>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+<title>$header</title>
+</head>
+<body class="main">
+<center>
 PAGE;
 
-print <<<PAGE
-<!--{-->
-<TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
-<TR><TH>$hhelp</TH></TR>
-<TR><TH>
-	<FORM ACTION="new_batch.php" METHOD="POST">
-	<!--{-->
-	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
-	<TR><TH COLSPAN=3>
-		<!--{-->
-		<TABLE BORDER=1><TR><TD>
-		$hthis
-		<INPUT NAME="copy_relate" $Check_None TYPE="radio" VALUE="None">
-		</TD><TD>
-		  <!--{-->
-		  <TABLE><TR><TD>
-		  <INPUT NAME="copy_relate" $Check_Copy TYPE="radio" VALUE="Copy">
-		  $hcopy </TD><TD>
-		  <INPUT NAME="copy_relate" $Check_Relate TYPE="radio" VALUE="Relate">
-		  $hrelate </TD>
-		  <TD>
-PAGE;
-$onebid->show_one_batch();
 $hbatch = sendhelp("Batch<BR>Property","batch property");
 $hlabel = sendhelp("Label","batch label");
 $hhelp = sendhelp("Helpful Description","batch help");
 
 print <<<PAGE
-		  </TD></TR></TABLE><!--}-->
-	</TD>$relmsg</TR></TABLE><!--}-->
-</TH></TR>
-<TR><TH>$hbatch</TH>
-	<TH>$hlabel</TH><TH>$hhelp</TH></TR>
-
+<!--{-->
+<table class="tight">
+<tr><th>$hhelp</th></tr>
+<tr><th>
+	<form action="new_batch.php" method="POST">
+	<!--{-->
+	<table border=1 cellpadding=2 cellspacing=2 bgcolor="$form_color">
+	<tr><th colspan=3>
+		<!--{-->
 PAGE;
+print table(row(cell(
+	$hthis.input("radio","copy_relate","None",$Check_None)
+		,"class=\"b_form\"")
+	.cell(table("<!--{-->".row(cell(
+		input("radio","copy_relate","Copy",$Check_Copy).$hcopy
+		.input("radio","copy_relate","Relate",$Check_Relate).$hrelate
+		.$onebid->string_one_batch()
+	)),"class=\"form\"")."<!--}-->\n"))
+,"class=\"form\" border=1")."<!--}-->\n";
+print "</th>".row(
+	cell($hbatch,"class=\"h_form\"")
+	.cell($hlabel,"class=\"h_form\"")
+	.cell($hhelp,"class=\"h_form\""))."\n";
 
 reset($list);
 while(list($k,$v) = each($list)) {
@@ -393,26 +388,20 @@ while(list($k,$v) = each($list)) {
 	$msg = $list[$k]["msg"];
 	$ml = $list[$k]["maxlen"];
 
-	print row(cell($label)."\n	".
-	cell("<INPUT NAME=\"$k\" SIZE=\"18\" MAXLENGTH=\"$ml\" TYPE=\"text\" ".
-		"VALUE=\"{$_POST[$k]}\">")."\n"
-	.cell("<INPUT NAME=\"{$k}_help\" SIZE=\"40\" MAXLENGTH=\"200\" TYPE=\"text\" ".
-		"VALUE=\"{$_POST[$k."_help"]}\">").$msg)."\n";
+	print row(cell($label,"class=\"h_form\"")."\n	"
+	.cell(input("text",$k,$_POST[$k],"size=18 maxlength=$ml"))
+	.cell(input("text",$k."_help",$_POST[$k."_help"],
+		"size=40 maxlength=200")) .$msg)."\n";
 }
 
-print <<<PAGE
-	<TR><TH COLSPAN=3>
-	<INPUT NAME="create_batch"		TYPE="submit"	value="$batch_select">
-	<INPUT NAME="check"			TYPE="submit"	value="Check" >
-	<INPUT NAME="reset"			TYPE="reset"	value="Reset" >
-	<INPUT NAME="clear"			TYPE="submit"	value="Clear" >
-	<INPUT NAME="bid"			TYPE="hidden"	value="$bid" >
-	<INPUT NAME="batch_select"		TYPE="hidden"	value="$batch_select" >
-	</TD></TR>
-	</TABLE><!--}-->
-	</FORM>
-</TH></TR>
-PAGE;
+print	row(head(
+		input("submit","create_batch",$batch_select)
+		.input("submit","check","Check")
+		.input("reset","reset","Reset")
+		.input("submit","clear","Clear")
+		.input("hidden","bid",$bid)
+		.input("hidden","batch_select",$batch_select)
+	,"colspan=3"))."\n</table><!--}-->\n</form>\n</th></tr>\n";
 
 if (! $non_blank) {
 	if (! isset($sqlmsg)) {
@@ -424,7 +413,7 @@ if (! $non_blank) {
 }
 
 if (isset($sqlmsg)) {
-	print row(cell(inform("<H2>".$sqlmsg."</H2>"),"COLSPAN=2"));
+	print row(cell(inform("<H2>".$sqlmsg."</H2>")));
 }
 
 $url= "new_batch.php?name=".urlencode($_POST["name"])
@@ -435,27 +424,22 @@ $url= "new_batch.php?name=".urlencode($_POST["name"])
 	}
 	$url .= "&example";
 
-print "<TR><TD>\n";
-print "Empty fields will not be shown in {$user->project}<BR>\n";
-print sendhelp("Card","card example")
-	." <A HREF=\"$url=card\">".inform("Example")."</A>(default)<BR>\n";
-print sendhelp("Journal","journal example")
-	." <A HREF=\"$url=journal\">".inform("Example")."</A><BR>\n";
-print sendhelp("People","people example")
-	." <A HREF=\"$url=people\">".inform("Example")."</A><BR>\n";
-print sendhelp("Recipe","recipe example")
-	." <A HREF=\"$url=recipe\">".inform("Example")."</A><BR>\n";
-
-print "</TD></TR>\n";
-
-
-print <<<PAGE
-</TABLE><!--}-->
-PAGE;
+print row(cell(
+	"\nEmpty fields will not be shown in {$user->project}<br>\n"
+	.sendhelp("Card","card example")
+	." <a href=\"$url=card\">".inform("Example")."</a> (default)<br>\n"
+	.sendhelp("Journal","journal example")
+	." <a href=\"$url=journal\">".inform("Example")."</a><br>\n"
+	.sendhelp("People","people example")
+	." <a href=\"$url=people\">".inform("Example")."</a><br>\n"
+	.sendhelp("Recipe","recipe example")
+	." <a href=\"$url=recipe\">".inform("Example")."</a><br>\n"
+,"id=\"left\""))."\n</table><!--}-->\n";
 	if ($phpinfo) {phpinfo();}
 print <<<PAGE
-</BODY>
-</HTML>
+</center>
+</body>
+</html>
 PAGE;
 
 ?>

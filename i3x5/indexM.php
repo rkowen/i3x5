@@ -6,8 +6,11 @@
 	include_once "cards.inc";
 
 print <<<PAGE
-<HTML>
-<BODY $result_bg>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+</head>
+<body class="main">
 
 PAGE;
 	if (isset($user)) {

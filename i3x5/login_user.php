@@ -26,13 +26,17 @@
 	} else {
 		$passwd = "";
 	}
+	if (isset($_GET["access"])) {
+		$username = $user->uname;
+		$passwd = "";
+		session_destroy();
+		session_write_close();
+		$_GET["access"] = ereg_replace(".access","",$_GET["access"]);
+	}
 
 	function not_logged_in ($q) {
-		global $PHP_SELF;
 		global $username;
 		global $passwd;
-		global $form_color;
-		global $box_color;
 		global $project;
 		global $phpinfo;
 		global $version;
@@ -41,54 +45,45 @@
 		$hpassword = sendhelp("Password","login password");
 		$q = warn($q);
 print <<<NOT_LOGGED_IN
-<HTML>
-<HEAD>
-<TITLE>$project - Login </TITLE>
-</HEAD>
-<BODY>
-<CENTER>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+</head>
+<body>
+<center>
 $hlogin
-<BR>
+<br>
 Version: $version
-<P>
-<TABLE BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
-<TR><TH>
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 BCOLOR="$box_color">
-<TR><TH>
-	<FORM ACTION="$PHP_SELF" METHOD="POST">
-	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
-	<TR><TD>$husername</TD><TD>
-	<INPUT NAME="username" SIZE="25" TYPE="text" value="$username" >
-	</TD></TR>
-	<TR><TD>$hpassword</TD><TD>
-	<INPUT NAME="passwd" SIZE="25" TYPE="password" value="$passwd" >
-	</TD></TR>
-	<TR><TH COLSPAN=2>
-	<INPUT NAME="submit"		TYPE="submit"	value="Login" >
-	<INPUT NAME="reset"		TYPE="reset"	value="Reset" >
-	<INPUT NAME="clear"		TYPE="submit"	value="Clear" >
-	<INPUT NAME="login_user"	TYPE="hidden"	value="1" >
-	</TR></TABLE>
-	</FORM>
-</TH></TR>
-<TR><TH>
-	<FORM ACTION="create_user.php" METHOD="POST">
-	<INPUT NAME="create_update_user" TYPE="submit"	value="Create User" >
-	</FORM>
-</TH></TR>
-</TABLE>
-</TH></TR>
-</TABLE>
+<p>
+NOT_LOGGED_IN;
+print table(row(head(
+	form($_SERVER['PHP_SELF'],
+	table(	row(cell($husername,"class=\"h_form\"")
+		.cell(input("text","username",$username,"size=25")))
+		.row(cell($hpassword,"class=\"h_form\"")
+		.cell(input("password","passwd",$passwd,"size=25")))
+		.row(head(
+			input("submit","submit","Login")
+			.input("reset","reset","Reset")
+			.input("submit","clear","Clear")
+			.input("hidden","login_user","1")
+		,"colspan=2"))
+	,"class=\"form\"")
+	.row(head(form("create_user.php",
+		input("submit","create_update_user","Create User")
+	)))
+))),"class=\"tight\"");
+print <<<NOT_LOGGED_IN
 $q
-</CENTER>
-<P>
+</center>
+<p>
 NOT_LOGGED_IN;
 
 if ($phpinfo) { phpinfo(); }
 
 print <<<NOT_LOGGED_IN
-</BODY>
-</HTML>
+</body>
+</html>
 NOT_LOGGED_IN;
 
 }
@@ -134,24 +129,34 @@ NOT_LOGGED_IN;
 		$project = $db->sql(
 			"SELECT project FROM i3x5_userpass ".
 			"WHERE username='$username'");
-		$_SESSION['user'] = New User($uid, $username,$access_level,$project,
+		$_SESSION['user']
+			= New User($uid, $username,$access_level,$project,
+
 			$db->bids($uid));
+
+		header("Location: indexF.php");
+/*
+		header("Location: indexF.php?_parent");
 		print <<<PAGE
-<HTML>
-<BODY $result_bg>
-<P>
-<P>
-<CENTER>
-<H2>
-<A HREF="indexF.php" TARGET="_parent"><BLINK>Click Here To Continue</BLINK></A>
-</H2>
-</CENTER>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+</head>
+<body class="main">
+<p>
+<p>
+<center>
+<h2>
+<a href="indexF.php" target="_parent"><blink>Click Here To Continue</blink></a>
+</h2>
+</center>
 PAGE;
 		if ($phpinfo) { phpinfo(); }
 		print <<<PAGE
-</BODY>
-</HTML>
+</body>
+</html>
 PAGE;
+*/
 
 	} else {
 		not_logged_in("Password does not match at any level!");

@@ -12,7 +12,8 @@
 	// $db->debug(1);
 
 // get userpass data from DB if not done!
-	if (! ereg("Done", $_POST["create_update_user"])) {
+	if (! isset($_POST["create_update_user"])
+	|| (! ereg("Done", $_POST["create_update_user"]))) {
 		if (! $db->query(
 "SELECT * FROM i3x5_userpass WHERE uid={$user->uid}")){
 			echo $db->errmsg();
@@ -34,7 +35,8 @@
 
 	$cuu->get_form();
 
-	if (ereg("Done", $_POST["create_update_user"])) {
+	if (isset($_POST["create_update_user"])
+	&&  ereg("Done", $_POST["create_update_user"])) {
 		// create query
 		$query = "UPDATE i3x5_userpass SET ";
 		reset ($cuu->list);
@@ -54,35 +56,34 @@
 
 		$cuu->show_form($user->project." - Update User", "update user");
 
-		if ($result) {
+		if (isset($result)) {
 			print <<<EOT
-</CENTER>
-<P>
-Your '{$this->project}' has not been updated properly!<BR>
+</center>
+<p>
+Your '{$user->project}' has not been updated properly!<BR>
 result = $result<BR>
-</BODY>
-</HTML>
+</body>
+</html>
 EOT;
 		}
 			print <<<EOT
-</CENTER>
-<P>
-Your '{$this->project}' user profile has been updated.<BR>
+</center>
+<p>
+Your '{$user->project}' user profile has been updated.<BR>
 Click on a menu item to the left to do something else.
-</BODY>
-</HTML>
+</body>
+</html>
 EOT;
 	} else {
 
 		$cuu->show_form($user->project." - Update User", "update user");
 		print <<<EOT
 
-</CENTER>
-<P>
-Your '{$this->project}' user profile has been updated.<BR>
+</center>
+<p>
 Click on a menu item to the left to do something else.
-</BODY>
-</HTML>
+</body>
+</html>
 EOT;
 	}
 ?>

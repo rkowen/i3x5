@@ -7,32 +7,35 @@
 	include_once "session.inc";
 
 print <<<PAGE
-<HTML>
-<BODY $title_bg>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+</head>
+<body class="title">
 
 PAGE;
-	print "<CENTER><B>".$user->project."</B></CENTER>\n";
-	print "username: <B>{$user->uname}</B><BR>\n";
+if (isset($user)) {
+	print "<B>".$user->project."</B><BR>\n"
+		."username: <B>{$user->uname}</B><BR>\n"
+		."access: <B>{$level_names[$user->level]}</B>\n";
+}
 
+print "<ul>\n";
+if (!isset($user)) {
 print <<<PAGE
-<P>
-<UL>
-PAGE;
-if (!$user) {
-print <<<PAGE
-<LI><A HREF="login_user.php?login=Login+User" TARGET="main">
-	Login New User</A>
-<LI><A HREF="create_user.php" TARGET="main">Create New User</A>
+<li><a href="login_user.php?login=Login+User" target="main">
+	Login New User</a>
+<li><a href="create_user.php" target="main">Create New User</a>
 PAGE;
 } else {
 print <<<PAGE
-<LI><A HREF="logout_user.php" TARGET="main">Logout User</A>
+<li><a href="logout_user.php" target="main">Logout User</a>
+<li><a href="login_user.php?access" target="main">Change Access</a>
 PAGE;
 }
 print <<<PAGE
-</UL>
-
-</BODY>
-</HTML>
+</ul>
+</body>
+</html>
 PAGE;
 ?>

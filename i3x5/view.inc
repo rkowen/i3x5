@@ -78,10 +78,9 @@ function get_buttons() {
 }
 
 // show the radio button table
-function show_buttons() {
+function string_buttons() {
 	global $user;
 	global $level_read;
-	global $noselect_color;
 
 	$sel_edit	= ($this->edit	== "edit" ? "CHECKED" : "");
 	$sel_list	= ($this->edit	== "list" ? "CHECKED" : "");
@@ -99,75 +98,84 @@ function show_buttons() {
 	$sel_none	= ($this->group	== "none" ? "CHECKED" : "");
 
 	// card edit buttons
-	print table(
-	row(	head("Card View Attributes", "COLSPAN=5"))
-	.row(	cell(sendhelp("Cards:","view cards"))
-		.cell(
-		($user->level <= $level_read
-		? "<FONT COLOR=\"$noselect_color\">Edit</FONT>\n"
+return "<!--{view-->".table(
+row(	cell("Card View Attributes",
+		"COLSPAN=5 class=\"h_form\" id=\"center\""))
+.row(	cell(sendhelp("Cards:","view cards"),"class=\"h_form\" id=\"left\"")
+	.cell(
+	($user->level <= $level_read
+		? noselect("Edit")."\n"
 		: input("radio","view_edit","edit",$sel_edit)." Edit"),
-		"COLSPAN=2")
-		.cell(	input("radio","view_edit","list",$sel_list)." List",
-		"COLSPAN=2"))
-	.row(	cell(sendhelp("Show:","view show"))
-		.cell(	input("radio","view_body","full",$sel_full)
-			." Full", "COLSPAN=2")
-		.cell(	input("radio","view_body","header",$sel_header)
-			." Header Only", "COLSPAN=2"))
-	.row(	cell(sendhelp("Dates:","view dates"))
-		.cell(	input("radio","view_dates","show",$sel_dates_show)
-			." Show dates", "COLSPAN=2")
-		.cell(	input("radio","view_dates","hide",$sel_dates_hide)
-			." Hide dates", "COLSPAN=2"))
-	.row(	cell(sendhelp("Key:","view key"))
-		.cell(	input("radio","view_key","num",$sel_num)." Number")
-		.cell(	input("radio","view_key","title",$sel_title)." Title")
-		.cell(	input("radio","view_key","mdate",$sel_mdate)." Mdate")
-		.cell(	input("radio","view_key","cdate",$sel_cdate)." Cdate"))
-	.row(	cell(sendhelp("Order:","view order"))
-		.cell(	input("radio","view_order","des",$sel_des)
-			." Descending", "COLSPAN=2")
-		.cell(	input("radio","view_order","asc",$sel_asc)
-			." Ascending", "COLSPAN=2"))
-	.row(	cell(sendhelp("Group By:","view group"))
-		.cell(	input("radio","view_group","batch",$sel_batch)
-			." Batch",
-		"COLSPAN=2")
-		.cell(	input("radio","view_group","none",$sel_none)
-			." None",
-		"COLSPAN=2"))
-,"WIDTH=\"100%\" BORDER=1");
+	"colspan=2 id=\"left\"")
+	.cell(	input("radio","view_edit","list",$sel_list)." List",
+	"colspan=2 id=\"left\""))
+.row(	cell(sendhelp("Show:","view show"),"class=\"h_form\" id=\"left\"")
+	.cell(	input("radio","view_body","full",$sel_full)
+		." Full", "colspan=2 id=\"left\"")
+	.cell(	input("radio","view_body","header",$sel_header)
+		." Header Only", "colspan=2 id=\"left\""))
+.row(	cell(sendhelp("Dates:","view dates"),"class=\"h_form\" id=\"left\"")
+	.cell(	input("radio","view_dates","show",$sel_dates_show)
+		." Show dates", "colspan=2 id=\"left\"")
+	.cell(	input("radio","view_dates","hide",$sel_dates_hide)
+		." Hide dates", "colspan=2 id=\"left\""))
+.row(	cell(sendhelp("Key:","view key"),"class=\"h_form\" id=\"left\"")
+	.cell(	input("radio","view_key","num",$sel_num)." Number",
+		"id=\"left\"")
+	.cell(	input("radio","view_key","title",$sel_title)." Title",
+		"id=\"left\"")
+	.cell(	input("radio","view_key","mdate",$sel_mdate)." Mdate",
+		"id=\"left\"")
+	.cell(	input("radio","view_key","cdate",$sel_cdate)." Cdate",
+		"id=\"left\""))
+.row(	cell(sendhelp("Order:","view order"),"class=\"h_form\" id=\"left\"")
+	.cell(	input("radio","view_order","des",$sel_des)
+		." Descending", "colspan=2 id=\"left\"")
+	.cell(	input("radio","view_order","asc",$sel_asc)
+		." Ascending", "colspan=2 id=\"left\""))
+.row(	cell(sendhelp("Group By:","view group"),"class=\"h_form\" id=\"left\"")
+	.cell(	input("radio","view_group","batch",$sel_batch)
+		." Batch",
+	"colspan=2 id=\"left\"")
+	.cell(	input("radio","view_group","none",$sel_none)
+		." None",
+	"colspan=2 id=\"left\""))
+,"class=\"form\" width=\"100%\" border=1")."<!--}-->\n";
 }
 
+// show the radio button table
+function show_buttons() {
+	print $this->string_buttons();
+}
 
 // takes the $cards hash and sort it according to the view parameters
 function sort(&$cards) {
 	uasort($cards, "card_cmp");
-} 
+}
 
 // display the cards according to view parameters
-function cards(&$cards, $check_all = false) {
+function string_cards(&$cards, $check_all = false) {
 	global $user;
-	global $form_color;
-	global $relate_color;
-	global $related_color;
-	global $head_color;
 	global $level_write;
 	global $db;
 
-	$entrytableopt = "BORDER=1 WIDTH=100% CELLPADDING=4";
+//	$entrytableopt = "border=1 width=100% cellpadding=4";
+	$entrytableopt = "class=\"cardview\"";
 
 	reset($cards);
-	print "<TABLE BORDER=1 WIDTH=100% BGCOLOR=\"$form_color\">\n";
+	$text = "<table width=100% class=\"batch\">\n";
 
-	if ($this->edit == "edit") {
+if ($this->edit == "edit") {
 		$lines = 3;
-		print row(head(
+		$text .= row(head(
 	sendhelp("Help","update all cards")
 	.input("submit","upd_all","Update All Cards")." ("
 	.sendhelp(inform("only non-relation cards") ,"update relation").")"));
+}
 
 	$bheader = "";
+
+if ($this->edit == "edit") {
 //{ insert card
 	reset($user->bids);
 	// get first selected batch
@@ -177,195 +185,208 @@ function cards(&$cards, $check_all = false) {
 	$fn = $db->batch_fieldnames($k);
 
 	$ibatch = new OneBatch("i",$k);
-	print "<TR><TD>\n"
-	.table(
+	$text .= row(cell(table(
 		row(	cell(senddesc($fn["num"],$k,"num")
-				,"BGCOLOR=\"$head_color\" WIDTH=10% ")
+				,"class=\"h_number\" width=10% ")
 			.cell(
-			  input("text","i_num","","SIZE=16 MAXLENGTH=20")."\n"
-				,"WIDTH=40% COLSPAN=2")
+			  input("text","i_num","","size=16 maxlength=20")."\n"
+				,"class=\"b_number\" width=35% colspan=2")
 			.head($ibatch->string_one_batch(true)
-				,"WIDTH=25%")
+				,"width=35%")
 			.cell(input("submit","ins__","Insert")."\n"
-				,"WIDTH=25% ALIGN=\"CENTER\""))
+				,"width=20% id=\"center\""))
 		.row(	cell(senddesc($fn["title"],$k,"title")
-				,"BGCOLOR=\"$head_color\" WIDTH=10%")
-			.cell(input("text","i_title","","SIZE=80 MAXLENGTH=80")
-				,"WIDTH=90% COLSPAN=3")
+				,"class=\"h_title\" width=10% colspan=1")
+			.cell(input("text","i_title","","size=80 maxlength=80")
+				,"class=\"b_title\" width=70% colspan=3")
 			.cell(input("checkbox","i_formatted","true")
 				.sendhelp("Formatted","formatted")."\n"
-				,"WIDTH=10% COLSPAN=1"))
+				,"class=\"b_title\" width=20% colspan=1"))
 		.row(	cell(senddesc($fn["card"],$k,"card")
-			,"WIDTH=10% BGCOLOR=\"$head_color\" VALIGN=\"top\"")
-			.cell(textarea("i_card","","COLS=80 ROWS=$lines")
-				,"WIDTH=90% COLSPAN=4"))
-	,$entrytableopt)
-	."</TD></TR>\n";
+			,"class=\"h_card\" width=10% valign=\"top\"")
+			.cell(textarea("i_card","","cols=80 rows=$lines")
+				,"class=\"b_card\" width=90% colspan=4"))
+	,"class=\"cardview\"")))."\n";
 //}
-	}
+}
 	while (list($k,$v) = each($cards)) {
 		$c_nrid = $v["nrid"];
 		$c_rid = $v["rid"];
 		if ($v["rid"]) {
-			$xcolor = $relate_color;
-			$xid = "$k (".inform($v["rid"]).")";
-			$rcolor = $form_color;
+			$xid = "$k (".$v["rid"].")";
+			$tcolor = "none";
+			$rcolor = "none";
 			$delmsg = "Delete";
+			$entrytableopt = "class=\"cardview_relate\"";
 		} else {
-			$xcolor = $form_color;
 			$xid = $k;
+			$tcolor = "b_number";
 			if ($v["nrid"]) {
-				$rcolor = $related_color;
+				$rcolor = "related_warn";
 				$delmsg = "Delete All";
 			} else {
-				$rcolor = $form_color;
+				$rcolor = "b_number";
 				$delmsg = "Delete";
 			}
+			$entrytableopt = "class=\"cardview\"";
 		}
 // batch header
 		if (($this->group == "batch")
 		&& ((! isset($bheader))
 		|| $bheader != $user->bids[$v["bid"]]["batch"])) {
 			$bheader = $user->bids[$v["bid"]]["batch"];
-			print "<TR><TD>\n"
-			.table( row( head( senddesc($bheader,$v["bid"],"batch"),
-			"ALIGN=\"LEFT\" COLSPAN=5 BGCOLOR=\"$head_color\""))
-				,$entrytableopt)
-			."</TD></TR>\n";
+			$text .= row(cell(
+			table( row( cell( senddesc($bheader,$v["bid"],"batch"),
+			"class=\"h_batch\" id=\"left\" colspan=5"))
+				,$entrytableopt)))."\n";
 		}
 if ($this->edit == "list") {
 	$card = $this->br($v["card"]);
 	if (ereg("^$", $user->bids[$v["bid"]]["num"])) {
 		$tcolspan = 3;
 		$tper = "80%";
-		$tid = cell($xid,"COLSPAN=1 WIDTH=10% ALIGN=\"RIGHT\"");
+		$tid = cell($xid,"class=\"b_cid\" colspan=1 width=10%");
 	} else {
 		$tcolspan = 4;
 		$tper = "90%";
 		$tid = "";
 	}
-	print "<TR><TD>\n"
-	.table(
+	$text .= row(cell(table(
 		(! ereg("^$",$user->bids[$v["bid"]]["num"])
 		? row(	cell(senddesc($user->bids[$v["bid"]]["num"]
 				,$v["bid"],"num")
-				,"BGCOLOR=\"$head_color\" WIDTH=10%")
-			.cell($v["num"],"WIDTH=80%")
-			.cell($xid,"COLSPAN=3 WIDTH=10% ALIGN=\"RIGHT\"") )
+				,"class=\"h_number\" width=10%")
+			.cell($v["num"],"class=\"$tcolor\" width=\"80%\"")
+			.cell($xid,"class=\"b_cid\" colspan=3 width=10%") )
 			: "" )
 	.(! ereg("^$",$user->bids[$v["bid"]]["title"])
 		? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
 				,$v["bid"],"title")
-				,"BGCOLOR=\"$head_color\" WIDTH=10%")
-			.cell($v["title"],"WIDTH=$tper COLSPAN=$tcolspan").$tid)
+				,"class=\"h_title\" width=10%")
+			.cell($v["title"],
+		"class=\"b_title\" width=$tper colspan=$tcolspan").$tid)
 		: "" )
 	.((($this->body == "full")
 		&& (! ereg("^$",$user->bids[$v["bid"]]["card"])))
 		? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
 				,$v["bid"],"card")
-				,"BGCOLOR=\"$head_color\" WIDTH=10%")
+				,"class=\"h_card\" width=10%")
 			.cell(($v["formatted"]=="t"
 				? pre($v["card"],"t") : $this->br($v["card"]))
-				,"WIDTH=90% COLSPAN=4")) : "")
-	,$entrytableopt)
-	."</TD></TR>\n";
+				,"class=\"b_card\" width=90% colspan=4")) : "")
+	,$entrytableopt)))."\n";
 } else {
 	if ($user->level >= $level_write) {
 	$card = $this->br($v["card"]);
 	$cbatch[$k] = new OneBatch("[$k]",$v["bid"]);
 	$lines = max(count(preg_split("/\n/", $v["card"])),
 			strlen($v["card"])/75) + 1;
-	print "<TR><TD>\n"
-	.table(
-		row(	(! ereg("^$",$user->bids[$v["bid"]]["num"])
-			?cell(senddesc($user->bids[$v["bid"]]["num"],$v["bid"],
-				"num"),"BGCOLOR=\"$head_color\" WIDTH=10%")
-			.cell(input("text","c_num[$k]",$v["num"],
-				"SIZE=16 MAXLENGTH")
-				,"BGCOLOR=\"$xcolor\" WIDTH=30%")
-			: cell("&nbsp;","COLSPAN=2 WIDTH=40%") )
-			.cell(input("checkbox","c_check[$k]","true",
-				($check_all?"CHECKED":""))
-				.$xid,"WIDTH=10% ALIGN=\"CENTER\"")
-			.head(	 $cbatch[$k]->string_ops_batch()
-				.$cbatch[$k]->string_one_batch()
-				,"WIDTH=25%")
-			.cell(	 input("hidden","c_rid[$k]",$c_rid)."\n"
-				.input("hidden","c_nrid[$k]",$c_nrid)."\n"
-				.input("submit","upd_[$k]","Update")."&nbsp;\n"
-				.input("submit","del_[$k]",$delmsg)."\n"
-				,"WIDTH=25% ALIGN=\"CENTER\" BGCOLOR=$rcolor"))
-	.(! ereg("^$",$user->bids[$v["bid"]]["title"])
-		? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
-				,$v["bid"],"title")
-				,"WIDTH=10% BGCOLOR=\"$head_color\"")
-			.cell(	input("text","c_title[$k]",$v["title"],
-					"SIZE=80 MAXLENGTH=80")
-				,"WIDTH=90% BGCOLOR=\"$xcolor\" COLSPAN=3")
-			.cell("\n".input("checkbox","c_formatted[$k]","true",
-				($v["formatted"]=="t" ? "CHECKED" : ""))
-				.sendhelp("Formatted","formatted")."\n"
-				,"WIDTH=10% COLSPAN=1"))
-		: "")
-	.((($this->body == "full")
-		&& ! ereg("^$",$user->bids[$v["bid"]]["card"]))
-		? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
-				,$v["bid"],"card")
-				,"WIDTH=10% BGCOLOR=\"$head_color\" "
-				."VALIGN=\"TOP\"")
-			.cell(textarea("c_card[$k]",$v["card"],
-				"COLS=80 ROWS=$lines")
-				,"WIDTH=90% COLSPAN=4")) : "")
-	.($this->dates != "hide" ?
-		row(	cell(	table(	row(
-				head("created: ".$v["cdate"])
-				.head("modified: ".$v["mdate"])),
-			"WIDTH=\"100%\" BORDER=0"),
-		"ALIGN=\"CENTER\" COLSPAN=5 BGCOLOR=\"$head_color\""))
-		: "")
-	,$entrytableopt)
-	."</TD></TR>\n";
+$text .= row(cell(table(
+	row(	(! ereg("^$",$user->bids[$v["bid"]]["num"])
+		?cell(senddesc($user->bids[$v["bid"]]["num"],$v["bid"],
+			"num"),"class=\"h_number\" width=10%")
+		.cell(input("text","c_num[$k]",$v["num"],
+			"size=16 maxlength=20")
+			,"class=\"$tcolor\" width=20%")
+		: cell("&nbsp;","class=\"$tcolor\" colspan=2 width=30%") )
+		.cell(input("checkbox","c_check[$k]","true",
+			($check_all?"CHECKED":""))
+			.$xid,"width=15% id=\"center\"")
+		.head(	 $cbatch[$k]->string_ops_batch()
+			.$cbatch[$k]->string_one_batch()
+			,"width=35%")
+		.cell(	 input("hidden","c_rid[$k]",$c_rid)."\n"
+			.input("hidden","c_nrid[$k]",$c_nrid)."\n"
+			.input("submit","upd_[$k]","Update")."&nbsp;\n"
+			.input("submit","del_[$k]",$delmsg)."\n"
+			,"class=\"$rcolor\" width=20% id=\"center\""))
+.(! ereg("^$",$user->bids[$v["bid"]]["title"])
+	? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
+			,$v["bid"],"title")
+			,"class=\"h_title\" width=10% colspan=1")
+		.cell(	input("text","c_title[$k]",$v["title"],
+				"size=80 maxlength=80")
+			,"class=\"b_title\" width=70% colspan=3")
+		.cell("\n".input("checkbox","c_formatted[$k]","true",
+			($v["formatted"]=="t" ? "CHECKED" : ""))
+			.sendhelp("Formatted","formatted")."\n"
+			,"class=\"b_title\" width=20% colspan=1"))
+	: "")
+.((($this->body == "full")
+	&& ! ereg("^$",$user->bids[$v["bid"]]["card"]))
+	? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
+			,$v["bid"],"card")
+			,"class=\"h_card\" width=10% valign=\"TOP\"")
+		.cell(textarea("c_card[$k]",$v["card"],
+			"cols=80 rows=$lines")
+			,"class=\"b_card\" width=90% colspan=4")) : "")
+.($this->dates != "hide" ?
+	row(	cell(	table(	row(
+			head("created: ".$v["cdate"])
+			.head("modified: ".$v["mdate"])),
+		"class=\"dates\" width=\"100%\""),
+	"class=\"dates\" colspan=5"))
+	: "")
+,$entrytableopt)))."\n";
+
 	} else {	// append only
 		$card = $this->br($v["card"]);
-	print "<TR><TD>\n"
-	.table(	row(	(! ereg("^$", $user->bids[$v["bid"]]["num"])
-			?cell(senddesc($user->bids[$v["bid"]]["num"] ,$v["bid"],
-				"num"),"WIDTH=10% BGCOLOR=\"$head_color\"")
-			 .cell($v["num"],"WIDTH=40%")
-			: cell(" ","WIDTH=50% COLSPAN=2") )
-			.cell(	 input("hidden","c_rid[$k]",$c_rid)
-				.input("hidden","c_nrid[$k]",$c_nrid)
-				.input("submit","upd_[$k]","Append")
-				,"COLSPAN=2 WIDTH=40% ALIGN=\"CENTER\"")
-			.cell($xid,"WIDTH=10% ALIGN=\"RIGHT\"") )
-	.(! ereg("^$",$user->bids[$v["bid"]]["title"])
-		? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
-				,$v["bid"],"title")
-				,"WIDTH=10% BGCOLOR=\"$head_color\"")
-			.cell($v["title"],"WIDTH=90% COLSPAN=4"))
-		: "" )
-	.((($this->body == "full")
-		&& ! ereg("^$",$user->bids[$v["bid"]]["card"]))
-		? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
-				,$v["bid"],"card")
-				,"WIDTH=10% BGCOLOR=\"$head_color\" "
-				."VALIGN=\"TOP\"")
-			.cell($card."<BR>"
-			.textarea("c_card[$k]",$v["card"],"COLS=80 ROWS=2")
-				,"WIDTH=90% BGCOLOR=\"$xcolor\" COLSPAN=4"))
-		: "")
-	,$entrytableopt)
-	."</TD></TR>\n";
+$text .= row(cell(table(
+	row(	(! ereg("^$", $user->bids[$v["bid"]]["num"])
+		?cell(senddesc($user->bids[$v["bid"]]["num"],$v["bid"],
+			"num"),"class=\"h_number\" width=10%")
+		 .cell($v["num"],"class=\"$tcolor\" width=40%")
+		: cell("&nbsp;","class=\"$tcolor\" width=50% colspan=2") )
+		.cell(	 input("hidden","c_rid[$k]",$c_rid)
+			.input("hidden","c_nrid[$k]",$c_nrid)
+			.input("submit","upd_[$k]","Append")
+			,"class=\"$tcolor\" colspan=2 width=40% id=\"center\"")
+		.cell($xid,"class=\"b_cid\" width=10%") )
+.(! ereg("^$",$user->bids[$v["bid"]]["title"])
+	? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
+			,$v["bid"],"title")
+			,"class=\"h_title\" width=10% colspan=1")
+		.cell($v["title"],"class=\"b_title\" width=60% colspan=3")
+		.cell("\n".input("checkbox","c_formatted[$k]","true",
+			($v["formatted"]=="t" ? "CHECKED" : ""))
+			.sendhelp("Formatted","formatted")."\n"
+			,"class=\"b_title\" width=20% colspan=1"))
+	: "" )
+.((($this->body == "full")
+	&& ! ereg("^$",$user->bids[$v["bid"]]["card"]))
+	? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
+			,$v["bid"],"card")
+			,"class=\"h_card\" width=10% valign=\"top\"")
+		.cell(($v["formatted"]=="t"
+			? pre($v["card"],"t"):$this->br($v["card"]))
+		.textarea("c_card[$k]","","cols=80 rows=2")
+			,"class=\"b_card\" width=90% colspan=4"))
+	: "")
+.($this->dates != "hide" ?
+	row(	cell(	table(	row(
+			head("created: ".$v["cdate"])
+			.head("modified: ".$v["mdate"])),
+		"class=\"dates\" width=\"100%\""),
+	"class=\"dates\" colspan=5"))
+	: "")
+,$entrytableopt)))."\n";
 	}
 }
 	}
 	if ($this->edit == "edit") {
-		print row(head(
+		$text .= row(head(
 	sendhelp("Help","update all cards")
 	.input("submit","upd_all","Update All Cards")." ("
 	.sendhelp(inform("only non-relation cards") ,"update relation").")"));
 	}
-	print "</TABLE>\n";
+	$text .= "</table>\n";
+
+	return $text;
+}
+
+// display the cards according to view parameters
+function cards(&$cards, $check_all = false) {
+	print $this->string_cards($cards, $check_all);
 }
 
 // return true if editable situation else false
@@ -378,7 +399,7 @@ function br (&$card) {
 	return preg_replace("/\n/","<BR>\n",$card);
 }
 
-// rest the session values
+// reset the session values
 function session () {
 	if (isset($_SESSION["view"])) {
 		$_SESSION["view"] = $view;

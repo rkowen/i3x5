@@ -101,10 +101,10 @@ function set_user_selected() {
 	}
 }
 
-// show the select table
+// return the select table as a string
 // (if $selected then only those identified in $user as selected)
 // (note that this can be a rapidly diminishing set.)
-function show_many_batch($selected = false) {
+function string_many_batch($selected = false) {
 	global $user;
 
 	// This code snippet handles the many_batch_* SELECTED
@@ -120,14 +120,14 @@ function show_many_batch($selected = false) {
 	$sel_N = "many_batch_".$this->id."_sel__NOT_";
 	$ssel_A = (isset($$sel_A)?$$sel_A:"");
 	$ssel_N = (isset($$sel_N)?$$sel_N:"");
-	print <<<PAGE
+	$text = <<<PAGE
 
 <!--{many_batch-->
-<TABLE WIDTH=100% BORDER=0><TR><TH VALIGN="top">
-<TR><TH>
-<SELECT MULTIPLE NAME="many_batch_{$this->id}[]" SIZE=5>
-<OPTION {$ssel_A} VALUE="_ALL_">_ALL_</OPTION>
-<OPTION {$ssel_N} VALUE="_NOT_">_NOT_</OPTION>
+<table width=100% border=0><tr><th valign="top">
+<tr><th>
+<select multiple name="many_batch_{$this->id}[]" size=5>
+<option {$ssel_A} value="_ALL_">_ALL_</option>
+<option {$ssel_N} value="_NOT_">_NOT_</option>
 
 PAGE;
 	// list batches owned by user
@@ -135,30 +135,33 @@ PAGE;
 	while (list($k,$v) = each ($user->bids)) {
 		$sel_ = "many_batch_".$this->id."_sel_".$k;
 		if ((! $selected) || $v[selected]) {
-			print "<OPTION ".(isset($$sel_)?$$sel_:"")
-			." VALUE=\"".$k."\">".$v["batch"]."</OPTION>\n";
+			$text .= "<option ".(isset($$sel_)?$$sel_:"")
+			." value=\"".$k."\">".$v["batch"]."</option>\n";
 		}
 	}
-	print <<<PAGE
+	$text .= <<<PAGE
 
-</SELECT>
-</TH><TD VALIGN="top">
+</select>
+</th><td valign="top">
 PAGE;
-	print inform("Try left click or<BR>ctrl or shift-left click<BR>"
+	$text .= inform("Try left click or<BR>ctrl or shift-left click<BR>"
 		."for multiple<BR>selections")."\n";
-	print <<<PAGE
-</TD></TR></TABLE>
+	$text .= "</td></tr></table>\n";
 
-PAGE;
 	// pass along status of $selected
 	if ($selected) {
-		print "<INPUT NAME=\"many_batch_{$this->id}_selected\""
-			." TYPE=\"hidden\" value=1>\n";
+		$text .= "<input name=\"many_batch_{$this->id}_selected\""
+			." type=\"hidden\" value=1>\n";
 	}
-	print <<<PAGE
-<!--}-->
+	$text .= "<!--}-->\n";
+	return $text;
+}
 
-PAGE;
+// show the select table
+// (if $selected then only those identified in $user as selected)
+// (note that this can be a rapidly diminishing set.)
+function show_many_batch($selected = false) {
+	print $this->string_many_batch($selected);
 }
 
 function dump() {

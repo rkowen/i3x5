@@ -1,0 +1,172 @@
+/* 3x5 cards style sheet */
+#right {
+	text-align: right	!important;
+	padding-right: .5em	!important;
+}
+#left {
+	text-align: left	!important;
+	padding-left: .5em	!important;
+}
+#center {
+	text-align: center	!important;
+	padding-left: .5em	!important;
+	padding-right: .5em	!important;
+}
+a:link,a:active,a:visited {
+	text-decoration: none;
+	color: #0000FF;
+}
+a.help:link,a.help:active,a.help:visited {
+	text-decoration: none;
+	color: #805000;
+}
+body.title {
+	background: #afffaf;
+	border-style: none;
+	margin: .5em;
+}
+body.options {
+	background: #afafff;
+	border-style: none;
+	margin: .5em;
+}
+body.main {
+	background: #efefef;
+	border-style: none;
+	margin: .5em;
+}
+ul {
+	list-style: none;
+	line-height: 1.1;
+	padding-left: 0;
+	margin-left: 1pt;
+	margin-top: .2em;
+}
+ul ul {
+	list-style: square;
+	line-height: 1.0;
+	padding-left: 1em;
+	margin-left: 1pt;
+}
+table.outer {
+	background: #f0d0d0;	/* box_color */
+	text-align: center;
+	border: outset 3px;
+/*	padding: 2em; */
+	margin: 0;
+	width: 100%;
+}
+table.tight {
+	background: #f0d0d0;	/* box_color */
+	text-align: center;
+	border: outset 3px;
+	padding: 10px;
+	margin: 0;
+}
+table.form {
+	background: #d0d0d0;	/* form_color */
+	text-align: center;
+	border: outset 3px;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+table.batch {
+	background: #d0d0d0;	/* form_color */
+	text-align: center;
+	border: outset 3px;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+table.cardview {
+	background: #d0d0d0;
+	text-align: center;
+	border: outset 2pt;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+table.cardview_relate {
+	background: #a0a0dd;
+	text-align: center;
+	border: outset 2pt;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+table.dates {
+	background: #f0f0f0;
+	text-align: center;
+	border: none 0;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+td.h_number,td.h_title,td.h_card,td.h_batch,td.h_form {
+	background: #f0f0f0;
+	border: none 0;
+	text-align: left;
+	padding-left: .5em;
+}
+td.b_number,td.b_title,td.b_card,td.b_form {
+	background: #d0d0d0;
+	border: none 0;
+	text-align: left;
+	padding-left: .5em;
+}
+td.b_title {
+	background: #e0e0e0;
+}
+td.b_cid {
+	background: #d0d0d0;
+	border: inset 1pt;
+	text-align: right;
+	padding-right: .5em;
+}
+td.h_dates {
+	border: none 0;
+	text-align: center;
+	padding: 0;
+}
+td.relate {
+	border: none 0;
+	text-align: left;
+	padding-left: .5em;
+	background: #a0a0dd;
+}
+td.none {
+	border: none 0;
+	text-align: left;
+	padding-left: .5em;
+}
+td.related_warn {
+	border: none 0;
+	text-align: left;
+	padding-left: .5em;
+	background: #cc5050;
+}
+em.warn {
+	font-style: normal;
+	font-size: larger;
+	font-weight: bolder;
+	color: #ff4040;
+}
+em.inform {
+	font-style: normal;
+	font-size: larger;
+	font-weight: bolder;
+	color: #40aaaa;
+}
+em.help {
+	font-style: normal;
+	color: #805000;
+}
+em.noselect {
+	font-style: oblique;
+	font-weight: lighter;
+	color: #ffffff;
+}
+p.help {
+	text-align: left;
+}

@@ -6,19 +6,7 @@
 	$schema		= "i3x5";
 	$version	= "0.7.1";
 	$phpinfo	= 0;	// set non-zero for phpinfo
-	$result_bg	= "BGCOLOR=\"#EFEFEF\"";
-	$title_bg	= "BGCOLOR=\"#AFFFAF\"";
-	$help_bg	= "BGCOLOR=\"#AFAFFF\"";
-	$box_color	= "#F0D0D0";
 	$form_color	= "#D0D0D0";
-	$warn_color	= "#DD0000";
-	$inform_color	= "#0000DD";
-	$relate_color	= "#8080DD";
-	$related_color	= "#CC5050";
-	$noselect_color	= "#D0D0D0";
-	$head_color	= "#F0F0F0";
-	$help_color	= "#805000";
-	$indent		= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	$level_admin	= 4;
 	$level_write	= 3;
 	$level_append	= 2;
@@ -33,53 +21,57 @@
 //
 // functions
 	function warn($q) {
-		global $warn_color;
-		return "<FONT COLOR=\"$warn_color\">$q</FONT>";
+		return "<em class=\"warn\">$q</em>";
 	}
 	function inform($q) {
-		global $inform_color;
-		return "<FONT COLOR=\"$inform_color\">$q</FONT>";
+		return "<em class=\"inform\">$q</em>";
+	}
+	function noselect($q) {
+		return "<em class=\"noselect\">$q</em>";
 	}
 	function help($q) {
-		global $help_color;
-		return "<FONT COLOR=\"$help_color\">$q</FONT>";
+		return "<em class=\"help\">$q</em>";
 	}
 	function table($q, $op="") {
-		return "<TABLE $op>\n$q\n</TABLE>\n";
+		return "<table $op>\n$q\n</table>\n";
 	}
 	function head($q, $op="") {
-		return "<TH $op>$q</TH>\n";
+		return "<th $op>$q</th>\n";
 	}
 	function row($q, $op="") {
-		return "<TR $op>$q</TR>\n";
+		return "<tr $op>$q</tr>\n";
 	}
 	function cell($q, $op="") {
-		return "<TD $op>$q</TD>\n";
+		return "<td $op>$q</td>\n";
+	}
+	function form($action, $q, $op="") {
+		return "<form action=\"$action\" method=\"POST\" $op>"
+		."$q</form>\n";
 	}
 	function input($type,$name,$value,$op="") {
-		return "<INPUT TYPE=\"$type\" NAME=\"$name\""
-		." VALUE = \"$value\" $op>";
+		return "<input type=\"$type\" name=\"$name\""
+		." value = \"$value\" $op>";
 	}
 	function textarea($name,$value,$op="") {
-		return "<TEXTAREA NAME=\"$name\" $op>".$value."</TEXTAREA>\n";
+		return "<textarea name=\"$name\" $op>".$value."</textarea>\n";
 	}
 	function pre($q, $op="") {
 		if ($op == "t") {
-			return "<PRE>$q</PRE>";
+			return "<pre>$q</pre>";
 		} else {
 			return "$q";
 		}
 	}
 	function sendhelp($text, $key = "unknown") {
-		global $help_color;
-		return "<A HREF=\"indexB.php?help=".urlencode($key).
-			"\" TARGET=\"options\">".
-			"<FONT COLOR=\"$help_color\">$text</FONT></A>\n";
+		return "<a class=\"help\" href=\"indexB.php"
+			."?help=".urlencode($key)
+			."\" target=\"options\">"
+			."$text</a>\n";
 	}
 	function senddesc($text, $bid, $property) {
-		global $help_color;
-		return "<A HREF=\"indexB.php?bid=$bid&property=$property".
-			"\" TARGET=\"options\">".
-			"<FONT COLOR=\"$help_color\">$text</FONT></A>\n";
+		return "<a class=\"help\" href=\"indexB.php"
+			."?bid=$bid&property=$property"
+			."\" target=\"options\">"
+			."$text</a>\n";
 	}
 ?>

@@ -165,7 +165,7 @@ function validate_strong($q, &$msg) {
 
 function get_form() {
 
-	if ($_POST["clear"]) {
+	if (isset($_POST["clear"])) {
 		// clear the posted values
 		reset($this->list);
 		while(list($k,$v) = each($this->list)) {
@@ -203,26 +203,22 @@ function get_form() {
 
 //------------ non-active code --------------
 
-function show_form($title, $helpkey, $url="indexM.php") {
-	global $result_bg;
-	global $box_color;
-	global $form_color;
-	global $PHP_SELF;
+function show_form($title, $helpkey) {
 
 	$thelp = sendhelp($title,$helpkey);
 	print <<<EOT
-<HTML>
-<HEAD>
-<TITLE> $title </TITLE>
-</HEAD>
-<BODY $result_bg>
-<CENTER>
-<TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
-<TR><TH><A HREF="$url"><IMG SRC="back.gif" ALT="back up" BORDER="0"></A></TH>
-<TH><CENTER><BIG> $thelp </BIG></CENTER>
-</TH></TR> <TR><TH COLSPAN=2>
-	<FORM ACTION="$PHP_SELF" METHOD="POST">
-	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+<title> $title </title>
+</head>
+<body class="main">
+<center>
+<table class="tight">
+<tr><th><center><big> $thelp </big></center>
+</th></tr> <tr><th>
+	<form action="{$_SERVER['PHP_SELF']}" method="POST">
+	<table class="form">
 EOT;
 
 reset($this->list);
@@ -232,34 +228,34 @@ while(list($k,$v) = each($this->list)) {
 	$ml = $this->list[$k]["maxlen"];
 
 	if ($this->type=="Update" && $k == "username") {
-		print row(cell($label)."\n	".
-		cell("<INPUT NAME=\"$k\" TYPE=\"hidden\" VALUE=\"".
-			$_POST[$k]."\">".$_POST[$k]
-			). $msg)."\n";
+		print row(cell($label,"class=\"h_form\"")."\n	".
+		cell(input("hidden",$k,$_POST[$k]).$_POST[$k])
+			.$msg)."\n";
 	} else {
-		print row(cell($label)."\n	".
-		cell("<INPUT NAME=\"$k\" SIZE=\"25\" MAXLENGTH=\"$ml\" TYPE=\"text\" ".
-		"VALUE=\"{$_POST[$k]}\">"). $msg)."\n";
+		print row(cell($label,"class=\"h_form\"")."\n	".
+		cell(input("text",$k,$_POST[$k],"size=25 maxlength=$ml"))
+			.$msg)."\n";
 	}
 }
-
 print <<<EOT
-	<TR><TH COLSPAN=3>
-	<INPUT NAME="submit"			TYPE="submit"	value="{$this->type}" >
-	<INPUT NAME="reset"			TYPE="reset"	value="Reset" >
-	<INPUT NAME="clear"			TYPE="submit"	value="Clear" >
-	<INPUT NAME="create_update_user"	TYPE="hidden"	value="Done" >
-	</TD></TR>
-	</TABLE>
-	</FORM>
-</TH></TR>
-</TABLE>
+	<tr><th colspan=3>
+EOT;
+	print	input("submit","submit",$this->type)
+		.input("reset","reset","Reset")
+		.input("submit","clear","Clear")
+		.input("hidden","create_update_user","Done");
+print <<<EOT
+	</td></tr>
+	</table>
+	</form>
+</th></tr>
+</table>
 EOT;
 // need to add end stuff
 
 	if ($this->invalid) {
 		print warn(
-"There were {$this->invalid} field(s) that need to be corrected")."<BR>\n";
+"There were {$this->invalid} field(s) that need to be corrected")."<br>\n";
 	}
 }
 
