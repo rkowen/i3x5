@@ -99,12 +99,17 @@ function &cards (&$bids, $selected = true) {
 	return $this->multi_col("id",
 "SELECT id,bid,rid,num,title,card,\n".
 " (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,\n".
-" moddate AS date, formatted\n".
+" TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,\n".
+" TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,\n".
+" formatted\n".
 "FROM i3x5_cards n WHERE bid in ($list) AND rid IS NULL\n".
 "UNION\n".
 "SELECT n.id AS id, n.bid AS bid, n.rid AS rid,\n".
 "r.num AS num,r.title AS title,\n".
-"r.card AS card,0 AS nrid, r.moddate AS date, r.formatted AS formatted\n".
+"r.card AS card,0 AS nrid,\n".
+"TO_CHAR(r.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,\n".
+"TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,\n".
+"r.formatted AS formatted\n".
 "FROM i3x5_cards n, i3x5_cards r\n".
 "WHERE n.bid in ($list) AND r.id=n.rid AND n.rid IS NOT NULL\n");
 }

@@ -276,10 +276,16 @@ Selecting "Header Only" will only show the "number" and "title"
 fields.  Selecting "Full" will show the "card" body too.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'view dates','
+Select whether to show the "card" creation and modification dates
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'view key','
 Select which field to sort the cards by.
-Sorting is only done on the "number" (numerically)
-or "title" (alphabetically) fields.
+Sorting can be done on the "number" (numerically),
+"title" (alphabetically), the creation date, or the modification date
+fields.  (If a date field is selected the sort will be done even
+if the date fields are not shown.)
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'view order','

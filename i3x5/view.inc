@@ -11,6 +11,7 @@ include_once "one_batch.inc";
 class View {
 	var $edit;
 	var $body;
+	var $dates;
 	var $key;
 	var $order;
 	var $group;
@@ -18,6 +19,7 @@ class View {
 // constructor
 function View (	$edit	= "edit",	// or "list"
 		$body	= "full",	// or "header"
+		$dates	= "show",	// or "hide"
 		$key	= "title",	// or "num"
 		$order	= "asc",	// or "des"
 		$group	= "batch") {	// or "none"
@@ -42,6 +44,7 @@ function get_buttons() {
 
 	$view_stuff = array (	"edit",
 				"body",
+				"dates",
 				"key",
 				"order",
 				"group");
@@ -63,46 +66,59 @@ function show_buttons() {
 	global $level_read;
 	global $noselect_color;
 
-	$sel_edit	= ($this->edit  == "edit" ? "CHECKED" : "");
-	$sel_list	= ($this->edit  == "list" ? "CHECKED" : "");
-	$sel_header	= ($this->body  == "header" ? "CHECKED" : "");
-	$sel_full	= ($this->body  == "full" ? "CHECKED" : "");
-	$sel_num	= ($this->key   == "num" ? "CHECKED" : "");
-	$sel_title	= ($this->key   == "title" ? "CHECKED" : "");
-	$sel_asc	= ($this->order == "asc" ? "CHECKED" : "");
-	$sel_des	= ($this->order == "des" ? "CHECKED" : "");
-	$sel_batch	= ($this->group == "batch" ? "CHECKED" : "");
-	$sel_none	= ($this->group == "none" ? "CHECKED" : "");
+	$sel_edit	= ($this->edit	== "edit" ? "CHECKED" : "");
+	$sel_list	= ($this->edit	== "list" ? "CHECKED" : "");
+	$sel_header	= ($this->body	== "header" ? "CHECKED" : "");
+	$sel_full	= ($this->body	== "full" ? "CHECKED" : "");
+	$sel_dates_show	= ($this->dates	== "show" ? "CHECKED" : "");
+	$sel_dates_hide	= ($this->dates	== "hide" ? "CHECKED" : "");
+	$sel_num	= ($this->key	== "num" ? "CHECKED" : "");
+	$sel_title	= ($this->key	== "title" ? "CHECKED" : "");
+	$sel_cdate	= ($this->key	== "cdate" ? "CHECKED" : "");
+	$sel_mdate	= ($this->key	== "mdate" ? "CHECKED" : "");
+	$sel_asc	= ($this->order	== "asc" ? "CHECKED" : "");
+	$sel_des	= ($this->order	== "des" ? "CHECKED" : "");
+	$sel_batch	= ($this->group	== "batch" ? "CHECKED" : "");
+	$sel_none	= ($this->group	== "none" ? "CHECKED" : "");
 
 	// card edit buttons
 	print table(
-	row(	head("Card View Attributes", "COLSPAN=4"))
+	row(	head("Card View Attributes", "COLSPAN=5"))
 	.row(	cell(sendhelp("Cards:","view cards"))
 		.cell(
-	($user->level <= $level_read
+		($user->level <= $level_read
 		? "<FONT COLOR=\"$noselect_color\">Edit</FONT>\n"
-		: input("radio","view_edit","edit",$sel_edit)." Edit"))
-		.cell(	input("radio","view_edit","list",$sel_list)." List"))
+		: input("radio","view_edit","edit",$sel_edit)." Edit"),
+		"COLSPAN=2")
+		.cell(	input("radio","view_edit","list",$sel_list)." List",
+		"COLSPAN=2"))
 	.row(	cell(sendhelp("Show:","view show"))
 		.cell(	input("radio","view_body","header",$sel_header)
-			." Header Only")
+			." Header Only", "COLSPAN=2")
 		.cell(	input("radio","view_body","full",$sel_full)
-			." Full"))
+			." Full", "COLSPAN=2"))
+	.row(	cell(sendhelp("Dates:","view dates"))
+		.cell(	input("radio","view_dates","show",$sel_dates_show)
+			." Show dates", "COLSPAN=2")
+		.cell(	input("radio","view_dates","hide",$sel_dates_hide)
+			." Hide dates", "COLSPAN=2"))
 	.row(	cell(sendhelp("Key:","view key"))
-		.cell(	input("radio","view_key","num",$sel_num)
-			." Number")
-		.cell(	input("radio","view_key","title",$sel_title)
-			." Title"))
+		.cell(	input("radio","view_key","num",$sel_num)." Number")
+		.cell(	input("radio","view_key","title",$sel_title)." Title")
+		.cell(	input("radio","view_key","mdate",$sel_mdate)." Mdate")
+		.cell(	input("radio","view_key","cdate",$sel_cdate)." Cdate"))
 	.row(	cell(sendhelp("Order:","view order"))
 		.cell(	input("radio","view_order","asc",$sel_asc)
-			." Ascending")
+			." Ascending", "COLSPAN=2")
 		.cell(	input("radio","view_order","des",$sel_des)
-			." Descending"))
+			." Descending", "COLSPAN=2"))
 	.row(	cell(sendhelp("Group By:","view group"))
 		.cell(	input("radio","view_group","batch",$sel_batch)
-			." Batch")
+			." Batch",
+		"COLSPAN=2")
 		.cell(	input("radio","view_group","none",$sel_none)
-			." None"))
+			." None",
+		"COLSPAN=2"))
 ,"WIDTH=\"100%\" BORDER=1");
 }
 
@@ -282,6 +298,13 @@ if ($this->edit == "list") {
 			.cell(textarea("c_card[$k]",$v["card"],
 				"COLS=80 ROWS=$lines")
 				,"WIDTH=90% COLSPAN=4")) : "")
+	.($this->dates != "hide" ?
+		row(	cell(	table(	row(
+				head("created: ".$v["cdate"])
+				.head("modified: ".$v["mdate"])),
+			"WIDTH=\"100%\" BORDER=0"),
+		"ALIGN=\"CENTER\" COLSPAN=5 BGCOLOR=\"$head_color\""))
+		: "")
 	,$entrytableopt)
 	."</TD></TR>\n";
 	} else {	// append only
@@ -310,7 +333,7 @@ if ($this->edit == "list") {
 				,"WIDTH=10% BGCOLOR=\"$head_color\" "
 				."VALIGN=\"TOP\"")
 			.cell($card."<BR>"
-			.textarea("c_card[$k]",$v[card],"COLS=80 ROWS=2")
+			.textarea("c_card[$k]",$v["card"],"COLS=80 ROWS=2")
 				,"WIDTH=90% BGCOLOR=\"$xcolor\" COLSPAN=4"))
 		: "")
 	,$entrytableopt)
@@ -344,7 +367,7 @@ function dump() {
 }
 
 // a comparison function for sorting a cards array, assumes a card array
-// (id=>(id=>,bid=>,rid=>,num=>, title=>, card=>),...)
+// (id=>(id=>,bid=>,rid=>,num=>, title=>, card=>, cdate=>, mdate=> ),...)
 // returns -1,0,1
 // must be a stand-alone function (not a method)
 function card_cmp(&$a, &$b) {
@@ -371,10 +394,22 @@ function card_cmp(&$a, &$b) {
 		}elseif($a["num"] > $b["num"] ) {
 			return $more;
 		}
-	} else {				// sort by title
+	} elseif ($view->key == "title") {	// sort by title
 		if (	$a["title"] < $b["title"] ) {
 			return $less;
 		}elseif($a["title"] > $b["title"] ) {
+			return $more;
+		}
+	} elseif ($view->key == "cdate") {	// sort by cdate
+		if (	strtotime($a["cdate"]) < strtotime($b["cdate"]) ) {
+			return $less;
+		}elseif(strtotime($a["cdate"]) > strtotime($b["cdate"]) ) {
+			return $more;
+		}
+	} elseif ($view->key == "mdate") {	// sort by mdate
+		if (	strtotime($a["mdate"]) < strtotime($b["mdate"]) ) {
+			return $less;
+		}elseif(strtotime($a["mdate"]) > strtotime($b["mdate"]) ) {
 			return $more;
 		}
 	}
