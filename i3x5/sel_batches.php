@@ -15,13 +15,14 @@
 	$manybid = new ManyBatch();
 	$manybid->get_many_batch();
 	
-if ($view) {
+if (isset($view)) {
 	$view->get_buttons();
 } else {
-	$view = new View();
+	$_SESSION['view'] = new View();
+	$view =& $_SESSION['view'];
 }
 // process batches if given view go-ahead
-if ($_POST["submit"] == "Submit") {
+if (isset($_POST["submit"]) && ($_POST["submit"] == "Submit")) {
 	if ( (! is_array($_POST["many_batch__"]))
 	|| (count($_POST["many_batch__"]) == 0)) {
 		$errmsg = "Nothing to view! Select some batches.";
@@ -39,6 +40,9 @@ if ($_POST["submit"] == "Submit") {
 Pick a ``Select Batches'' operation from left menu<BR>
 </H2>
 </CENTER>
+PAGE;
+	if ($phpinfo) {phpinfo(); $view->dump();}
+		print <<<PAGE
 </BODY>
 PAGE;
 		return;
@@ -57,12 +61,12 @@ $hhead = sendhelp("{$user->project} - Select Batches", "batch select");
 <TR><TH> $hhead </TH></TR>
 
 PAGE;
-	if ($errmsg) {
+	if (isset($errmsg)) {
 		print "<TR><TH>".warn($errmsg)."</TH></TR>\n";
 	}
 	print <<<PAGE
 <TR><TH>
-	<FORM ACTION="$PHP_SELF" METHOD="POST">
+	<FORM ACTION="{$_SERVER['PHP_SELF']}" METHOD="POST">
 	<!--{-->
 	<TABLE WIDTH=100% BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
 	<TR><TH VALIGN="top">

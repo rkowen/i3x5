@@ -34,6 +34,12 @@ rko_db.inc
 	action:		(none)
 
 session.inc
+    make certain session variables "global"
+    (use references for convenience so changes will be propagated back)
+    This allows the register_globals directive to be off
+    Session registered variables:
+    user
+    view
 	include:	(none)
 	action:		(none)
 
@@ -47,6 +53,15 @@ view.inc
     and viewing the card batches
 	include:	user.inc
 			cards.inc
+			one_batch.inc
+	action:		(none)
+
+batches.php
+    select batch operations
+	include:	cards.inc
+			user.inc
+			session.inc
+			3x5_db.inc
 			one_batch.inc
 	action:		(none)
 
@@ -81,6 +96,7 @@ indexB.php
 			cards.inc
 			3x5_db.inc
 	action:		update_user.php
+			batches.php
 			del_batch.php
 			list_batches.php
 			sel_batches.php
@@ -121,6 +137,7 @@ list_batches.php
 login_user.php
     prompts for username and password
 	include:	user.inc
+			session.inc
 			cards.inc
 			3x5_db.inc
 	action:		create_user.php

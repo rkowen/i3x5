@@ -136,13 +136,14 @@ function insert_card ($bid, $object, $append = false) {
 			$this->escape($object["card"])."' "; }
 		else { $object["card"]
 			= "'".$this->escape($object["card"])."'";}
-		if (! $object["formatted"]) { $object["formatted"] = "false"; }
+		if (! $object["formatted"])
+			{ $object["formatted"] = "false"; }
 
 		$id = $this->sql("SELECT nextval('i3x5_cards_id_seq')");
 		$this->sql(
 "INSERT INTO i3x5_cards (id,bid,num,title,card,formatted) ".
-"VALUES ($id, $bid, {$object[num]}, {$object[title]}, {$object[card]},".
-" {$object[formatted]})" );
+"VALUES ($id, $bid, {$object['num']}, {$object['title']}, {$object['card']},".
+" {$object['formatted']})" );
 		return $id;
 	} elseif((is_numeric($object) ? intval($object)==$object : false)) {
 		// is_int($object) doesn't work as advertized

@@ -26,12 +26,12 @@ function get_many_batch() {
 
 	$t = "many_batch_".$this->id;
 	// selected status
-	if ($_POST[$t."_selected"]) {
+	if (isset($_POST[$t."_selected"])) {
 		$selected = $_POST[$t."_selected"];
 	} else {
 		$selected = false;
 	}
-	if (is_array($_POST[$t])) {
+	if (isset($_POST[$t]) && is_array($_POST[$t])) {
 		$tbids = $_POST[$t];
 		reset($tbids);
 		// create some local variables
@@ -50,7 +50,7 @@ function get_many_batch() {
 			}
 		}
 		// see if all is checked then set them all
-		if ($sel__ALL_) {
+		if (isset($sel__ALL_)) {
 			reset($user->bids);
 			while (list($k,$v) = each($user->bids)) {
 				if ((! $selected) || $v["selected"]) {
@@ -59,7 +59,7 @@ function get_many_batch() {
 			}
 		}
 		// if not is checked then toggle them all
-		if ($sel__NOT_) {
+		if (isset($sel__NOT_)) {
 			reset($user->bids);
 			while (list($k,$v) = each($user->bids)) {
 				if ((! $selected) || $v["selected"]) {
@@ -118,14 +118,16 @@ function show_many_batch($selected = false) {
 	}
 	$sel_A = "many_batch_".$this->id."_sel__ALL_";
 	$sel_N = "many_batch_".$this->id."_sel__NOT_";
+	$ssel_A = (isset($$sel_A)?$$sel_A:"");
+	$ssel_N = (isset($$sel_N)?$$sel_N:"");
 	print <<<PAGE
 
 <!--{many_batch-->
 <TABLE WIDTH=100% BORDER=0><TR><TH VALIGN="top">
 <TR><TH>
 <SELECT MULTIPLE NAME="many_batch_{$this->id}[]" SIZE=5>
-<OPTION {$$sel_A} VALUE="_ALL_">_ALL_</OPTION>
-<OPTION {$$sel_N} VALUE="_NOT_">_NOT_</OPTION>
+<OPTION {$ssel_A} VALUE="_ALL_">_ALL_</OPTION>
+<OPTION {$ssel_N} VALUE="_NOT_">_NOT_</OPTION>
 
 PAGE;
 	// list batches owned by user
@@ -133,7 +135,7 @@ PAGE;
 	while (list($k,$v) = each ($user->bids)) {
 		$sel_ = "many_batch_".$this->id."_sel_".$k;
 		if ((! $selected) || $v[selected]) {
-			print "<OPTION ".$$sel_
+			print "<OPTION ".(isset($$sel_)?$$sel_:"")
 			." VALUE=\"".$k."\">".$v["batch"]."</OPTION>\n";
 		}
 	}

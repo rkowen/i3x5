@@ -46,7 +46,7 @@ function catch_gets() {
 	global $level_read;
 
 	// Allow the _GET to override the following:
-	if (array_key_exists("view_edit",$_GET)
+	if (isset($_GET["view_edit"])
 	&& ($_GET["view_edit"] == "edit"
 	|| $_GET["view_edit"] == "list")) {
 		$this->edit = $_GET["view_edit"];
@@ -71,7 +71,7 @@ function get_buttons() {
 	reset($view_stuff);
 	while (list($k,$v) = each($view_stuff)) {
 		$t = "view_".$v;
-		if ($_POST[$t]) {
+		if (isset($_POST[$t])) {
 			$this->$v = $_POST[$t];
 		}
 	}
@@ -223,8 +223,9 @@ function cards(&$cards, $check_all = false) {
 			}
 		}
 // batch header
-		if ($this->group == "batch"
-		&&  $bheader != $user->bids[$v["bid"]]["batch"]) {
+		if (($this->group == "batch")
+		&& ((! isset($bheader))
+		|| $bheader != $user->bids[$v["bid"]]["batch"])) {
 			$bheader = $user->bids[$v["bid"]]["batch"];
 			print "<TR><TD>\n"
 			.table( row( head( senddesc($bheader,$v["bid"],"batch"),

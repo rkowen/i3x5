@@ -11,7 +11,7 @@
 	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
 	$check_all = false;
 
-if (! $view) {
+if (! isset($view)) {
 	$view = new View();
 }
 
@@ -68,7 +68,9 @@ elseif (array_key_exists("upd_", $_POST)
 				array(	"num"=>$_POST["c_num"][$k],
 				"title"=>$_POST["c_title"][$k],
 				"card"=>$_POST["c_card"][$k],
-				"formatted"=>$_POST["c_formatted"][$k]
+				"formatted"=>
+					(isset($_POST["c_formatted"][$k])
+					?$_POST["c_formatted"][$k]:false)
 				));
 		} elseif ($ops == "COPY") {
 			$db->copy_card($id,$bid);
@@ -96,7 +98,9 @@ elseif (array_key_exists("ins__", $_POST)
 		array(	"num"=>$_POST["i_num"],
 			"title"=>$_POST["i_title"],
 			"card"=>$_POST["i_card"],
-			"formatted"=>$_POST["i_formatted"]
+			"formatted"=>
+				(isset($_POST["i_formatted"])
+				?$_POST["i_formatted"]:false)
 		),
 		($user->level >= $level_write ? false : "append"));
 }
@@ -143,7 +147,7 @@ $hhead = sendhelp("{$user->project} - Card View","card view");
 <BODY $result_bg>
 <CENTER>
 <!--{-->
-<FORM ACTION="$PHP_SELF" METHOD="POST">
+<FORM ACTION="{$_SERVER['PHP_SELF']}" METHOD="POST">
 <TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color" WIDTH=100%>
 <TR><TH> $hhead </TH></TR>
 
