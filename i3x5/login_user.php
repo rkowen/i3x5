@@ -4,22 +4,27 @@
 
 	session_start();
 	session_register("user");
+	include_once "session.inc";
 
 	include_once "cards.inc";
 	$project = "3x5 Cards";
 
-	if ($_POST["clear"]) {
+	if (isset($_POST["clear"])) {
 		$_POST["username"] = "";
 		$_POST["passwd"] = "";
 		$username = "";
 		$passwd = "";
 		$login_user = 0;
 	}
-	if ($_POST["username"]) {
+	if (isset($_POST["username"])) {
 		$username = strip_tags(trim($_POST["username"]));
+	} else {
+		$username = "";
 	}
-	if ($_POST["passwd"]) {
+	if (isset($_POST["passwd"])) {
 		$passwd = strip_tags(trim($_POST["passwd"]));
+	} else {
+		$passwd = "";
 	}
 
 	function not_logged_in ($q) {
@@ -89,7 +94,7 @@ NOT_LOGGED_IN;
 }
 
 // if coming to reset login
-	if (! $_POST["username"]) {
+	if (! isset($_POST["username"])) {
 		not_logged_in(
 		"Please fill in fields to login into ``$project''");
 		return;
@@ -104,7 +109,7 @@ NOT_LOGGED_IN;
 "SELECT uid FROM i3x5_userpass WHERE username='$username'");
 	if (! $uid) {
 		not_logged_in("Invalid Username");
-		exit;
+		return;
 	}
 
 // find the matching password and access_level
@@ -129,7 +134,7 @@ NOT_LOGGED_IN;
 		$project = $db->sql(
 			"SELECT project FROM i3x5_userpass ".
 			"WHERE username='$username'");
-		$user = New User($uid, $username,$access_level,$project,
+		$_SESSION['user'] = New User($uid, $username,$access_level,$project,
 			$db->bids($uid));
 		print <<<PAGE
 <HTML>
@@ -147,10 +152,8 @@ PAGE;
 </BODY>
 </HTML>
 PAGE;
-		return;
 
 	} else {
 		not_logged_in("Password does not match at any level!");
 	}
-
 ?>

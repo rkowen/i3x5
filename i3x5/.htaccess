@@ -4,3 +4,8 @@
 </IfModule>
 # enable this for secure communication (requires mod_ssl)
 SSLRequireSSL
+
+# Make all PHP code look like HTML
+AddType application/x-httpd-php .html
+
+php_flag	register_globals		Off

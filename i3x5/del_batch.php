@@ -24,7 +24,7 @@ if (isset($_GET["msg"])) {
 	$msg = $_GET["msg"];
 }
 // check if batch properties are linked to
-if ($del_batch) {
+if (isset($del_batch)) {
 	$rid = $db->sql(
 	"SELECT count(*) FROM i3x5_batch WHERE rid=$del_batch");
 	if ($rid) {
@@ -34,7 +34,7 @@ if ($del_batch) {
 	}
 }
 
-if ($do_delete && $delete=="Delete") {
+if (isset($do_delete) && $delete=="Delete") {
 
 // delete non-related cards
 	$db->sql(
@@ -72,20 +72,20 @@ if ($do_delete && $delete=="Delete") {
 <CENTER>
 PAGE;
 
-if ($del_batch) {
+if (isset($del_batch)) {
 	print <<<PAGE
 <!--{-->
 <TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
 <TR><TH>$hdel</TH></TR>
 <TR><TH>
-	<FORM ACTION="$PHP_SELF" METHOD="POST">
+	<FORM ACTION="{$_SERVER['PHP_SELF']}" METHOD="POST">
 	<!--{-->
 	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
 	<TR><TH>
 PAGE;
 	print warn("All non-linked cards<BR>will be deleted with batch")
 		."</TH></TR>\n";
-	if ($msg) {
+	if (isset($msg)) {
 		print row(cell(warn($msg)))."\n";
 	}
 	$hbatch = senddesc("{$user->bids[$del_batch]["batch"]}",
@@ -111,11 +111,11 @@ PAGE;
 <TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
 <TR><TH>$hdel</TH></TR>
 <TR><TH>
-	<FORM ACTION="$PHP_SELF" METHOD="POST">
+	<FORM ACTION="{$_SERVER['PHP_SELF']}" METHOD="POST">
 	<!--{-->
 	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
 PAGE;
-	if ($msg) {
+	if (isset($msg)) {
 		print row(cell(warn("<BIG>$msg</BIG>"),
 			"ALIGN=CENTER"))."\n";
 	}
@@ -126,7 +126,8 @@ PAGE;
 	// list batches owned by user
 	reset($user->bids);
 	while (list($k,$v) = each($user->bids)) {
-		$sel_ = (($del_batch == $k) ? "SELECTED" : "" );
+		$sel_ = ((isset($del_batch) && $del_batch == $k)
+			? "SELECTED" : "" );
 		print "<OPTION ".$sel_." VALUE=\"$k\">{$v["batch"]}</OPTION>\n";
 	}
 

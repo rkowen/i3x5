@@ -10,7 +10,7 @@ print <<<PAGE
 <BODY $result_bg>
 
 PAGE;
-	if ($user) {
+	if (isset($user)) {
 	print <<<PAGE
 <H2>``{$user->project}'' - results</H2>
 This the ``{$user->project}'' results frame

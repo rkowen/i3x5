@@ -6,20 +6,22 @@
 	include_once "session.inc";
 
 	include_once "cards.inc";
-	if ($_POST["logout"]) {
+	if (isset($_POST["logout"])) {
 		session_destroy();
+		session_write_close();
 		header("Location: indexM.php");
 		return;
 	}
-	if ($_POST["back"]) {
+	if (isset($_POST["back"])) {
+		session_write_close();
 		header("Location: indexM.php");
 		return;
 	}
-	$hlogout = sendhelp("{$user->project} - Logout","logout");
+	$hlogout = sendhelp("{$_SESSION['user']->project} - Logout","logout");
 print <<<PAGE
 <HTML>
 <HEAD>
-<TITLE>{$user->project} - Logout </TITLE>
+<TITLE>{$_SESSION['user']->project} - Logout </TITLE>
 </HEAD>
 <BODY $result_bg>
 <CENTER>
@@ -29,7 +31,7 @@ $hlogout
 <TR><TH>
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 BCOLOR="$box_color">
 <TR><TH>
-	<FORM ACTION="$PHP_SELF" METHOD="POST">
+	<FORM ACTION="{$_SERVER['PHP_SELF']}" METHOD="POST">
 	<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 BGCOLOR="$form_color">
 	<TR><TH>
 	<INPUT NAME="logout"		TYPE="submit"	value="Logout" >

@@ -37,7 +37,7 @@ Batch Properties:<BR>
 $indent
 <A HREF="new_batch.php?batch_select=New&example=card" TARGET="main">Create</A>
 or
-<A HREF="new_batch.php?batch_select=Update&example=card" TARGET="main">Update</A>
+<A HREF="batches.php" TARGET="main">Update</A>
 Batch<BR>
 EOT;
 	} else {
@@ -77,10 +77,10 @@ EOT;
 	$db = new i3x5_DB($schema);
 	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
 
-	if ($help) {
+	if (isset($help)) {
 		print "<H4>Help</H4>\n";
 		print "<P ALIGN=left>".help($db->helpmsg($help))."\n";
-	} elseif ($bid) {
+	} elseif (isset($bid)) {
 		print "<H4>Project Help</H4>\n";
 		print "<P ALIGN=left>"
 			.help($db->helpdesc($bid,$property))."\n";

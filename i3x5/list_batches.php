@@ -34,12 +34,11 @@
 
 	function related_bid( $bid ) {
 		global $db;
-		global $user;
 
 		$rbid = $db->sql("SELECT rid FROM i3x5_batch WHERE bid=$bid");
 
 		if ($rbid) {
-			return inform("Related to '".$user->bids[$rbid]["batch"]
+			return inform("Related to '".$_SESSION['user']->bids[$rbid]["batch"]
 				."' ($rbid)") ;
 		}
 		return;
@@ -47,7 +46,6 @@
 
 	function count_bid( $bid ) {
 		global $db;
-		global $user;
 
 		$cnt = $db->sql(
 			"SELECT COUNT(id) FROM i3x5_cards WHERE bid=$bid");
@@ -55,11 +53,11 @@
 		return $cnt;
 	}
 
-	$hhead = sendhelp("{$user->project} - List Batches", "list batches");
+	$hhead = sendhelp("{$_SESSION['user']->project} - List Batches", "list batches");
 print <<<PAGE
 <HTML>
 <HEAD>
-<TITLE>{$user->project} - List Batches</TITLE>
+<TITLE>{$_SESSION['user']->project} - List Batches</TITLE>
 <BODY $result_bg>
 <CENTER>
 <!--{-->
@@ -81,8 +79,8 @@ PAGE;
 	print "</TR>\n";
 
 // list batches owned by user
-reset($user->bids);
-while (list($k,$v) = each($user->bids)) {
+reset($_SESSION['user']->bids);
+while (list($k,$v) = each($_SESSION['user']->bids)) {
 	$fn = $db->batch_fieldnames($k);
 print	row(cell($k,"ALIGN=\"RIGHT\" BGCOLOR=\"$head_color\"")
 	."\n  ".cell(senddesc($v["batch"],$k,"batch"))

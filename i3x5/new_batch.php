@@ -10,6 +10,7 @@
 	include_once "one_batch.inc";
 
 	$insert = true;			// governs how data is input to table
+	$relmsg = "";			// unneeded actually
 	$db = new i3x5_DB($schema);
 	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
  
@@ -54,6 +55,7 @@
 		global $user;
 		global $bid;
 		global $insert;
+		global $batch_select;
 		// check if name is in DB
 		// make sure batch is not already being used by the user
 		// warn the user if it is ... they may want to overwrite it
@@ -61,10 +63,17 @@
 		"SELECT bid FROM i3x5_batch WHERE uid={$user->uid} AND batch='".
 			$_POST["name"]."'");
 		if ($bid) {
-			$msg = cell(warn(
-		"pre-existing batch name, you may update"));
-			$insert = false;
-			return 1;	// it's OK anyways
+			if ("Update" == $batch_select) {
+				$msg = cell(warn(
+			"pre-existing batch name ... may be updated"));
+				$insert = false;
+				return 1;	// it's OK anyways
+			} else {
+				$msg = cell(warn(
+			"pre-existing batch name ... needs to be unique"));
+				$insert = false;
+				return 0;	// not OK
+			}
 		}
 		$insert = true;
 		return 1;
@@ -77,28 +86,40 @@
 
 //-----------------------------------------------------
 // set name if GET
-if ($_GET["name"]) {
+if (isset($_GET["name"])) {
 	$_POST["name"] = $_GET["name"];
 }
-if ($_GET["name_help"]) {
+if (isset($_GET["name_help"])) {
 	$_POST["name_help"] = $_GET["name_help"];
 }
-if ($_GET["batch_select"]) {
+if (isset($_GET["batch_select"])) {
 	$_POST["batch_select"] = $_GET["batch_select"];
 }
-if ($_POST["batch_select"]) {
+if (isset($_POST["batch_select"])) {
 	$batch_select = $_POST["batch_select"];
+}
+if (isset($_GET["bid"]) && ! isset($_POST["bid"])) {
+	$_POST["bid"] = $_GET["bid"];
+}
+if (isset($_POST["bid"])) {
+	$bid = $_POST["bid"];
+}
+if (isset($_POST["copy_relate"])) {
+	$copy_relate = $_POST["copy_relate"];
+	if ($copy_relate == "None") {
+		unset($copy_relate);
+	}
 }
 
 //-----------------------------------------------------
 // If not set ... then must be New
-	if (! $batch_select ) {
+	if (! isset($batch_select)) {
 		$batch_select = "New";
 		$suggest_card = 1;
 	}
 //-----------------------------------------------------
 // check if example (overrides everything)
-if ($_GET["example"]) {
+if (isset($_GET["example"])) {
 	if ($_GET["example"] == "card") {
 // print "-----card<BR>\n";
 		$_POST["name"] = $_GET["name"];
@@ -144,7 +165,7 @@ if ($_GET["example"]) {
 	// we either got a bid or a name
 	// check if called from batches.php directly
 	// find bid & set up fields
-	if ($_GET["name"]) {
+	if (isset($_GET["name"])) {
 		// not given bid already
 		if (! $_GET["bid"]) {
 			$bid = $db->sql(
@@ -159,7 +180,8 @@ if ($_GET["example"]) {
 			$_POST["number"] = $fn["num"];
 			$_POST["title"] = $fn["title"];
 			$_POST["card"] = $fn["card"];
-			$_POST["batch_help"] = $fn["batch_help"];
+			$_POST["batch_help"] = (isset($fn["batch_help"]) ?
+				$fn["batch_help"] : "");
 			$_POST["number_help"] = $fn["num_help"];
 			$_POST["title_help"] = $fn["title_help"];
 			$_POST["card_help"] = $fn["card_help"];
@@ -175,6 +197,8 @@ if ($_GET["example"]) {
 			$batch_select="Related";
 			$relmsg = cell(inform("Currently Related to '".
 				$user->bids[$rbid]["batch"]."'"));
+		} else {
+			$relmsg = "";
 		}
 		$fn = $db->batch_fieldnames($bid);
 		$_POST["number"] = $fn["num"];
@@ -187,7 +211,7 @@ if ($_GET["example"]) {
 	}
 
 	// if Copy or Relate ... then get those values stored away
-	if ($one_batch__ && ($batch_select=="Copy" || $batch_select=="Relate")){
+	if ($one_batch__ && isset($copy_relate)){
 		$fn = $db->batch_fieldnames($one_batch__);
 		$_POST["number"] = $fn["num"];
 		$_POST["title"] = $fn["title"];
@@ -202,18 +226,27 @@ if ($_GET["example"]) {
 }
 
 //---------------------------------------------------
-// see which radio button should be CHECKED as to type
-	$check = "Check_".$batch_select;
-	$$check = "CHECKED";
+// see which radio button should be CHECKED as to type and define helps
+	$Check_None = "";
+	$Check_Copy = "";
+	$Check_Relate = "";
+	if (isset($copy_relate)) {
+		$check = "Check_".$copy_relate;
+		$$check = "CHECKED";
+	}
 	if ($batch_select == "New") {
 		$header = "{$user->project} - Create New Batch";
 		$hhelp = sendhelp($header,"create batch");
+		$hthis = sendhelp("New","create batch");
 	} else {
 		$header = "{$user->project} - Update Existing Batch";
 		$hhelp = sendhelp($header,"update batch");
+		$hthis= sendhelp("Update","update batch") . " ($bid)";
 	}
+	$hcopy = sendhelp("Copy","batch copy");
+	$hrelate = sendhelp("Relate","batch relate");
 //------------ clear fields (if asked) --------------
-	if ($_POST["clear"]) {
+	if (isset($_POST["clear"])) {
 		// clear the posted values
 		reset($list);
 		while(list($k,$v) = each($list)) {
@@ -247,13 +280,19 @@ if ($_GET["example"]) {
 	}
 
 //{------------ update/insert to DB --------------
-if ("Submit" == $_POST["create_batch"]) {
+if (isset($_POST["create_batch"])) {
+if ("New" == $_POST["create_batch"]) {
 // looks OK ... add it into DB
-	if ($batch_select == "New"
-	||  $batch_select == "Update"
-	||  $batch_select == "Copy") {
-		if ($insert) {
-			$sql = 
+	if ($one_batch__ && isset($copy_relate) && $copy_relate == "Relate") {
+		$sql = 
+"INSERT INTO i3x5_batch (uid,batch,batch_help,rid) VALUES (".
+$user->uid.",'".
+$db->escape($_POST["name"])."','".
+$db->escape($_POST["name_help"])."',".
+$_POST["rid"].")";
+		$sqlmsg = "Batch was inserted as relation";
+	} else {
+		$sql = 
 "INSERT INTO i3x5_batch (uid,batch,num_name,title_name,card_name,\n".
 "batch_help,num_help,title_help,card_help) VALUES (\n".
 $user->uid.",'".
@@ -265,9 +304,20 @@ $db->escape($_POST["name_help"])."','".
 $db->escape($_POST["number_help"])."','".
 $db->escape($_POST["title_help"])."','".
 $db->escape($_POST["card_help"])."')";
-			$sqlmsg = "Batch was added";
-		} else {		// need to update instead
-			$sql = 
+		$sqlmsg = "Batch was added";
+	}
+} elseif ("Update" == $_POST["create_batch"]) {
+	if ($one_batch__ && $copy_relate == "Relate") {
+		$sql = 
+"UPDATE i3x5_batch SET ".
+"batch='".$db->escape($_POST["name"])."',".
+"batch_help='".$db->escape($_POST["name_name"])."',".
+"rid=".$_POST["rid"]." WHERE ".
+"bid=".$bid." AND ".
+"uid=".$user->uid;
+		$sqlmsg = "Batch was updated as relation";
+	} else {
+		$sql = 
 "UPDATE i3x5_batch SET ".
 "batch='".$_POST["name"]."',".
 "rid=NULL,".
@@ -280,32 +330,16 @@ $db->escape($_POST["card_help"])."')";
 "card_help='".$db->escape($_POST["card_help"])."' WHERE ".
 "bid=".$bid." AND ".
 "uid=".$user->uid;
-			$sqlmsg = "Batch was updated";
-		}
-	} elseif ($one_batch__ && $batch_select == "Relate") {
-		if ($insert) {
-			$sql = 
-"INSERT INTO i3x5_batch (uid,batch,batch_help,rid) VALUES (".
-$user->uid.",'".
-$db->escape($_POST["name"])."','".
-$db->escape($_POST["name_help"])."',".
-$_POST["rid"].")";
-			$sqlmsg = "Batch was inserted as relation";
-		} else {
-			$sql = 
-"UPDATE i3x5_batch SET ".
-"batch='".$db->escape($_POST["name"])."',".
-"batch_help='".$db->escape($_POST["name_name"])."',".
-"rid=".$_POST["rid"]." WHERE ".
-"bid=".$bid." AND ".
-"uid=".$user->uid;
-			$sqlmsg = "Batch was updated as relation";
-		}
+		$sqlmsg = "Batch was updated";
 	}
-
-	$db->sql($sql);
-	// need to update list of bids
-	$user->update_bids($db->bids($user->uid));
+}
+	if (! $invalid ) {
+		$db->sql($sql);
+		// need to update list of bids
+		$user->update_bids($db->bids($user->uid));
+	} else {
+		$sqlmsg = warn("Please fix the invalid entries before retrying");
+	}
 }
 //}
 
@@ -317,10 +351,6 @@ print <<<PAGE
 <CENTER>
 PAGE;
 
-$hnew = sendhelp("New","create batch");
-$hupdate = sendhelp("Update","update batch");
-$hcopy = sendhelp("Copy","batch copy");
-$hrelate = sendhelp("Relate","batch relate");
 print <<<PAGE
 <!--{-->
 <TABLE ALIGN="center" BORDER=1 CELLPADDING=10 CELLSPACING=0 BGCOLOR="$box_color">
@@ -332,15 +362,14 @@ print <<<PAGE
 	<TR><TH COLSPAN=3>
 		<!--{-->
 		<TABLE BORDER=1><TR><TD>
-		<INPUT NAME="batch_select" $Check_New TYPE="radio" VALUE="New">
-		$hnew
-		<INPUT NAME="batch_select" $Check_Update TYPE="radio" VALUE="Update">
-		$hupdate</TD><TD>
+		$hthis
+		<INPUT NAME="copy_relate" $Check_None TYPE="radio" VALUE="None">
+		</TD><TD>
 		  <!--{-->
 		  <TABLE><TR><TD>
-		  <INPUT NAME="batch_select" $Check_Copy TYPE="radio" VALUE="Copy">
+		  <INPUT NAME="copy_relate" $Check_Copy TYPE="radio" VALUE="Copy">
 		  $hcopy </TD><TD>
-		  <INPUT NAME="batch_select" $Check_Relate TYPE="radio" VALUE="Relate">
+		  <INPUT NAME="copy_relate" $Check_Relate TYPE="radio" VALUE="Relate">
 		  $hrelate </TD>
 		  <TD>
 PAGE;
@@ -373,25 +402,38 @@ while(list($k,$v) = each($list)) {
 
 print <<<PAGE
 	<TR><TH COLSPAN=3>
-	<INPUT NAME="create_batch"		TYPE="submit"	value="Submit">
+	<INPUT NAME="create_batch"		TYPE="submit"	value="$batch_select">
 	<INPUT NAME="check"			TYPE="submit"	value="Check" >
 	<INPUT NAME="reset"			TYPE="reset"	value="Reset" >
 	<INPUT NAME="clear"			TYPE="submit"	value="Clear" >
 	<INPUT NAME="bid"			TYPE="hidden"	value="$bid" >
+	<INPUT NAME="batch_select"		TYPE="hidden"	value="$batch_select" >
 	</TD></TR>
 	</TABLE><!--}-->
 	</FORM>
 </TH></TR>
 PAGE;
 
-if ($sqlmsg) {
+if (! $non_blank) {
+	if (! isset($sqlmsg)) {
+		$sqlmsg = "";
+	}
+	$sqlmsg = warn(
+		"You must have at least 1 non-blank {$user->project} field\n")
+		.$sqlmsg;
+}
+
+if (isset($sqlmsg)) {
 	print row(cell(inform("<H2>".$sqlmsg."</H2>"),"COLSPAN=2"));
 }
 
 $url= "new_batch.php?name=".urlencode($_POST["name"])
 	."&name_help=".urlencode($_POST["name_help"])
-	."&batch_select=".$batch_select
-	."&example";
+	."&batch_select=".$batch_select;
+	if ($batch_select == "Update" && isset ($bid)) {
+		$url .= "&bid=$bid";
+	}
+	$url .= "&example";
 
 print "<TR><TD>\n";
 print "Empty fields will not be shown in {$user->project}<BR>\n";
@@ -406,10 +448,6 @@ print sendhelp("Recipe","recipe example")
 
 print "</TD></TR>\n";
 
-if (! $non_blank) {
-	print row(cell(warn(
-	"You must have at least 1 non-blank {$user->project} field")));
-}
 
 print <<<PAGE
 </TABLE><!--}-->
