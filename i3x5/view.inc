@@ -247,7 +247,8 @@ if ($this->edit == "list") {
 	if ($user->level >= $level_write) {
 	$card = $this->br($v[card]);
 	$cbatch[$k] = new OneBatch("[$k]",$v[bid]);
-	$lines = count(preg_split("/\n/", $v[card]))+1;
+	$lines = max(count(preg_split("/\n/", $v[card])),
+			strlen($v[card])/75) + 1;
 	print "<TR><TD>\n"
 	.table(
 		row(	(! ereg("^$",$user->bids[$v[bid]][num])
