@@ -159,7 +159,7 @@ function cards(&$cards) {
 		row(	cell(senddesc($fn[num],$k,"num")
 				,"BGCOLOR=\"$head_color\" WIDTH=10% ")
 			.cell("\n<INPUT NAME=\"i_num\" TYPE=\"text\" "
-				."SIZE=15 MAXLENGTH=15>\n"
+				."SIZE=16 MAXLENGTH=20>\n"
 				,"WIDTH=40% COLSPAN=2")
 			.head($ibatch->string_one_batch(true)
 				,"WIDTH=25%")
@@ -255,7 +255,7 @@ if ($this->edit == "list") {
 			? cell(senddesc($user->bids[$v[bid]][num] ,$v[bid],
 				"num"),"BGCOLOR=\"$head_color\" WIDTH=10%")
 			.cell("<INPUT NAME=\"c_num[$k]\" TYPE=\"text\" "
-				."VALUE=\"".$v[num]."\" SIZE=15 MAXLENGTH=15>"
+				."VALUE=\"".$v[num]."\" SIZE=16 MAXLENGTH=20>"
 				,"BGCOLOR=\"$xcolor\" WIDTH=30%")
 			: cell("&nbsp;","COLSPAN=2 WIDTH=40%") )
 			.cell($xid,"WIDTH=10% ALIGN=\"CENTER\"")
