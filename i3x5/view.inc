@@ -20,8 +20,8 @@ class View {
 function View (	$edit	= "edit",	// or "list"
 		$body	= "full",	// or "header"
 		$dates	= "show",	// or "hide"
-		$key	= "title",	// or "num"
-		$order	= "asc",	// or "des"
+		$key	= "num",	// or "title","cdate","mdate"
+		$order	= "des",	// or "asc"
 		$group	= "batch") {	// or "none"
 
 	global $user;
@@ -34,9 +34,26 @@ function View (	$edit	= "edit",	// or "list"
 		$this->edit	= $edit;
 	}
 	$this->body	= $body;
+	$this->dates	= $dates;
 	$this->key	= $key;
 	$this->order	= $order;
 	$this->group	= $group;
+}
+
+// catch_gets - capture those view values we want to override via the URL
+function catch_gets() {
+	global $user;
+	global $level_read;
+
+	// Allow the _GET to override the following:
+	if (array_key_exists("view_edit",$_GET)
+	&& ($_GET["view_edit"] == "edit"
+	|| $_GET["view_edit"] == "list")) {
+		$this->edit = $_GET["view_edit"];
+	}
+	if ($user->level <= $level_read) {
+		$this->edit	= "list";
+	}
 }
 
 // retrieve the posted values and update attributes as needed
@@ -93,10 +110,10 @@ function show_buttons() {
 		.cell(	input("radio","view_edit","list",$sel_list)." List",
 		"COLSPAN=2"))
 	.row(	cell(sendhelp("Show:","view show"))
-		.cell(	input("radio","view_body","header",$sel_header)
-			." Header Only", "COLSPAN=2")
 		.cell(	input("radio","view_body","full",$sel_full)
-			." Full", "COLSPAN=2"))
+			." Full", "COLSPAN=2")
+		.cell(	input("radio","view_body","header",$sel_header)
+			." Header Only", "COLSPAN=2"))
 	.row(	cell(sendhelp("Dates:","view dates"))
 		.cell(	input("radio","view_dates","show",$sel_dates_show)
 			." Show dates", "COLSPAN=2")
@@ -108,10 +125,10 @@ function show_buttons() {
 		.cell(	input("radio","view_key","mdate",$sel_mdate)." Mdate")
 		.cell(	input("radio","view_key","cdate",$sel_cdate)." Cdate"))
 	.row(	cell(sendhelp("Order:","view order"))
-		.cell(	input("radio","view_order","asc",$sel_asc)
-			." Ascending", "COLSPAN=2")
 		.cell(	input("radio","view_order","des",$sel_des)
-			." Descending", "COLSPAN=2"))
+			." Descending", "COLSPAN=2")
+		.cell(	input("radio","view_order","asc",$sel_asc)
+			." Ascending", "COLSPAN=2"))
 	.row(	cell(sendhelp("Group By:","view group"))
 		.cell(	input("radio","view_group","batch",$sel_batch)
 			." Batch",

@@ -44,7 +44,17 @@ EOT;
 	$csvhelp = sendhelp("(help)", "csv file");
 	print <<< EOT
 <A HREF="sel_batches.php" TARGET="main">Select Batches</A><BR>
-$indent<A HREF="view_cards.php" TARGET="main">View/Edit Cards</A><BR>
+$indent
+	<A HREF="view_cards.php?view_edit=list" TARGET="main">View</A>
+EOT;
+	if ($user->level >= $level_write) {
+		print "&nbsp;/&nbsp;";
+		print <<< EOT
+	<A HREF="view_cards.php?view_edit=edit" TARGET="main">Edit</A>
+EOT;
+	}
+	print <<< EOT
+	 Batches<BR>
 $indent<A HREF="csv_cards.php" TARGET="main">CSV file</A> $csvhelp<BR>
 EOT;
 

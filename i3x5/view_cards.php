@@ -15,6 +15,10 @@ if (! $view) {
 }
 
 //
+// catch any GETS
+//
+	$view->catch_gets();
+//
 // process any changes
 //
 

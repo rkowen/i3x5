@@ -266,7 +266,8 @@ arrange the cards.
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'view cards','
 Select whether to edit the cards, by selecting "Edit", or to
-view the cards with "List".
+view the cards with "List".  This can be overruled by clicking on
+View or Edit links.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'view show','

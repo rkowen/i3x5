@@ -4,7 +4,7 @@
 // values
 //
 	$schema		= "i3x5";
-	$version	= "0.7.0";
+	$version	= "0.7.1";
 	$phpinfo	= 0;	// set non-zero for phpinfo
 	$result_bg	= "BGCOLOR=\"#EFEFEF\"";
 	$title_bg	= "BGCOLOR=\"#AFFFAF\"";
