@@ -170,3 +170,62 @@ em.noselect {
 p.help {
 	text-align: left;
 }
+pre {
+	margin-top: 0;
+	margin-bottom: -1em;
+}
+pre br {
+	line-height: 0;
+}
+
+/* PRINT-ONLY styles */
+@media print {
+table.outer {
+	text-align: center;
+	border: none 0;
+/*	padding: 2em; */
+	margin: 0;
+	width: 100%;
+}
+table.tight {
+	text-align: center;
+	border: none 0;
+	padding: 10px;
+	margin: 0;
+}
+table.form {
+	text-align: center;
+	border: solid 1pt;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+table.batch {
+	text-align: center;
+	border: none 0;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+table.cardview {
+	text-align: center;
+	border: solid 1pt;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+table.cardview_relate {
+	text-align: center;
+	border: double 2pt;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+table.dates {
+	text-align: center;
+	border: none 0;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+}

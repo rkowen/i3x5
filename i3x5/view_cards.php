@@ -181,14 +181,20 @@ if ($view->is_edit()
 <body class="main">
 <center>
 PAGE;
-print form($_SERVER['PHP_SELF'],"<!--{-->".table(
+$x = "<!--{-->".table(
 	row(head($hhead))
 	.(isset($errmsg)?row(head(warn($errmsg))):"")
 	.row(cell("Batches: $blist","class=\"h_batch\""))
 	.$bselect_top
 	.row(cell($view->string_cards($cards,$check_all)))
 	.$bselect_bot
-,"class=\"outer\"")."<!--}-->");
+,"class=\"outer\"")."<!--}-->";
+
+if ($view->is_edit()) {
+	print form($_SERVER['PHP_SELF'],$x);
+} else {
+	print $x."\n";
+}
 	if ($phpinfo) {phpinfo();}
 	print <<<PAGE
 </center>

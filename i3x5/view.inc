@@ -396,7 +396,7 @@ function is_edit() {
 
 // put in <BR>s wherever there is a newline
 function br (&$card) {
-	return preg_replace("/\n/","<BR>\n",$card);
+	return preg_replace("/\n/","<BR>",$card);
 }
 
 // reset the session values
