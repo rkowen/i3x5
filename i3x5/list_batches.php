@@ -18,7 +18,8 @@
 	"number"=> "Number<BR>Field",
 	"title"	=> "Title<BR>Field",
 	"card"	=> "Card<BR>Field",
-	"misc"  => inform("Relation")
+	"misc"	=> inform("Relation"),
+	"count"	=> "Card<BR>Count"
 	);
 	$help = array(
 	"bid"	=> "batch id",
@@ -26,7 +27,8 @@
 	"number"=> "batch number",
 	"title"	=> "batch title",
 	"card"	=> "batch card",
-	"misc"  => "batch relation"
+	"misc"	=> "batch relation",
+	"count"	=> "batch count"
 	);
 
 	function related_bid( $bid ) {
@@ -40,6 +42,16 @@
 				."' ($rbid)") ;
 		}
 		return;
+	}
+
+	function count_bid( $bid ) {
+		global $db;
+		global $user;
+
+		$cnt = $db->sql(
+			"SELECT COUNT(id) FROM i3x5_cards WHERE bid=$bid");
+
+		return $cnt;
 	}
 
 	$hhead = sendhelp("{$user->project} - List Batches", "list batches");
@@ -71,12 +83,13 @@ PAGE;
 reset($user->bids);
 while (list($k,$v) = each($user->bids)) {
 	$fn = $db->batch_fieldnames($k);
-print "<TR><TD ALIGN=RIGHT BGCOLOR=\"$head_color\">$k</TD>\n";
-print "      <TD>".senddesc($v["batch"],$k,"batch")."</TD>\n";
-print "        <TD>".senddesc($fn["num"],$k,"num")."</TD>\n";
-print "          <TD>".senddesc($fn["title"],$k,"title")."</TD>\n";
-print "            <TD>".senddesc($fn["card"],$k,"card")."</TD>\n";
-print "              <TD>".related_bid($k)."</TD></TR>\n";
+print	row(cell($k,"ALIGN=\"RIGHT\" BGCOLOR=\"$head_color\"")
+	."\n  ".cell(senddesc($v["batch"],$k,"batch"))
+	."\n    ".cell(senddesc($fn["num"],$k,"num"))
+	."\n      ".cell(senddesc($fn["title"],$k,"title"))
+	."\n        ".cell(senddesc($fn["card"],$k,"card"))
+	."\n          ".cell(related_bid($k))
+	."\n            ".cell(count_bid($k),"ALIGN=\"RIGHT\""));
 }
 
 print <<<PAGE

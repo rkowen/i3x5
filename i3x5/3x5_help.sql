@@ -144,6 +144,10 @@ Any changes to that batch''s properties
 are reflected in the corresponding batch.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'batch count','
+The number of cards in this batch.
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'update all cards','
 All the card contents (except for the relation cards) can be updated
 collectively by, first changing the card contents for all those desired,
