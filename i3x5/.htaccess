@@ -1,0 +1,6 @@
+# ErrorDocument 404 
+<IfModule mod_dir.c>
+	DirectoryIndex indexF.php
+</IfModule>
+# enable this for secure communication (requires mod_ssl)
+SSLRequireSSL
