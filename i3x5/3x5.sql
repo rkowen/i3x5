@@ -108,7 +108,10 @@ CREATE TRIGGER ut_batch BEFORE UPDATE
 CREATE FUNCTION uf_cards()
 RETURNS TRIGGER AS '
 BEGIN
-	NEW.moddate:=now();
+	IF NEW.num <> OLD.num OR NEW.title <> OLD.title
+	OR NEW.card <> OLD.card THEN
+		NEW.moddate:=now();
+	END IF;
 	RETURN NEW;
 END;
 ' LANGUAGE 'plpgsql';
