@@ -54,7 +54,7 @@ function string_one_batch($selected = false) {
 	// list batches owned by user
 	reset($user->bids);
 	while (list($k,$v) = each ($user->bids)) {
-		if ((! $selected) || $v[selected]) {
+		if ((! $selected) || $v["selected"]) {
 			$s .= "<OPTION"
 			.($this->bid == $k ? " SELECTED " : " ")
 			."VALUE=\"".$k."\">".$v["batch"]."</OPTION>\n";

@@ -18,8 +18,9 @@ if (! $view) {
 //
 
 // process a global change only for real cards (not relations)
-if ($HTTP_POST_VARS["upd_all"]=="Update All Cards"
-    && is_array($HTTP_POST_VARS["c_rid"])) {
+if (in_array("upd_all",$HTTP_POST_VARS)
+&& $HTTP_POST_VARS["upd_all"]=="Update All Cards"
+&& is_array($HTTP_POST_VARS["c_rid"])) {
 	reset($HTTP_POST_VARS["c_rid"]);
 	while (list($k,$v) = each($HTTP_POST_VARS["c_rid"])) {
 		if (! $v) {
@@ -39,7 +40,8 @@ if ($HTTP_POST_VARS["upd_all"]=="Update All Cards"
 	}
 }
 // process a selective update change
-elseif (is_array($HTTP_POST_VARS["upd_"])) {
+elseif (in_array("upd_",$HTTP_POST_VARS)
+&& is_array($HTTP_POST_VARS["upd_"])) {
 	// only one value
 	reset($HTTP_POST_VARS["upd_"]);
 	list($k,$v) = each($HTTP_POST_VARS["upd_"]);
@@ -72,7 +74,8 @@ elseif (is_array($HTTP_POST_VARS["upd_"])) {
 	}
 }
 // process a selective delete change
-elseif (is_array($HTTP_POST_VARS["del_"])) {
+elseif (in_array("del_",$HTTP_POST_VARS)
+&& is_array($HTTP_POST_VARS["del_"])) {
 	reset($HTTP_POST_VARS["del_"]);
 	/* only one value */
 	list($k,$v) = each($HTTP_POST_VARS["del_"]);
@@ -81,7 +84,8 @@ elseif (is_array($HTTP_POST_VARS["del_"])) {
 	}
 }
 // insert a card
-elseif ($HTTP_POST_VARS["ins__"]=="Insert") {
+elseif (in_array("ins__",$HTTP_POST_VARS)
+&& $HTTP_POST_VARS["ins__"]=="Insert") {
 	$db->insert_card($HTTP_POST_VARS["one_batch_i"],
 		array(	"num"=>$HTTP_POST_VARS["i_num"],
 			"title"=>$HTTP_POST_VARS["i_title"],
@@ -92,7 +96,7 @@ elseif ($HTTP_POST_VARS["ins__"]=="Insert") {
 }
 
 // get cards from db
-$cards = $db->cards(&$user->bids);
+$cards = $db->cards($user->bids);
 $view->sort($cards);
 //$db->dumper($cards);
 
@@ -110,14 +114,14 @@ $hhead = sendhelp("{$user->project} - Card View","card view");
 <TR><TH> $hhead </TH></TR>
 
 PAGE;
-	if ($errmsg) {
+	if (isset($errmsg)) {
 		print row(head(warn($errmsg)));
 	}
 	print "<TR><TD> Batches: <B>";
 	reset($user->bids);
 	while (list($k,$v) = each($user->bids)) {
-		if ($v[selected]) {
-			print " ".senddesc($v[batch],$k,"batch")."\n";
+		if ($v["selected"]) {
+			print " ".senddesc($v["batch"],$k,"batch")."\n";
 		}
 	}
 	print "</B></TD></TR><TR><TH>\n";

@@ -90,7 +90,7 @@ function &cards (&$bids, $selected = true) {
 		$list = "";
 		reset($bids);
 		while (list($k,$v) = each($bids)) {
-			if ($v[selected]) { $list .= "$k,"; }
+			if ($v["selected"]) { $list .= "$k,"; }
 		}
 		$list = preg_replace("/,$/","",$list);
 	} else {
@@ -117,25 +117,25 @@ function insert_card ($bid, $object, $append = false) {
 		echo "3x5_DB::insert_card($this,$bid,$object,$append)<BR>\n";
 	}
 	if (is_array($object)) {	// array of things
-		if (! ($object[num] || $object[title] || $object[card])) {
+		if (! ($object["num"] || $object["title"] || $object["card"])) {
 			return false;
 		}
-		if (! $object[num]) { $object[num] = "NULL"; }
-		if (! $object[title]) { $object[title] = "NULL"; }
-		else { $object[title] = "'".$object[title]."'";}
-		if (! $object[card]) { $object[card] = "NULL"; }
+		if (! $object["num"]) { $object["num"] = "NULL"; }
+		if (! $object["title"]) { $object["title"] = "NULL"; }
+		else { $object["title"] = "'".$object["title"]."'";}
+		if (! $object["card"]) { $object["card"] = "NULL"; }
 		elseif ($append) {
-			$object[card] = 
+			$object["card"] = 
 "'<<<'||to_char(CURRENT_TIMESTAMP,'YYYY/MM/DD HH24:MI:SS')||'>>>\n".
-			$object[card]."' "; }
-		else { $object[card] = "'".$object[card]."'";}
-		if (! $object[formatted]) { $object[formatted] = "false"; }
+			$object["card"]."' "; }
+		else { $object["card"] = "'".$object["card"]."'";}
+		if (! $object["formatted"]) { $object["formatted"] = "false"; }
 
 		$id = $this->sql("SELECT nextval('i3x5_cards_id_seq')");
 		$this->sql(
 "INSERT INTO i3x5_cards (id,bid,num,title,card,formatted) ".
-"VALUES ($id, $bid, {$object[num]}, {$object[title]}, {$object[card]}),".
-" {$object[formatted]}");
+"VALUES ($id, $bid, {$object[num]}, {$object[title]}, {$object[card]},".
+" {$object[formatted]})" );
 		return $id;
 	} elseif((is_numeric($object) ? intval($object)==$object : false)) {
 		// is_int($object) doesn't work as advertized
@@ -154,18 +154,18 @@ function update_card ($id, $rid, $object) {
 	if ($this->debug > 0) {
 		echo "3x5_DB::update_card($this,$object)<BR>\n";
 	}
-	if (! ($object[num] || $object[title] || $object[card]
-	|| $object[formatted])) {
+	if (! ($object["num"] || $object["title"] || $object["card"]
+	|| $object["formatted"])) {
 		return false;
 	}
 	// update to related card if given
 	if ($rid) {$id = $rid;}
 	// prepare query
 	$q = "";
-	if ($object[num]) { $q.="num={$object[num]},"; }
-	if ($object[title]) { $q.="title='".$object[title]."',";}
-	if ($object[card]) { $q.="card='".$object[card]."',";}
-	if ($object[formatted]) { $q.="formatted=".$object[formatted].",";}
+	if ($object["num"]) { $q.="num={$object[num]},"; }
+	if ($object["title"]) { $q.="title='".$object["title"]."',";}
+	if ($object["card"]) { $q.="card='".$object["card"]."',";}
+	if ($object["formatted"]) { $q.="formatted=".$object["formatted"].",";}
 	else { $q.="formatted=false,";}
 	// strip final ,
 	$q = preg_replace("/,$/","",$q);

@@ -5,7 +5,7 @@
 //
 	$schema		= "i3x5";
 	$version	= "0.7.0";
-	$phpinfo	= 0;	// set non-zero for phpinfo
+	$phpinfo	= 1;	// set non-zero for phpinfo
 	$result_bg	= "BGCOLOR=\"#EFEFEF\"";
 	$title_bg	= "BGCOLOR=\"#AFFFAF\"";
 	$help_bg	= "BGCOLOR=\"#AFAFFF\"";
@@ -55,6 +55,13 @@
 	}
 	function cell($q, $op="") {
 		return "<TD $op>$q</TD>\n";
+	}
+	function input($type,$name,$value,$op="") {
+		return "<INPUT TYPE=\"$type\" NAME=\"$name\""
+		." VALUE = \"$value\" $op>";
+	}
+	function textarea($name,$value,$op="") {
+		return "<TEXTAREA NAME=\"$name\" $op>".$value."</TEXTAREA>\n";
 	}
 	function pre($q, $op="") {
 		if ($op == "t") {
