@@ -64,6 +64,6 @@ illegal, or sensitive.
 </BODY>
 </HTML>
 NOT_CREATED;
-		if ($phpinfo) { phpinfo(); }
+		showphpinfo();
 	}
 ?>

@@ -49,7 +49,7 @@ Pick a ``Select Batches'' operation from left menu<BR>
 </h2>
 </center>
 PAGE;
-			if ($phpinfo) {phpinfo(); $view->dump(); }
+			showphpinfo();
 			print "</body>\n";
 		}
 	}
@@ -78,7 +78,7 @@ PAGE;
 				.input("reset","reset","Reset")
 				.input("submit","clear","Clear"))))))
 	,"class=\"tight\""))."\n";
-	if ($phpinfo) {phpinfo();}
+	showphpinfo();
 	print <<<PAGE
 </center>
 </body>

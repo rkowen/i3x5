@@ -49,7 +49,7 @@ print "<!--{-->".form($_SERVER['PHP_SELF'],
 	,"colspan=2"))
 	,"class=\"form\"")."<!--}-->\n"))
 ,"class=\"tight\"")."<!--}-->\n");
-	if ($phpinfo) {phpinfo();}
+	showphpinfo();
 	print <<<PAGE
 </center>
 </body>

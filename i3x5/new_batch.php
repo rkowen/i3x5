@@ -435,7 +435,7 @@ print row(cell(
 	.sendhelp("Recipe","recipe example")
 	." <a href=\"$url=recipe\">".inform("Example")."</a><br>\n"
 ,"id=\"left\""))."\n</table><!--}-->\n";
-	if ($phpinfo) {phpinfo();}
+	showphpinfo();
 print <<<PAGE
 </center>
 </body>

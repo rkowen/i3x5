@@ -101,6 +101,6 @@ while (list($k,$v) = each($cards)) {
 	print join(",",$stack)."\n";
 }
 
-if ($phpinfo) {phpinfo();}
+showphpinfo();
 
 ?>

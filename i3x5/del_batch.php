@@ -103,7 +103,7 @@ if (isset($one_batch__) && $one_batch__) {
 		.(isset($msg)?row(head(inform($msg))):"")
 	,"class=\"tight\"")."<!--}-->\n")."\n";
 }
-	if ($phpinfo) {phpinfo();}
+	showphpinfo();
 	print <<<PAGE
 </center>
 </body>

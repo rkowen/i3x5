@@ -38,7 +38,6 @@
 		global $username;
 		global $passwd;
 		global $project;
-		global $phpinfo;
 		global $version;
 		$hlogin = sendhelp("$project - Login","login");
 		$husername = sendhelp("Username","login username");
@@ -79,7 +78,7 @@ $q
 <p>
 NOT_LOGGED_IN;
 
-if ($phpinfo) { phpinfo(); }
+showphpinfo();
 
 print <<<NOT_LOGGED_IN
 </body>
@@ -151,7 +150,7 @@ NOT_LOGGED_IN;
 </h2>
 </center>
 PAGE;
-		if ($phpinfo) { phpinfo(); }
+		showphpinfo();
 		print <<<PAGE
 </body>
 </html>

@@ -20,6 +20,10 @@
 
 //
 // functions
+	function showphpinfo ($opt = INFO_VARIABLES) {
+		global $phpinfo;
+		if ($phpinfo) {phpinfo($opt);}
+	}
 	function warn($q) {
 		return "<em class=\"warn\">$q</em>";
 	}

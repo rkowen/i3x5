@@ -39,7 +39,7 @@ Or click
 
 PAGE;
 	}
-	if ($phpinfo) { phpinfo(); }
+	showphpinfo();
 
 print <<<PAGE
 

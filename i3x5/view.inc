@@ -299,8 +299,8 @@ $text .= row(cell(table(
 		.cell(input("checkbox","c_check[$k]","true",
 			($check_all?"CHECKED":""))
 			.$xid,"width=15% id=\"center\"")
-		.head(	 $cbatch[$k]->string_ops_batch()
-			.$cbatch[$k]->string_one_batch()
+		.head(	 $cbatch[$k]->js_string_ops_batch()
+			.$cbatch[$k]->js_string_one_batch()
 			,"width=35%")
 		.cell(	 input("hidden","c_rid[$k]",$c_rid)."\n"
 			.input("hidden","c_nrid[$k]",$c_nrid)."\n"

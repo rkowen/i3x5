@@ -97,7 +97,7 @@ print <<<PAGE
 </th></tr>
 </table><!--}-->
 PAGE;
-	if ($phpinfo) {phpinfo();}
+	showphpinfo();
 print <<<PAGE
 </body>
 </html>

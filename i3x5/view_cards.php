@@ -6,6 +6,7 @@
 	include_once "session.inc";
 	include_once "cards.inc";
 	include_once "3x5_db.inc";
+	include_once "javascript.inc";
 
 if (! isset($view) || ! $user->selected_count()) {
 	$_SESSION['view'] = new View();
@@ -73,7 +74,7 @@ elseif (isset($_POST["upd_"])
 		$bid = $onebatch->get_one_batch();
 		$rid = $_POST["c_rid"][$k];
 		$id = ( $rid ? $rid : $k);
-		if ($ops == "NONE") {
+		if ($ops == "" || $ops == "NONE") {
 			$db->update_card($k,
 				$_POST["c_rid"][$k],
 				array(	"num"=>$_POST["c_num"][$k],
@@ -165,18 +166,22 @@ if ($view->is_edit()
 	$abatch = new OneBatch("a");
 	$bselect_top =	row(head(sendhelp("Help","batch ops")
 			.$abatch->string_ops_batch(true)
-			.$abatch->string_one_batch(false)
+			.$abatch->js_string_one_batch()
 			.input("submit","a_submit","Batch Submit")))
 			.row(head(input("submit","a_submit","Check All")
 			.input("submit","a_submit","Uncheck All")))."\n";
 	$bselect_bot =	row(head(sendhelp("Help","batch ops")
 			.input("submit","a_submit","Batch Submit")))."\n";
+	$js_ = javascript($js_RCM.$abatch->js_one_array().$js_loadSelect);
+} else {
+	$js_ = "";
 }
 	print <<<PAGE
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="3x5.css">
 <title>{$user->project} - View Cards</title>
+$js_
 <head>
 <body class="main">
 <center>
@@ -195,7 +200,7 @@ if ($view->is_edit()) {
 } else {
 	print $x."\n";
 }
-	if ($phpinfo) {phpinfo();}
+	showphpinfo();
 	print <<<PAGE
 </center>
 </body>
