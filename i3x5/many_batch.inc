@@ -22,18 +22,17 @@ function ManyBatch (	$id	= "_",
 // retrieve the posted values and update attributes as needed
 function get_many_batch() {
 
-	global $HTTP_POST_VARS;
 	global $user;
 
 	$t = "many_batch_".$this->id;
 	// selected status
-	if ($HTTP_POST_VARS[$t."_selected"]) {
-		$selected = $HTTP_POST_VARS[$t."_selected"];
+	if ($_POST[$t."_selected"]) {
+		$selected = $_POST[$t."_selected"];
 	} else {
 		$selected = false;
 	}
-	if (is_array($HTTP_POST_VARS[$t])) {
-		$tbids = $HTTP_POST_VARS[$t];
+	if (is_array($_POST[$t])) {
+		$tbids = $_POST[$t];
 		reset($tbids);
 		// create some local variables
 		$list = array();

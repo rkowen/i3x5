@@ -5,12 +5,12 @@
 	session_start();
 
 	include_once "cards.inc";
-	if ($HTTP_POST_VARS["logout"]) {
+	if ($_POST["logout"]) {
 		session_destroy();
 		header("Location: indexM.php");
 		return;
 	}
-	if ($HTTP_POST_VARS["back"]) {
+	if ($_POST["back"]) {
 		header("Location: indexM.php");
 		return;
 	}

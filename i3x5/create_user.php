@@ -13,20 +13,20 @@
 
 	$cuu->get_form();
 
-	if (ereg("Done", $HTTP_POST_VARS["create_update_user"])) {
+	if (ereg("Done", $_POST["create_update_user"])) {
 // it looks like have valid input ... now ship it off to the DB
 		$db->sql(
 "INSERT INTO i3x5_userpass (username,passwd_admin,passwd_w,passwd_a,passwd_r,".
 "author,email,challenge,response) VALUES ('".
-$HTTP_POST_VARS["username"]."','".
-$HTTP_POST_VARS["passwd_admin"]."','".
-$HTTP_POST_VARS["passwd_w"]."','".
-$HTTP_POST_VARS["passwd_a"]."','".
-$HTTP_POST_VARS["passwd_r"]."','".
-$HTTP_POST_VARS["author"]."','".
-$HTTP_POST_VARS["email"]."','".
-$HTTP_POST_VARS["challenge"]."','".
-$HTTP_POST_VARS["response"]."')"
+$_POST["username"]."','".
+$_POST["passwd_admin"]."','".
+$_POST["passwd_w"]."','".
+$_POST["passwd_a"]."','".
+$_POST["passwd_r"]."','".
+$_POST["author"]."','".
+$_POST["email"]."','".
+$_POST["challenge"]."','".
+$_POST["response"]."')"
 		);
 
 // have set-up a new user ... now roll over to login_user which will

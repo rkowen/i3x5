@@ -126,11 +126,10 @@ function validate_username($q, &$msg) {
 	if (! $this->validate_text($q, $msg, 3)) { return 0; }
 
 	global $db;
-	global $HTTP_POST_VARS;
 	// check if username is already in use
 	if ($db->sql(
 		"SELECT count(*) FROM i3x5_userpass WHERE username='".
-		$HTTP_POST_VARS["username"]."'")) {
+		$_POST["username"]."'")) {
 		$msg = cell(warn(
 		"This user name already exists please choose another"));
 		return 0;
@@ -165,15 +164,14 @@ function validate_strong($q, &$msg) {
 //------------ active code --------------
 
 function get_form() {
-	global $HTTP_POST_VARS;
 
-	if ($HTTP_POST_VARS["clear"]) {
+	if ($_POST["clear"]) {
 		// clear the posted values
 		reset($this->list);
 		while(list($k,$v) = each($this->list)) {
 			// clear all but username if update
 			if ($this->type != "Update" || $k != "username") {
-				$HTTP_POST_VARS[$k] = "";
+				$_POST[$k] = "";
 				$$k = "";
 			}
 		}
@@ -181,10 +179,10 @@ function get_form() {
 	// clean-up values
 	reset($this->list);
 	while(list($k,$v) = each($this->list)) {
-		if ($HTTP_POST_VARS[$k]) {
+		if ($_POST[$k]) {
 			$$k = $this->dequote(
-				strip_tags(trim($HTTP_POST_VARS[$k])));
-			$HTTP_POST_VARS[$k] = $$k;
+				strip_tags(trim($_POST[$k])));
+			$_POST[$k] = $$k;
 		}
 	}
 
@@ -199,7 +197,7 @@ function get_form() {
 	}
 	
 	if ($this->invalid) {
-		$HTTP_POST_VARS["create_update_user"] = "Invalid";
+		$_POST["create_update_user"] = "Invalid";
 	}
 }
 
@@ -210,7 +208,6 @@ function show_form($title, $helpkey, $url="indexM.php") {
 	global $box_color;
 	global $form_color;
 	global $PHP_SELF;
-	global $HTTP_POST_VARS;
 
 	$thelp = sendhelp($title,$helpkey);
 	print <<<EOT
@@ -237,12 +234,12 @@ while(list($k,$v) = each($this->list)) {
 	if ($this->type=="Update" && $k == "username") {
 		print row(cell($label)."\n	".
 		cell("<INPUT NAME=\"$k\" TYPE=\"hidden\" VALUE=\"".
-			$HTTP_POST_VARS[$k]."\">".$HTTP_POST_VARS[$k]
+			$_POST[$k]."\">".$_POST[$k]
 			). $msg)."\n";
 	} else {
 		print row(cell($label)."\n	".
 		cell("<INPUT NAME=\"$k\" SIZE=\"25\" MAXLENGTH=\"$ml\" TYPE=\"text\" ".
-		"VALUE=\"{$HTTP_POST_VARS[$k]}\">"). $msg)."\n";
+		"VALUE=\"{$_POST[$k]}\">"). $msg)."\n";
 	}
 }
 

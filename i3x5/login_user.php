@@ -8,18 +8,18 @@
 	include_once "cards.inc";
 	$project = "3x5 Cards";
 
-	if ($HTTP_POST_VARS["clear"]) {
-		$HTTP_POST_VARS["username"] = "";
-		$HTTP_POST_VARS["passwd"] = "";
+	if ($_POST["clear"]) {
+		$_POST["username"] = "";
+		$_POST["passwd"] = "";
 		$username = "";
 		$passwd = "";
 		$login_user = 0;
 	}
-	if ($HTTP_POST_VARS["username"]) {
-		$username = strip_tags(trim($HTTP_POST_VARS["username"]));
+	if ($_POST["username"]) {
+		$username = strip_tags(trim($_POST["username"]));
 	}
-	if ($HTTP_POST_VARS["passwd"]) {
-		$passwd = strip_tags(trim($HTTP_POST_VARS["passwd"]));
+	if ($_POST["passwd"]) {
+		$passwd = strip_tags(trim($_POST["passwd"]));
 	}
 
 	function not_logged_in ($q) {
@@ -89,7 +89,7 @@ NOT_LOGGED_IN;
 }
 
 // if coming to reset login
-	if (! $HTTP_POST_VARS["username"]) {
+	if (! $_POST["username"]) {
 		not_logged_in(
 		"Please fill in fields to login into ``$project''");
 		return;

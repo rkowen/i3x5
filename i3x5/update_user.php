@@ -11,7 +11,7 @@
 	// $db->debug(1);
 
 // get userpass data from DB if not done!
-	if (! ereg("Done", $HTTP_POST_VARS["create_update_user"])) {
+	if (! ereg("Done", $_POST["create_update_user"])) {
 		if (! $db->query(
 "SELECT * FROM i3x5_userpass WHERE uid={$user->uid}")){
 			echo $db->errmsg();
@@ -22,7 +22,7 @@
 		// set values
 		reset($data);
 		while (list($k,$v) = each($data)) {
-			$HTTP_POST_VARS[$k] = $db->dequote($v);
+			$_POST[$k] = $db->dequote($v);
 		}
 	}
 
@@ -33,20 +33,20 @@
 
 	$cuu->get_form();
 
-	if (ereg("Done", $HTTP_POST_VARS["create_update_user"])) {
+	if (ereg("Done", $_POST["create_update_user"])) {
 		// create query
 		$query = "UPDATE i3x5_userpass SET ";
 		reset ($cuu->list);
 		while (list($k,$v) = each($cuu->list)) {
 			if ($k != "username") {
 				$query .= "$k='".
-					$db->quote($HTTP_POST_VARS[$k])."',";
+					$db->quote($_POST[$k])."',";
 			}
 		}
 		// strip off last ,
 // it looks like valid input ... now ship it off to the DB
 		$query = preg_replace("/,$/","",$query);
-		$query .= " WHERE username='".$HTTP_POST_VARS["username"]."'";
+		$query .= " WHERE username='".$_POST["username"]."'";
 		$result = $db->sql($query);
 		// print "query = $query<BR>\n";
 		// print "result = $result<BR>\n";

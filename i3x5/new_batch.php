@@ -49,7 +49,6 @@
 	}
 
 	function validate_name( $q, &$msg ) {
-		global $HTTP_POST_VARS;
 		global $db;
 		global $user;
 		global $bid;
@@ -59,7 +58,7 @@
 		// warn the user if it is ... they may want to overwrite it
 		$bid = $db->sql(
 		"SELECT bid FROM i3x5_batch WHERE uid={$user->uid} AND batch='".
-			$HTTP_POST_VARS["name"]."'");
+			$_POST["name"]."'");
 		if ($bid) {
 			$msg = cell(warn(
 		"pre-existing batch name, you may update"));
@@ -77,13 +76,13 @@
 
 //-----------------------------------------------------
 // set name if GET
-if ($HTTP_GET_VARS["name"]) {
-	$HTTP_POST_VARS["name"] = $HTTP_GET_VARS["name"];
-	$name = $HTTP_GET_VARS["name"];
+if ($_GET["name"]) {
+	$_POST["name"] = $_GET["name"];
+	$name = $_GET["name"];
 }
-if ($HTTP_GET_VARS["name_help"]) {
-	$HTTP_POST_VARS["name_help"] = $HTTP_GET_VARS["name_help"];
-	$name_help = $HTTP_GET_VARS["name_help"];
+if ($_GET["name_help"]) {
+	$_POST["name_help"] = $_GET["name_help"];
+	$name_help = $_GET["name_help"];
 }
 
 //-----------------------------------------------------
@@ -94,71 +93,71 @@ if ($HTTP_GET_VARS["name_help"]) {
 	}
 //-----------------------------------------------------
 // check if example (overrides everything)
-if ($HTTP_GET_VARS["example"]) {
-	if ($HTTP_GET_VARS["example"] == "card") {
+if ($_GET["example"]) {
+	if ($_GET["example"] == "card") {
 // print "-----card<BR>\n";
-		$HTTP_POST_VARS["name"] = $HTTP_GET_VARS["name"];
-		$HTTP_POST_VARS["number"] = "Number";
-		$HTTP_POST_VARS["title"] = "Title";
-		$HTTP_POST_VARS["card"] = "Card";
-		$HTTP_POST_VARS["number_help"] =
+		$_POST["name"] = $_GET["name"];
+		$_POST["number"] = "Number";
+		$_POST["title"] = "Title";
+		$_POST["card"] = "Card";
+		$_POST["number_help"] =
 			"For ordering the cards numerically";
-		$HTTP_POST_VARS["title_help"] = "Title for card";
-		$HTTP_POST_VARS["card_help"] = "Card of info";
+		$_POST["title_help"] = "Title for card";
+		$_POST["card_help"] = "Card of info";
 
-	} elseif ($HTTP_GET_VARS["example"] == "journal") {
+	} elseif ($_GET["example"] == "journal") {
 // print "-----journal<BR>\n";
-		$HTTP_POST_VARS["number"] = "Date";
-		$HTTP_POST_VARS["title"] = "Entry";
-		$HTTP_POST_VARS["card"] = "Journal";
-		$HTTP_POST_VARS["number_help"] = "Date in YYYYMMDD format";
-		$HTTP_POST_VARS["title_help"] = "Short description of day";
-		$HTTP_POST_VARS["card_help"] = "Detailed daily journal entry";
+		$_POST["number"] = "Date";
+		$_POST["title"] = "Entry";
+		$_POST["card"] = "Journal";
+		$_POST["number_help"] = "Date in YYYYMMDD format";
+		$_POST["title_help"] = "Short description of day";
+		$_POST["card_help"] = "Detailed daily journal entry";
 
-	} elseif ($HTTP_GET_VARS["example"] == "people") {
+	} elseif ($_GET["example"] == "people") {
 // print "-----people<BR>\n";
-		$HTTP_POST_VARS["number"] = "";
-		$HTTP_POST_VARS["title"] = "Name";
-		$HTTP_POST_VARS["card"] = "Info";
-		$HTTP_POST_VARS["title_help"] =
+		$_POST["number"] = "";
+		$_POST["title"] = "Name";
+		$_POST["card"] = "Info";
+		$_POST["title_help"] =
 			"Name of person last name, first name";
-		$HTTP_POST_VARS["card_help"] =
+		$_POST["card_help"] =
 			"Address, Phone, Misc Information";
-	} elseif ($HTTP_GET_VARS["example"] == "recipe") {
+	} elseif ($_GET["example"] == "recipe") {
 // print "-----people<BR>\n";
-		$HTTP_POST_VARS["number"] = "Calories";
-		$HTTP_POST_VARS["title"] = "Recipe";
-		$HTTP_POST_VARS["card"] = "Ingredients";
-		$HTTP_POST_VARS["batch_help"] = "Recipe Classification";
-		$HTTP_POST_VARS["number_help"] = "Calories per serving";
-		$HTTP_POST_VARS["title_help"] = "Common Recipe Name";
-		$HTTP_POST_VARS["card_help"] =
+		$_POST["number"] = "Calories";
+		$_POST["title"] = "Recipe";
+		$_POST["card"] = "Ingredients";
+		$_POST["batch_help"] = "Recipe Classification";
+		$_POST["number_help"] = "Calories per serving";
+		$_POST["title_help"] = "Common Recipe Name";
+		$_POST["card_help"] =
 			"Recipe Ingredients and Instructions";
 	}
 } else {
 	// we either got a bid or a name
 	// check if called from batches.php directly
 	// find bid & set up fields
-	if ($HTTP_GET_VARS["name"]) {
+	if ($_GET["name"]) {
 		// not given bid already
-		if (! $HTTP_GET_VARS["bid"]) {
+		if (! $_GET["bid"]) {
 			$bid = $db->sql(
 	"SELECT bid FROM i3x5_batch WHERE uid={$user->uid} AND batch='".
-				$HTTP_GET_VARS["name"]."'");
+				$_GET["name"]."'");
 		} else {
-			$bid = $HTTP_GET_VARS["bid"];
+			$bid = $_GET["bid"];
 		}
 		// may still not have proper bid
 		if ($bid) {
 			$fn = $db->batch_fieldnames($bid);
-			$HTTP_POST_VARS["number"] = $fn["num"];
-			$HTTP_POST_VARS["title"] = $fn["title"];
-			$HTTP_POST_VARS["card"] = $fn["card"];
-			$HTTP_POST_VARS["batch_help"] = $fn["batch_help"];
-			$HTTP_POST_VARS["number_help"] = $fn["num_help"];
-			$HTTP_POST_VARS["title_help"] = $fn["title_help"];
-			$HTTP_POST_VARS["card_help"] = $fn["card_help"];
-			$HTTP_GET_VARS["example"] = "none";
+			$_POST["number"] = $fn["num"];
+			$_POST["title"] = $fn["title"];
+			$_POST["card"] = $fn["card"];
+			$_POST["batch_help"] = $fn["batch_help"];
+			$_POST["number_help"] = $fn["num_help"];
+			$_POST["title_help"] = $fn["title_help"];
+			$_POST["card_help"] = $fn["card_help"];
+			$_GET["example"] = "none";
 		}
 	}
 
@@ -172,26 +171,26 @@ if ($HTTP_GET_VARS["example"]) {
 				$user->bids[$rbid]["batch"]."'"));
 		}
 		$fn = $db->batch_fieldnames($bid);
-		$HTTP_POST_VARS["number"] = $fn["num"];
-		$HTTP_POST_VARS["title"] = $fn["title"];
-		$HTTP_POST_VARS["card"] = $fn["card"];
-		$HTTP_POST_VARS["batch_help"] = $fn["batch_help"];
-		$HTTP_POST_VARS["number_help"] = $fn["num_help"];
-		$HTTP_POST_VARS["title_help"] = $fn["title_help"];
-		$HTTP_POST_VARS["card_help"] = $fn["card_help"];
+		$_POST["number"] = $fn["num"];
+		$_POST["title"] = $fn["title"];
+		$_POST["card"] = $fn["card"];
+		$_POST["batch_help"] = $fn["batch_help"];
+		$_POST["number_help"] = $fn["num_help"];
+		$_POST["title_help"] = $fn["title_help"];
+		$_POST["card_help"] = $fn["card_help"];
 	}
 
 	// if Copy or Relate ... then get those values stored away
 	if ($one_batch__ && ($batch_select=="Copy" || $batch_select=="Relate")){
 		$fn = $db->batch_fieldnames($one_batch__);
-		$HTTP_POST_VARS["number"] = $fn["num"];
-		$HTTP_POST_VARS["title"] = $fn["title"];
-		$HTTP_POST_VARS["card"] = $fn["card"];
-		$HTTP_POST_VARS["batch_help"] = $fn["batch_help"];
-		$HTTP_POST_VARS["number_help"] = $fn["num_help"];
-		$HTTP_POST_VARS["title_help"] = $fn["title_help"];
-		$HTTP_POST_VARS["card_help"] = $fn["card_help"];
-		$HTTP_POST_VARS["rid"] = $fn["bid"];
+		$_POST["number"] = $fn["num"];
+		$_POST["title"] = $fn["title"];
+		$_POST["card"] = $fn["card"];
+		$_POST["batch_help"] = $fn["batch_help"];
+		$_POST["number_help"] = $fn["num_help"];
+		$_POST["title_help"] = $fn["title_help"];
+		$_POST["card_help"] = $fn["card_help"];
+		$_POST["rid"] = $fn["bid"];
 			// which bid to relate to
 	}
 }
@@ -211,14 +210,14 @@ if ($HTTP_GET_VARS["example"]) {
 		$button = "Update";
 	}
 //------------ clear fields (if asked) --------------
-	if ($HTTP_POST_VARS["clear"]) {
+	if ($_POST["clear"]) {
 		// clear the posted values
 		reset($list);
 		while(list($k,$v) = each($list)) {
 			// clear all but name
 			if ($k != "name") {
-				$HTTP_POST_VARS[$k] = "";
-				$HTTP_POST_VARS[$k."_help"] = "";
+				$_POST[$k] = "";
+				$_POST[$k."_help"] = "";
 				$$k = "";
 			}
 		}
@@ -226,9 +225,9 @@ if ($HTTP_GET_VARS["example"]) {
 //------------ clean-up and set local values --------------
 	reset($list);
 	while(list($k,$v) = each($list)) {
-		if ($HTTP_POST_VARS[$k]) {
-			$$k = strip_tags(trim($HTTP_POST_VARS[$k]));
-			$HTTP_POST_VARS[$k] = $$k;
+		if ($_POST[$k]) {
+			$$k = strip_tags(trim($_POST[$k]));
+			$_POST[$k] = $$k;
 		}
 	}
 //------------ validate the input fields --------------
@@ -241,12 +240,12 @@ if ($HTTP_GET_VARS["example"]) {
 		if (! $check($$k, $list[$k]["msg"])) { $invalid++; }
 	}
 	if (!$non_blank) {
-		$HTTP_POST_VARS["create_batch"] = "Invalid";
+		$_POST["create_batch"] = "Invalid";
 	}
 
 //{------------ update/insert to DB --------------
-if ("Create" == $HTTP_POST_VARS["create_batch"]
-||  "Update" == $HTTP_POST_VARS["create_batch"]) {
+if ("Create" == $_POST["create_batch"]
+||  "Update" == $_POST["create_batch"]) {
 // looks OK ... add it into DB
 	if ($batch_select == "New" || $batch_select == "Copy") {
 		if ($insert) {
@@ -254,27 +253,27 @@ if ("Create" == $HTTP_POST_VARS["create_batch"]
 "INSERT INTO i3x5_batch (uid,batch,num_name,title_name,card_name,\n".
 "batch_help,num_help,title_help,card_help) VALUES (\n".
 $user->uid.",'".
-$HTTP_POST_VARS["name"]."','".
-$HTTP_POST_VARS["number"]."','".
-$HTTP_POST_VARS["title"]."','".
-$HTTP_POST_VARS["card"]."','".
-$HTTP_POST_VARS["name_help"]."','".
-$HTTP_POST_VARS["number_help"]."','".
-$HTTP_POST_VARS["title_help"]."','".
-$HTTP_POST_VARS["card_help"]."')";
+$db->escape($_POST["name"])."','".
+$db->escape($_POST["number"])."','".
+$db->escape($_POST["title"])."','".
+$db->escape($_POST["card"])."','".
+$db->escape($_POST["name_help"])."','".
+$db->escape($_POST["number_help"])."','".
+$db->escape($_POST["title_help"])."','".
+$db->escape($_POST["card_help"])."')";
 			$sqlmsg = "Batch was added";
 		} else {		// need to update instead
 			$sql = 
 "UPDATE i3x5_batch SET ".
-"batch='".$HTTP_POST_VARS["name"]."',".
+"batch='".$_POST["name"]."',".
 "rid=NULL,".
-"num_name='".$HTTP_POST_VARS["number"]."',".
-"title_name='".$HTTP_POST_VARS["title"]."',".
-"card_name='".$HTTP_POST_VARS["card"]."',".
-"batch_help='".$HTTP_POST_VARS["name_help"]."',".
-"num_help='".$HTTP_POST_VARS["number_help"]."',".
-"title_help='".$HTTP_POST_VARS["title_help"]."',".
-"card_help='".$HTTP_POST_VARS["card_help"]."' WHERE ".
+"num_name='".$db->escape($_POST["number"])."',".
+"title_name='".$db->escape($_POST["title"])."',".
+"card_name='".$db->escape($_POST["card"])."',".
+"batch_help='".$db->escape($_POST["name_help"])."',".
+"num_help='".$db->escape($_POST["number_help"])."',".
+"title_help='".$db->escape($_POST["title_help"])."',".
+"card_help='".$db->escape($_POST["card_help"])."' WHERE ".
 "bid=".$bid." AND ".
 "uid=".$user->uid;
 			$sqlmsg = "Batch was updated";
@@ -284,16 +283,16 @@ $HTTP_POST_VARS["card_help"]."')";
 			$sql = 
 "INSERT INTO i3x5_batch (uid,batch,batch_help,rid) VALUES (".
 $user->uid.",'".
-$HTTP_POST_VARS["name"]."','".
-$HTTP_POST_VARS["name_help"]."',".
-$HTTP_POST_VARS["rid"].")";
+$db->escape($_POST["name"])."','".
+$db->escape($_POST["name_help"])."',".
+$_POST["rid"].")";
 			$sqlmsg = "Batch was inserted as relation";
 		} else {
 			$sql = 
 "UPDATE i3x5_batch SET ".
-"batch='".$HTTP_POST_VARS["name"]."',".
-"batch_help='".$HTTP_POST_VARS["name_name"]."',".
-"rid=".$HTTP_POST_VARS["rid"]." WHERE ".
+"batch='".$db->escape($_POST["name"])."',".
+"batch_help='".$db->escape($_POST["name_name"])."',".
+"rid=".$_POST["rid"]." WHERE ".
 "bid=".$bid." AND ".
 "uid=".$user->uid;
 			$sqlmsg = "Batch was updated as relation";
@@ -366,9 +365,9 @@ while(list($k,$v) = each($list)) {
 
 	print row(cell($label)."\n	".
 	cell("<INPUT NAME=\"$k\" SIZE=\"18\" MAXLENGTH=\"$ml\" TYPE=\"text\" ".
-		"VALUE=\"{$HTTP_POST_VARS[$k]}\">")."\n"
+		"VALUE=\"{$_POST[$k]}\">")."\n"
 	.cell("<INPUT NAME=\"{$k}_help\" SIZE=\"40\" MAXLENGTH=\"200\" TYPE=\"text\" ".
-		"VALUE=\"{$HTTP_POST_VARS[$k."_help"]}\">").$msg)."\n";
+		"VALUE=\"{$_POST[$k."_help"]}\">").$msg)."\n";
 }
 
 print <<<PAGE
@@ -388,8 +387,8 @@ if ($sqlmsg) {
 	print row(cell(inform("<H2>".$sqlmsg."</H2>"),"COLSPAN=2"));
 }
 
-$url= "$PHP_SELF?name=".urlencode($HTTP_POST_VARS["name"])
-	."&name_help=".urlencode($HTTP_POST_VARS["name_help"])
+$url= "$PHP_SELF?name=".urlencode($_POST["name"])
+	."&name_help=".urlencode($_POST["name_help"])
 	."&batch_select=".$batch_select
 	."&example";
 

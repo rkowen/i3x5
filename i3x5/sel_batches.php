@@ -20,9 +20,9 @@ if ($view) {
 	$view = new View();
 }
 // process batches if given view go-ahead
-if ($HTTP_POST_VARS["submit"] == "Submit") {
-	if ( (! is_array($HTTP_POST_VARS["many_batch__"]))
-	|| (count($HTTP_POST_VARS["many_batch__"]) == 0)) {
+if ($_POST["submit"] == "Submit") {
+	if ( (! is_array($_POST["many_batch__"]))
+	|| (count($_POST["many_batch__"]) == 0)) {
 		$errmsg = "Nothing to view! Select some batches.";
 	} else {
 		$manybid->set_user_selected();
