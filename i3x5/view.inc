@@ -130,7 +130,8 @@ function cards(&$cards, $batch_op = false) {
 	if ($this->edit == "edit") {
 		$lines = 3;
 		print row(head(
-	input("submit","upd_all","Update All Cards")." ("
+	sendhelp("Help","update all cards")
+	.input("submit","upd_all","Update All Cards")." ("
 	.sendhelp(inform("only non-relation cards") ,"update relation").")"));
 
 	$bheader = "";
@@ -251,10 +252,9 @@ if ($this->edit == "list") {
 				"SIZE=16 MAXLENGTH")
 				,"BGCOLOR=\"$xcolor\" WIDTH=30%")
 			: cell("&nbsp;","COLSPAN=2 WIDTH=40%") )
-			.cell($xid,"WIDTH=10% ALIGN=\"CENTER\"")
-			.head($batch_op
-				? input("checkbox","c_check[$k]","true")
-				: $cbatch[$k]->string_ops_batch()
+			.cell(input("checkbox","c_check[$k]","true")
+				.$xid,"WIDTH=10% ALIGN=\"CENTER\"")
+			.head(	 $cbatch[$k]->string_ops_batch()
 				.$cbatch[$k]->string_one_batch()
 				,"WIDTH=25%")
 			.cell(	 input("hidden","c_rid[$k]",$c_rid)."\n"
@@ -321,7 +321,8 @@ if ($this->edit == "list") {
 	}
 	if ($this->edit == "edit") {
 		print row(head(
-	input("submit","upd_all","Update All Cards")." ("
+	sendhelp("Help","update all cards")
+	.input("submit","upd_all","Update All Cards")." ("
 	.sendhelp(inform("only non-relation cards") ,"update relation").")"));
 	}
 	print "</TABLE>\n";

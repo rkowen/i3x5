@@ -82,14 +82,15 @@ function get_ops_batch() {
 	return $this->ops;
 }
 
-function string_ops_batch() {
+function string_ops_batch($delete = false) {
 	return 
 		"<!--ops_batch-->\n"
 		."<SELECT NAME=\"ops_batch_{$this->id}\" SIZE=1>\n"
-		."<OPTION SELECTED VALUE=\"NONE\"></OPTION>\n"
+		.($delete?"":"<OPTION SELECTED VALUE=\"NONE\"></OPTION>\n")
 		."<OPTION VALUE=\"RELATE\">Relate To</OPTION>\n"
 		."<OPTION VALUE=\"COPY\">Copy To</OPTION>\n"
 		."<OPTION VALUE=\"MOVE\">Move To</OPTION>\n"
+	.($delete?"<OPTION VALUE=\"DELETE\">Delete Checked</OPTION>\n":"")
 		."</SELECT>\n";
 }
 

@@ -94,6 +94,26 @@ elseif (array_key_exists("ins__", $_POST)
 		),
 		($user->level >= $level_write ? false : "append"));
 }
+elseif (array_key_exists("a_submit", $_POST)
+&& $_POST["a_submit"]=="Batch Submit") {
+	// get one_batch info
+	$onebatch = new OneBatch("a");
+	$ops = $onebatch->get_ops_batch();
+	$bid = $onebatch->get_one_batch();
+	reset($_POST["c_check"]);
+	while (list($k,$v) = each($_POST["c_check"])) {
+		$id = $k;
+		if ($ops == "DELETE") {
+			$db->delete_card($id);
+		} elseif ($ops == "COPY") {
+			$db->copy_card($id,$bid);
+		} elseif ($ops == "RELATE") {
+			$db->insert_card($bid, $id);
+		} elseif ($ops == "MOVE") {
+			$db->move_card($k,$bid);
+		}
+	}
+}
 
 // get cards from db
 $cards = $db->cards($user->bids);
@@ -124,9 +144,17 @@ PAGE;
 			print " ".senddesc($v["batch"],$k,"batch")."\n";
 		}
 	}
-	print "</B></TD></TR><TR><TH>\n";
+	print "</B></TD></TR>\n";
+	$abatch = new OneBatch("a");
+	print	row(head(sendhelp("Help","batch ops")
+		.$abatch->string_ops_batch(true)
+		.$abatch->string_one_batch(false)
+		.input("submit","a_submit","Batch Submit")
+		))."<TR><TH>\n";
 	$view->cards($cards);
-	print "</TH></TR>\n";
+	print "</TH></TR>\n"
+		.row(head(sendhelp("Help","batch ops")
+			.input("submit","a_submit","Batch Submit")));
 	print <<<PAGE
 </TABLE>
 <!--}-->

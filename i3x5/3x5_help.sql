@@ -144,6 +144,14 @@ Any changes to that batch''s properties
 are reflected in the corresponding batch.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'update all cards','
+All the card contents (except for the relation cards) can be updated
+collectively by, first changing the card contents for all those desired,
+and then selecting the "Update All Cards" button.  Note that any
+"Batch Submit" check box selections will be lost and can not be processed
+at the same time.
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'update relation','
 Only cards that are not related to other cards can be updated
 in a collective operation.  The reason for this is that the
@@ -151,6 +159,13 @@ order of cards dictates what changes will be implemented
 and there would be no way to resolve conflicts.  Hence,
 only the point of truth, the original card can be updated
 in a collective fashion.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'batch ops','
+Select a collective or batch operation at the right, then
+check the boxes in front of the card id numbers for which the collective
+operation will be applied against.  Note that any card contents that have
+been changed will not be updated with the "Batch Submit"
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'batch name','
