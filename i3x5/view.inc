@@ -274,6 +274,13 @@ if ($this->edit == "list") {
 			.cell(($v["formatted"]=="t"
 				? pre($v["card"],"t") : $this->br($v["card"]))
 				,"class=\"b_card\" width=90% colspan=4")) : "")
+	.($this->dates != "hide" ?
+		row(	cell(	table(	row(
+			cell("created: ".$v["cdate"],"class=\"h_dates\"")
+			.cell("modified: ".$v["mdate"],"class=\"h_dates\"")),
+			"class=\"dates\" width=\"100%\""),
+		"class=\"dates\" colspan=5"))
+	: "")
 	,$entrytableopt)))."\n";
 } else {
 	if ($user->level >= $level_write) {
@@ -322,8 +329,8 @@ $text .= row(cell(table(
 			,"class=\"b_card\" width=90% colspan=4")) : "")
 .($this->dates != "hide" ?
 	row(	cell(	table(	row(
-			head("created: ".$v["cdate"])
-			.head("modified: ".$v["mdate"])),
+			cell("created: ".$v["cdate"],"class=\"h_dates\"")
+			.cell("modified: ".$v["mdate"],"class=\"h_dates\"")),
 		"class=\"dates\" width=\"100%\""),
 	"class=\"dates\" colspan=5"))
 	: "")
