@@ -154,6 +154,7 @@ PAGE;
 		}
 	}
 	print "</B></TD></TR>\n";
+	if ($view->is_edit()) {
 	$abatch = new OneBatch("a");
 	print	row(head(sendhelp("Help","batch ops")
 			.$abatch->string_ops_batch(true)
@@ -162,10 +163,13 @@ PAGE;
 		.row(head(input("submit","a_submit","Check All")
 			.input("submit","a_submit","Uncheck All")))
 		."<TR><TH>\n";
+	}
 	$view->cards($cards,$check_all);
+	if ($view->is_edit()) {
 	print "</TH></TR>\n"
 		.row(head(sendhelp("Help","batch ops")
 			.input("submit","a_submit","Batch Submit")));
+	}
 	print <<<PAGE
 </TABLE>
 <!--}-->

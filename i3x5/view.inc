@@ -350,6 +350,11 @@ if ($this->edit == "list") {
 	print "</TABLE>\n";
 }
 
+// return true if editable situation else false
+function is_edit() {
+	return ($this->edit == "edit" ? true : false);
+}
+
 // put in <BR>s wherever there is a newline
 function br (&$card) {
 	return preg_replace("/\n/","<BR>\n",$card);
