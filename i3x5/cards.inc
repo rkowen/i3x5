@@ -5,7 +5,7 @@
 //
 	$schema		= "i3x5";
 	$version	= "0.7.0";
-	$phpinfo	= 0;
+	$phpinfo	= 0;	// set non-zero for phpinfo
 	$result_bg	= "BGCOLOR=\"#EFEFEF\"";
 	$title_bg	= "BGCOLOR=\"#AFFFAF\"";
 	$help_bg	= "BGCOLOR=\"#AFAFFF\"";
@@ -55,6 +55,13 @@
 	}
 	function cell($q, $op="") {
 		return "<TD $op>$q</TD>\n";
+	}
+	function pre($q, $op="") {
+		if ($op == "t") {
+			return "<PRE>$q</PRE>";
+		} else {
+			return "$q";
+		}
 	}
 	function sendhelp($text, $key = "unknown") {
 		global $help_color;

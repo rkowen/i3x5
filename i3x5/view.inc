@@ -1,6 +1,7 @@
 <?php
 //
 // DESC: View class handles the batch view properties
+// DESC: and viewing the card batches
 //
 
 include_once "user.inc";
@@ -170,7 +171,11 @@ function cards(&$cards) {
 				,"BGCOLOR=\"$head_color\" WIDTH=10%")
 			.cell("\n<INPUT NAME=\"i_title\" TYPE=\"text\" "
 				."SIZE=80 MAXLENGTH=80>\n"
-				,"WIDTH=90% COLSPAN=4"))
+				,"WIDTH=90% COLSPAN=3")
+			.cell("\n<INPUT NAME=\"i_formatted\" TYPE=\"checkbox\" "
+				."VALUE=\"true\">"
+				.sendhelp("Formatted","formatted")."\n"
+				,"WIDTH=10% COLSPAN=1"))
 		.row(	cell(senddesc($fn[card],$k,"card")
 			,"WIDTH=10% BGCOLOR=\"$head_color\" VALIGN=\"top\"")
 			.cell("\n<TEXTAREA NAME=\"i_card\" COLS=80 ROWS=$lines>"
@@ -240,7 +245,9 @@ if ($this->edit == "list") {
 		? row(	cell(senddesc($user->bids[$v[bid]][card]
 				,$v[bid],"card")
 				,"BGCOLOR=\"$head_color\" WIDTH=10%")
-			.cell($this->br($v[card]),"WIDTH=90% COLSPAN=4")) : "")
+			.cell(($v[formatted]=="t"
+				? pre($v[card],"t") : $this->br($v[card]))
+				,"WIDTH=90% COLSPAN=4")) : "")
 	,$entrytableopt)
 	."</TD></TR>\n";
 } else {
@@ -275,7 +282,12 @@ if ($this->edit == "list") {
 			.cell(
 	"<INPUT NAME=\"c_title[$k]\" TYPE=\"text\" VALUE=\""
 	.$v[title]."\" SIZE=80 MAXLENGTH=80>"
-				,"WIDTH=90% BGCOLOR=\"$xcolor\" COLSPAN=4"))
+				,"WIDTH=90% BGCOLOR=\"$xcolor\" COLSPAN=3")
+			.cell("\n<INPUT NAME=\"c_formatted[$k]\" "
+				."TYPE=\"checkbox\" VALUE=\"true\""
+				.($v[formatted]=="t" ? "CHECKED" : "")
+				.">".sendhelp("Formatted","formatted")."\n"
+				,"WIDTH=10% COLSPAN=1"))
 		: "")
 	.((($this->body == "full") && ! ereg("^$",$user->bids[$v[bid]][card]))
 		? row(	cell(senddesc($user->bids[$v[bid]][card]

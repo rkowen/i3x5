@@ -26,9 +26,10 @@ if ($HTTP_POST_VARS["upd_all"]=="Update All Cards"
 			if ($user->level >= $level_write) {
 				$db->update_card($k,$v,
 				array(
-					"num"=>$HTTP_POST_VARS["c_num"][$k],
-					"title"=>$HTTP_POST_VARS["c_title"][$k],
-					"card"=>$HTTP_POST_VARS["c_card"][$k]
+				"num"=>$HTTP_POST_VARS["c_num"][$k],
+				"title"=>$HTTP_POST_VARS["c_title"][$k],
+				"card"=>$HTTP_POST_VARS["c_card"][$k],
+				"formatted"=>$HTTP_POST_VARS["c_formatted"][$k]
 				));
 			} else { 	// append only
 				$db->append_card($k, $v,
@@ -51,16 +52,20 @@ elseif (is_array($HTTP_POST_VARS["upd_"])) {
 		$onebatch = new OneBatch("[$k]");
 		$ops = $onebatch->get_ops_batch();
 		$bid = $onebatch->get_one_batch();
+		$rid = $HTTP_POST_VARS["c_rid"][$k];
+		$id = ( $rid ? $rid : $k);
 		if ($ops == "NONE") {
 			$db->update_card($k,
 				$HTTP_POST_VARS["c_rid"][$k],
 				array(	"num"=>$HTTP_POST_VARS["c_num"][$k],
-					"title"=>$HTTP_POST_VARS["c_title"][$k],
-					"card"=>$HTTP_POST_VARS["c_card"][$k]));
+				"title"=>$HTTP_POST_VARS["c_title"][$k],
+				"card"=>$HTTP_POST_VARS["c_card"][$k],
+				"formatted"=>$HTTP_POST_VARS["c_formatted"][$k]
+				));
 		} elseif ($ops == "COPY") {
-			$db->copy_card($k,$bid);
+			$db->copy_card($id,$bid);
 		} elseif ($ops == "RELATE") {
-			$db->insert_card($bid,$k);
+			$db->insert_card($bid, $id);
 		} elseif ($ops == "MOVE") {
 			$db->move_card($k,$bid);
 		}
@@ -80,7 +85,9 @@ elseif ($HTTP_POST_VARS["ins__"]=="Insert") {
 	$db->insert_card($HTTP_POST_VARS["one_batch_i"],
 		array(	"num"=>$HTTP_POST_VARS["i_num"],
 			"title"=>$HTTP_POST_VARS["i_title"],
-			"card"=>$HTTP_POST_VARS["i_card"] ),
+			"card"=>$HTTP_POST_VARS["i_card"],
+			"formatted"=>$HTTP_POST_VARS["i_formatted"]
+		),
 		($user->level >= $level_write ? false : "append"));
 }
 

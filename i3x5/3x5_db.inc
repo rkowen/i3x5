@@ -16,7 +16,7 @@ class i3x5_DB extends RKO_DB {
 // constructor
 //////////////////////////////////////////////////////////////////////////
 function i3x5_DB ($schema = "3x5") {
-	// $this->debug = 0;
+	// $this->debug = 1;
 	$this->errno = 0;
 	$this->errmsg = "i3x5_DB: ";
 	$this->schema = $schema;
@@ -99,22 +99,22 @@ function &cards (&$bids, $selected = true) {
 	return $this->multi_col("id",
 "SELECT id,bid,rid,num,title,card,\n".
 " (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,\n".
-" moddate AS date\n".
+" moddate AS date, formatted\n".
 "FROM i3x5_cards n WHERE bid in ($list) AND rid IS NULL\n".
 "UNION\n".
 "SELECT n.id AS id, n.bid AS bid, n.rid AS rid,\n".
 "r.num AS num,r.title AS title,\n".
-"r.card AS card,0 AS nrid, r.moddate AS date\n".
+"r.card AS card,0 AS nrid, r.moddate AS date, r.formatted AS formatted\n".
 "FROM i3x5_cards n, i3x5_cards r\n".
 "WHERE n.bid in ($list) AND r.id=n.rid AND n.rid IS NOT NULL\n");
 }
 
 // insert a card, return the id
-// $object = array(num=>, title=>, card=> )  or rid
+// $object = array(num=>, title=>, card=>, formatted=> )  or rid
 // returns false if bad input
 function insert_card ($bid, $object, $append = false) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::insert_card($this,$object)<BR>\n";
+		echo "3x5_DB::insert_card($this,$bid,$object,$append)<BR>\n";
 	}
 	if (is_array($object)) {	// array of things
 		if (! ($object[num] || $object[title] || $object[card])) {
@@ -129,13 +129,16 @@ function insert_card ($bid, $object, $append = false) {
 "'<<<'||to_char(CURRENT_TIMESTAMP,'YYYY/MM/DD HH24:MI:SS')||'>>>\n".
 			$object[card]."' "; }
 		else { $object[card] = "'".$object[card]."'";}
+		if (! $object[formatted]) { $object[formatted] = "false"; }
 
 		$id = $this->sql("SELECT nextval('i3x5_cards_id_seq')");
 		$this->sql(
-"INSERT INTO i3x5_cards (id,bid,num,title,card) ".
-"VALUES ($id, $bid, {$object[num]}, {$object[title]}, {$object[card]})");
+"INSERT INTO i3x5_cards (id,bid,num,title,card,formatted) ".
+"VALUES ($id, $bid, {$object[num]}, {$object[title]}, {$object[card]}),".
+" {$object[formatted]}");
 		return $id;
-	} elseif(is_int($object)) {
+	} elseif((is_numeric($object) ? intval($object)==$object : false)) {
+		// is_int($object) doesn't work as advertized
 		$id = $this->sql("SELECT nextval('i3x5_cards_id_seq')");
 		$this->sql(
 "INSERT INTO i3x5_cards (id,bid,rid) VALUES ($id, $bid, $object)");
@@ -145,13 +148,14 @@ function insert_card ($bid, $object, $append = false) {
 }
 
 // update a card, return the id
-// $object = array(num=>, title=>, card=> )
+// $object = array(num=>, title=>, card=>, formatted=> )
 // returns false if bad input
 function update_card ($id, $rid, $object) {
 	if ($this->debug > 0) {
 		echo "3x5_DB::update_card($this,$object)<BR>\n";
 	}
-	if (! ($object[num] || $object[title] || $object[card])) {
+	if (! ($object[num] || $object[title] || $object[card]
+	|| $object[formatted])) {
 		return false;
 	}
 	// update to related card if given
@@ -161,6 +165,8 @@ function update_card ($id, $rid, $object) {
 	if ($object[num]) { $q.="num={$object[num]},"; }
 	if ($object[title]) { $q.="title='".$object[title]."',";}
 	if ($object[card]) { $q.="card='".$object[card]."',";}
+	if ($object[formatted]) { $q.="formatted=".$object[formatted].",";}
+	else { $q.="formatted=false,";}
 	// strip final ,
 	$q = preg_replace("/,$/","",$q);
 	
@@ -207,8 +213,8 @@ function move_card($id,$newbid) {
 // copy a card to another batch
 function copy_card($id,$newbid) {
 	return $this->sql(
-"INSERT INTO i3x5_cards (bid,num,title,card)\n".
-"SELECT $newbid,num,title,card FROM i3x5_cards WHERE id=$id");
+"INSERT INTO i3x5_cards (bid,num,title,card,formatted)\n".
+"SELECT $newbid,num,title,card,formatted FROM i3x5_cards WHERE id=$id");
 }
 
 function helpmsg($key = "unknown") {

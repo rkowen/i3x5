@@ -306,6 +306,11 @@ The first line usually has the field names, which will be defined
 by the first card''s batch field names.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'formatted','
+Display the given card as <TT>fixed width formatted</TT>
+when listed.  (Have it look like the "editted" version when listed.)
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'xxx','
 ');
 
