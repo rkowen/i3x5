@@ -9,3 +9,5 @@ SSLRequireSSL
 AddType application/x-httpd-php .html
 
 php_flag	register_globals		Off
+php_flag	session_gc_maxlifetime		864000
+php_flag	session_cache_expire		14400
