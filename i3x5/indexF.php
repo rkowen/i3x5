@@ -20,7 +20,7 @@
 <title>3x5 Cards Project</title>
 <link rel="stylesheet" type="text/css" href="3x5.css">
 </head>
-<frameset border=2 cols="200, 100%" onLoad="if (self != top) top.location = self.location">>
+<frameset border=2 cols="200, 100%" onLoad="if (self != top) top.location = self.location">
 	<frameset border=2 rows="120, 100%">
 		<frame name="title" src="indexT.php">
 		<frame name="options" src="indexB.php">
