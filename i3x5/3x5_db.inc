@@ -16,16 +16,18 @@ class i3x5_DB extends RKO_DB {
 // constructor
 //////////////////////////////////////////////////////////////////////////
 function i3x5_DB ($schema = "3x5") {
-	// $this->debug = 1;
-	// $this->showerr = 1;
+//	$this->debug = 1;
+	$this->showerr = 1;
 	$this->errno = 0;
 	$this->errmsg = "i3x5_DB: ";
 	$this->schema = $schema;
 	if ($this->debug) {
 		echo "3x5_DB constructor($this)<BR>\n";
+		echo "dbconn = pg_Connect({$this->host},{$this->user},{$this->passwd}, {$this->schema})<br>";
 	}
-	$this->dbconn = pg_Connect($this->host,$this->user,$this->passwd,
-		$this->schema);
+//	$this->dbconn = pg_Connect($this->host,$this->user,$this->passwd,
+//		$this->schema);
+	$this->dbconn = pg_Connect("dbname=i3x5 host=localhost port=5432 user=rk");
 	if (!$this->dbconn) {
 		$this->errmsg.="Can't connect as ".
 			"($this->host,$this->user,$this->passwd,$this->schema)";
