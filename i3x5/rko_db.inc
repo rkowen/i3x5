@@ -39,7 +39,8 @@ function RKO_DB ($schema) {
 	if ($this->debug) {
 		echo "RKO_DB constructor($this)<BR>\n";
 	}
-	$this->dbconn = pg_Connect($host,$user,$passwd,$schema);
+#	$this->dbconn = pg_Connect($host,$user,$passwd,$schema);
+	$this->dbconn = pg_Connect("dbname=i3x5 host=localhost port=5432 user=rk");
 	if (!$this->dbconn) {
 		$this->errmsg.="Can't connect as ($host,$user,$passwd,$schema)";
 		$this->errno=-1;
@@ -176,8 +177,8 @@ function &fetch() {
 		// must stop fetch before end, else get nasty warning
 		return false;
 	}
-	$this->dbfetch = pg_fetch_object($this->dbresult, $this->dbrow,
-		PGSQL_ASSOC);
+	$this->dbfetch = pg_fetch_object($this->dbresult, $this->dbrow);
+//		PGSQL_ASSOC);
 	$this->dbrow++;
 	if ($this->dbfset) {
 		$t = array();
@@ -323,7 +324,8 @@ function &one_row ($sql) {
 
 // escapes the PostgreSQL special characters
 function escape($q) {
-	$qq = pg_escape_string($q);
+#	$qq = pg_escape_string($q);
+	$qq = $q;
 	if ($this->debug > 0) {
 		echo "RKO_DB::escape($this,$q)=>$qq<BR>\n";
 	}
