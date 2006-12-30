@@ -176,16 +176,8 @@ if ($view->is_edit()
 } else {
 	$js_ = "";
 }
-	print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<title>{$user->project} - View Cards</title>
-$js_
-<head>
-<body class="main">
-<center>
-PAGE;
+	card_head("{$user->project} - View Cards","main",1,$js_);
+
 $x = "<!--{-->".table(
 	row(head($hhead))
 	.(isset($errmsg)?row(head(warn($errmsg))):"")
@@ -201,10 +193,5 @@ if ($view->is_edit()) {
 	print $x."\n";
 }
 	showphpinfo();
-	print <<<PAGE
-</center>
-</body>
-</html>
-PAGE;
-
+	card_foot();
 ?>

@@ -36,14 +36,8 @@ if (isset($_POST["submit"]) && ($_POST["submit"] == "Submit")) {
 			header("Location: view_cards.php?view_edit="
 				.$view->edit);
 		} else {
+			card_head("{$user->project} - Selected Batches");
 			print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<title>{$user->project} - Selected Batches</title>
-</head>
-<body class="main">
-<center>
 <h2>
 Pick a ``Select Batches'' operation from left menu<BR>
 </h2>
@@ -57,15 +51,7 @@ PAGE;
 }
 
 $hhead = sendhelp("{$user->project} - Select Batches", "batch select");
-	print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<title>{$user->project} - Select Batches</title>
-</head>
-<body class="main">
-<center>
-PAGE;
+	card_head("{$user->project} - Select Batches");
 	print form($_SERVER['PHP_SELF'],
 	"<!--{-->".table(row(head($hhead))
 		.(isset($errmsg)?row(head(warn($errmsg)))."\n":"")
@@ -79,10 +65,5 @@ PAGE;
 				.input("submit","clear","Clear"))))))
 	,"class=\"tight\""))."\n";
 	showphpinfo();
-	print <<<PAGE
-</center>
-</body>
-</html>
-PAGE;
-
+	card_foot();
 ?>

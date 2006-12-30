@@ -206,14 +206,8 @@ function get_form() {
 function show_form($title, $helpkey) {
 
 	$thelp = sendhelp($title,$helpkey);
+	card_head($title);
 	print <<<EOT
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<title> $title </title>
-</head>
-<body class="main">
-<center>
 <table class="tight">
 <tr><th><center><big> $thelp </big></center>
 </th></tr> <tr><th>

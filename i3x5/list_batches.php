@@ -54,14 +54,8 @@
 	}
 
 	$hhead = sendhelp("{$_SESSION['user']->project} - List Batches", "list batches");
+	card_head("{$_SESSION['user']->project} - List Batches");
 print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<title>{$_SESSION['user']->project} - List Batches</title>
-</head>
-<body class="main">
-<CENTER>
 <!--{-->
 <table class="tight">
 <tr><th>$hhead</th></tr>
@@ -98,9 +92,5 @@ print <<<PAGE
 </table><!--}-->
 PAGE;
 	showphpinfo();
-print <<<PAGE
-</body>
-</html>
-PAGE;
-
+	card_foot();
 ?>

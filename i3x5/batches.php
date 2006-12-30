@@ -29,15 +29,7 @@
 
 	$thelp = sendhelp("{$user->project} - batch properties",
 		"batch properties");
-	print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<title>{$user->project} - batches</title>
-</head>
-<body class="main">
-<center>
-PAGE;
+	card_head("{$user->project} - batches");
 print "<!--{-->".form($_SERVER['PHP_SELF'],
 	table(row(head($thelp))
 	.row(head(
@@ -50,10 +42,5 @@ print "<!--{-->".form($_SERVER['PHP_SELF'],
 	,"class=\"form\"")."<!--}-->\n"))
 ,"class=\"tight\"")."<!--}-->\n");
 	showphpinfo();
-	print <<<PAGE
-</center>
-</body>
-</html>
-PAGE;
-
+	card_foot();
 ?>

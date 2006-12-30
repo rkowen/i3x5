@@ -343,15 +343,7 @@ $db->escape($_POST["card_help"])."')";
 }
 //}
 
-print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<title>$header</title>
-</head>
-<body class="main">
-<center>
-PAGE;
+card_head($header);
 
 $hbatch = sendhelp("Batch<BR>Property","batch property");
 $hlabel = sendhelp("Label","batch label");
@@ -436,10 +428,5 @@ print row(cell(
 	." <a href=\"$url=recipe\">".inform("Example")."</a><br>\n"
 ,"id=\"left\""))."\n</table><!--}-->\n";
 	showphpinfo();
-print <<<PAGE
-</center>
-</body>
-</html>
-PAGE;
-
+	card_foot();
 ?>

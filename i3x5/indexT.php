@@ -6,14 +6,7 @@
 	session_start();
 	include_once "session.inc";
 
-print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-</head>
-<body class="title">
-
-PAGE;
+	card_head("Title Frame","title",0);
 if (isset($user)) {
 	print "<B>".$user->project."</B><BR>\n"
 		."username: <B>{$user->uname}</B><BR>\n"
@@ -33,9 +26,6 @@ print <<<PAGE
 <li><a href="login_user.php?access" target="main">Change Access</a>
 PAGE;
 }
-print <<<PAGE
-</ul>
-</body>
-</html>
-PAGE;
+	print "</ul>\n";
+	card_foot(0);
 ?>

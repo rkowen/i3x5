@@ -14,21 +14,16 @@ if (! $view) {
 }
 
 if ($user->selected_count() == 0) {
+	card_head("No Selected Batches");
 print <<< PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-</head>
-<body class="main">
 
 <h2>No Selected Batches</h2>
 <P ALIGN="justified">Please select at least one batch from 
 <P>
 <A HREF="sel_batches.php">Click here</A> to make a selection
 
-</body>
-</html>
 PAGE;
+	card_foot();
 	return;
 }
 

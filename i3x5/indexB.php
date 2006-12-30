@@ -14,14 +14,7 @@
 	if (isset($_GET["help"])) {
 		$help = $_GET["help"];
 	}
-print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-</head>
-<body class="options">
-
-PAGE;
+	card_head("Button Frame","options",0);
 if (isset($user)) {
 	print "<H4>".sendhelp($level_names[$user->level],
 		$level_names[$user->level])
@@ -90,8 +83,5 @@ EOT;
 			.help($db->helpdesc($bid,$property))."\n";
 	}
 	
-print <<<PAGE
-</body>
-</html>
-PAGE;
+	card_foot(0);
 ?>

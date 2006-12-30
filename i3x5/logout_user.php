@@ -17,15 +17,9 @@
 		header("Location: indexM.php");
 		return;
 	}
-	$hlogout = sendhelp("{$_SESSION['user']->project} - Logout","logout");
+$hlogout = sendhelp("{$_SESSION['user']->project} - Logout","logout");
+card_head("{$_SESSION['user']->project} - Logout");
 print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<title>{$_SESSION['user']->project} - Logout </title>
-</head>
-<body class="main">
-<center>
 $hlogout
 <p>
 PAGE;
@@ -37,10 +31,7 @@ print table(row(head(
 		)),"class=\"form\"")
 	)
 )),"class=\"tight\"");
-print <<<PAGE
-</center>
-</body>
-</html>
-PAGE;
+
+card_foot();
 
 ?>

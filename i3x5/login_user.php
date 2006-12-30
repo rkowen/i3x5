@@ -43,13 +43,9 @@
 		$husername = sendhelp("Username","login username");
 		$hpassword = sendhelp("Password","login password");
 		$q = warn($q);
+
+		card_head("User Login");
 print <<<NOT_LOGGED_IN
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-</head>
-<body>
-<center>
 $hlogin
 <br>
 Version: $version
@@ -80,11 +76,7 @@ NOT_LOGGED_IN;
 
 showphpinfo();
 
-print <<<NOT_LOGGED_IN
-</body>
-</html>
-NOT_LOGGED_IN;
-
+	card_foot();
 }
 
 // if coming to reset login
@@ -134,28 +126,6 @@ NOT_LOGGED_IN;
 			$db->bids($uid));
 
 		header("Location: indexF.php");
-/*
-		header("Location: indexF.php?_parent");
-		print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-</head>
-<body class="main">
-<p>
-<p>
-<center>
-<h2>
-<a href="indexF.php" target="_parent"><blink>Click Here To Continue</blink></a>
-</h2>
-</center>
-PAGE;
-		showphpinfo();
-		print <<<PAGE
-</body>
-</html>
-PAGE;
-*/
 
 	} else {
 		not_logged_in("Password does not match at any level!");

@@ -65,15 +65,7 @@ if (isset($do_delete) && $delete=="Delete") {
 }
 
 	$hdel = sendhelp("{$user->project} - Delete Batch","delete batch");
-	print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<title>{$user->project} - Delete Batch</title>
-</head>
-<body class="main">
-<center>
-PAGE;
+	card_head("{$user->project} - Delete Batch");
 
 if (isset($one_batch__) && $one_batch__) {
 	$hbatch = senddesc("{$user->bids[$one_batch__]["batch"]}",
@@ -104,10 +96,5 @@ if (isset($one_batch__) && $one_batch__) {
 	,"class=\"tight\"")."<!--}-->\n")."\n";
 }
 	showphpinfo();
-	print <<<PAGE
-</center>
-</body>
-</html>
-PAGE;
-
+	card_foot();
 ?>

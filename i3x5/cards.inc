@@ -20,6 +20,40 @@
 
 //
 // functions
+//
+	function card_head ($title="", $class="main", $center=1, $extra="") {
+		print <<<HEAD
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="3x5.css">
+HEAD;
+		if ($title != "") {
+			print <<<TITLE
+<title>
+$title
+</title>
+TITLE;
+		}
+		if ($extra != "") {
+			print $extra."\n";
+		}
+		PRINT <<<BODY
+</head>
+<body class="$class">
+BODY;
+		if ($center == 1) {
+			print "<center>\n";
+		}
+	}
+	function card_foot ($center=1) {
+		if ($center == 1) {
+			print "</center>\n";
+		}
+		PRINT <<<END
+</body>
+</html>
+END;
+	}
 	function showphpinfo ($opt = INFO_VARIABLES) {
 		global $phpinfo;
 		if ($phpinfo) {phpinfo($opt);}

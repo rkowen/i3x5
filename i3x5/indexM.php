@@ -5,14 +5,8 @@
 	include_once "session.inc";
 	include_once "cards.inc";
 
-print <<<PAGE
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
-</head>
-<body class="main">
+	card_head("Main Frame");
 
-PAGE;
 	if (isset($user)) {
 	print <<<PAGE
 <H2>``{$user->project}'' - results</H2>
@@ -41,9 +35,5 @@ PAGE;
 	}
 	showphpinfo();
 
-print <<<PAGE
-
-</BODY>
-</HTML>
-PAGE;
+	card_foot();
 ?>
