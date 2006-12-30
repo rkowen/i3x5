@@ -20,9 +20,10 @@ restrictive of read-only.
 
 Requires:
 	Apache		- web server
-	PHP4		- embedded scripting and display
-	Postgres 7.x	- database
+	PHP5		- embedded scripting and display
+	Postgres 8.x	- database
 		(with plpgsql - Postgres procedural language - for triggers)
+	Dojo 0.4	- AJAX framework
 
 
 Principle Author:	R.K. Owen, Ph.D.
@@ -66,7 +67,7 @@ and invoking the sql scripts.  The prompt is given as "i3x5=#".
 	i3x5=# \q
 
 
-PHP4 - 
+PHP5 - 
 The configuration options are given here (tailor the path to your own site)
 
 configure \
@@ -75,6 +76,9 @@ configure \
 	--with-exec-dir=/php_path/php/4.0.6/bin --with-openssl \
 	--without-pear --enable-xml --enable-wddx \
 	--with-pgsql --with-gdbm
+
+Dojo -
+Copy over the dojo.js file into the i3x5/ directory.
 
 Web page layout: page and (frame)
 				indexF.php
