@@ -28,7 +28,8 @@
 	<frame name="main" src="$what">
 </frameset>
 <noframe>
-<body> You need to have a Frames capable browser!
+<body>
+You need to have a Frames capable browser!
 </body>
 </noframe>
 </html>
