@@ -13,7 +13,7 @@ var selectRCM = new Array(
 EOV;
 	$js_check = <<<EOV
 
-// check for valid imput
+// check for valid input
 
 var_digits = "0123456789";
 

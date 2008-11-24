@@ -305,7 +305,8 @@ $text .= row(cell(table(
 		.cell(	 input("hidden","c_rid[$k]",$c_rid)."\n"
 			.input("hidden","c_nrid[$k]",$c_nrid)."\n"
 			.input("submit","upd_[$k]","Update")."&nbsp;\n"
-			.input("submit","del_[$k]",$delmsg)."\n"
+			.input("submit","del_[$k]",$delmsg,
+			  "onClick=\"return confirm('Are you sure?');\"")."\n"
 			,"class=\"$rcolor\" width=20% id=\"center\""))
 .(! ereg("^$",$user->bids[$v["bid"]]["title"])
 	? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
