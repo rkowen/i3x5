@@ -6,8 +6,53 @@
 //
 //////////////////////////////////////////////////////////////////////////
 include_once "rko_db.inc";
+include_once "cards.inc";
 
 class i3x5_DB extends RKO_DB {
+//////////////////////////////////////////////////////////////////////////
+// constants
+//////////////////////////////////////////////////////////////////////////
+	protected $selectcards = "SELECT nn.*,b.batch FROM (
+ SELECT id,bid,rid,num,title,card,
+ (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
+ createdate,TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+ moddate,TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
+ formatted
+FROM i3x5_cards n
+WHERE n.rid IS NULL wherexxx
+UNION
+SELECT n.id AS id, n.bid AS bid, n.rid AS rid,
+r.num AS num,r.title AS title,
+r.card AS card,0 AS nrid,
+r.createdate,TO_CHAR(r.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+r.moddate,TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
+r.formatted AS formatted
+FROM	i3x5_cards n
+JOIN	i3x5_cards r
+ON	r.id=n.rid
+WHERE	n.rid IS NOT NULL wherexxx)	nn
+JOIN	i3x5_batch					b
+ON	(nn.bid = b.bid)
+orderbyxxx";
+	protected $selectbatch = "(SELECT bid, batch, rid, 0 AS selected,
+num_name AS num, title_name AS title, card_name AS card,
+num_help, title_help, card_help,
+createdate,TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+moddate,TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate
+FROM	i3x5_batch	n
+WHERE	rid IS NULL wherexxx
+UNION
+SELECT n.bid, n.batch, n.rid, 0 AS selected,
+r.num_name AS num, r.title_name AS title, r.card_name AS card,
+r.num_help, r.title_help, r.card_help,
+r.createdate,TO_CHAR(r.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+r.moddate,TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate
+FROM	i3x5_batch	n
+JOIN	i3x5_batch	r
+ON	r.bid=n.rid
+WHERE	n.bid IS NOT NULL wherexxx
+) orderbyxxx";
+
 //////////////////////////////////////////////////////////////////////////
 // attributes
 //////////////////////////////////////////////////////////////////////////
@@ -16,14 +61,14 @@ class i3x5_DB extends RKO_DB {
 // constructor
 //////////////////////////////////////////////////////////////////////////
 function i3x5_DB ($schema = "3x5") {
-//	$this->debug = 1;
+	$this->debug = 0;
 	$this->showerr = 1;
 	$this->errno = 0;
 	$this->errmsg = "i3x5_DB: ";
 	$this->schema = $schema;
 	if ($this->debug) {
-		echo "3x5_DB constructor($this)<BR>\n";
-		echo "dbconn = pg_Connect({$this->host},{$this->user},{$this->passwd}, {$this->schema})<br>";
+		echo "3x5_DB constructor()<BR>\n";
+		echo "dbconn = pg_Connect({$this->host},{$this->user},{$this->passwd}, {$this->schema})<br>\n";
 	}
 //	$this->dbconn = pg_Connect($this->host,$this->user,$this->passwd,
 //		$this->schema);
@@ -73,7 +118,9 @@ function &batch_fieldnames($bid) {
 "SELECT bid,rid,batch,\n".
 "num_name AS num, title_name AS title ,card_name AS card, ".
 "num_help, title_help, card_help, ".
-"moddate AS date ".
+"moddate AS date,".
+"createdate,TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,".
+"moddate,TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate ".
 "FROM i3x5_batch ".
 "WHERE bid=$bid");
 		$bid = $one_row_data["rid"];
@@ -82,11 +129,155 @@ function &batch_fieldnames($bid) {
 }
 
 //
+// return a hash array for one card
+function &card ($card_id) {
+	if ($this->debug > 0) {
+		echo "3x5_DB::card($card_id)<BR>\n";
+	}
+	// reject if $card_id is not a number
+	if (! is_int($card_id)) {
+		$this->errmsg.="card:($card_id) not integer";
+		$this->errno=-1;
+		return false;
+	} 
+	$query = str_replace("wherexxx","AND n.id=$card_id",$this->selectcards);
+	$query = str_replace("orderbyxxx","",$query);
+	return $this->multi_col("id",$query);
+}
+
+//
+// return XML for one card
+//	$card_id = id, query multi_col, or card hash
+function &xml_card($card_id, $indent = "") {
+	if ($this->debug > 0) {
+		echo "3x5_DB::xml_card($card_id,$indent)<BR>\n";
+	}
+	$buffer = $indent."<xcard>\n";
+	if (is_array($card_id)) {
+		$r = $card_id;
+	} else {
+		$r = $this->card($card_id);
+	}
+	if (isset($r["id"])) {
+		$v = $r;
+	} else {
+		list($k,$v) = each($r);
+	}
+	ksort($v);
+	while (list($kk,$vv) = each($v)) {
+		$buffer.=$indent."  <".$kk.">".xmlspecialchars($vv)
+		."</".$kk.">\n";
+	}
+	$buffer .= $indent."</xcard>\n";
+	return $buffer;
+}
+
+function &cards ($select,$orderby="") {
+	if ($this->debug > 0) {
+		echo "3x5_DB::cards($select)<BR>\n";
+	}
+
+	$query = str_replace("wherexxx",$select,$this->selectcards);
+	$query = str_replace("orderbyxxx",$orderby,$query);
+	return $this->multi_col("id",$query);
+}
+
+//
+// return XML for a collection of cards
+//	pass in a select or a query multi_col
+function &xml_cards($select = "", $orderby = "", $indent = "") {
+	if ($this->debug > 0) {
+		echo "3x5_DB::xml_cards($select,$orderby,$indent)<BR>\n";
+	}
+	$buffer = $indent."<xcards>\n";
+	if (is_array($select)) {
+		$r = $select;
+	} else {
+		$r = $this->cards($select,$orderby);
+	}
+	$buffer .= $indent."  <count>".count($r)."</count>\n";
+	while (list($k,$v) = each($r)) {
+		$buffer.=$this->xml_card($v,$indent."  ");
+	}
+	$buffer .= $indent."</xcards>\n";
+	return $buffer;
+}
+//
+// return a hash array for one batch
+function &batch ($batch_id) {
+	if ($this->debug > 0) {
+		echo "3x5_DB::batch($batch_id)<BR>\n";
+	}
+	// reject if $batch_id is not a number
+	if (! is_int($batch_id)) {
+		$this->errmsg.="batch:($batch_id) not integer";
+		$this->errno=-1;
+		return false;
+	} 
+	$query = str_replace("wherexxx","AND n.bid=$batch_id",
+		$this->selectbatch);
+	$query = str_replace("orderbyxxx","",$query);
+	return $this->multi_col("bid",$query);
+}
+//
+// return XML for one batch
+//	$batch_id = id, query multi_col, or batch hash
+function &xml_batch($batch_id, $indent = "",$card_batch = "") {
+	if ($this->debug > 0) {
+		echo "3x5_DB::xml_batch($batch_id,$indent,...)<BR>\n";
+	}
+	$buffer = $indent."<xbatch>\n";
+	if (is_array($batch_id)) {
+		$r = $batch_id;
+	} else {
+		$r = $this->batch($batch_id);
+	}
+	if (isset($r["bid"])) {
+		$v = $r;
+	} else {
+		list($k,$v) = each($r);
+	}
+	ksort($v);
+	while (list($kk,$vv) = each($v)) {
+		$buffer.=$indent."  <".$kk.">".xmlspecialchars($vv)
+		."</".$kk.">\n";
+	}
+	$buffer .= $card_batch;
+	$buffer .= $indent."</xbatch>\n";
+	return $buffer;
+}
+//
+// return XML for one batch
+//	$batch_id = bid, query multi_col, or batch hash
+//	$orderby for the card batch
+function &xml_card_batch($batch_id, $indent = "",$orderby = "") {
+	if ($this->debug > 0) {
+		echo "3x5_DB::xml_card_batch($batch_id,$indent,$orderby)<BR>\n";
+	}
+	if (is_array($batch_id)) {
+		$r = $batch_id;
+		$bid = $batch_id;
+	} else {
+		$r = $this->batch($batch_id);
+	}
+	if (isset($r["bid"])) {
+		$v = $r;
+		$bid = (int) $r["bid"];
+	} else {
+		list($k,$v) = each($r);
+		$bid = $k;
+	}
+	$buffer = $this->xml_batch($bid,$indent,
+		$this->xml_cards("AND n.bid=$bid",$orderby,$indent."  "));
+	return $buffer;
+}
+
+//
 // return a hash array of cards for the given $bids
 // set $selected to false to get all cards for the user
-function &cards (&$bids, $selected = true) {
+function &cards_ (&$bids, $selected = true) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::cards($this,$bids,$selected)<BR>\n";
+		echo "3x5_DB::cards_($this,$bids,$selected)<BR>\n";
 	}
 
 	if ($selected) {
@@ -190,7 +381,7 @@ function update_card ($id, $rid, $object) {
 // returns false if bad input else id or card appended to
 function append_card ($id, $rid, $card_append, $card_formatted) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::append_card($this,$rid,$card_append,$card_formatted)<BR>\n";
+		echo "3x5_DB::append_card($rid,$card_append,$card_formatted)<BR>\n";
 	}
 	if (! ($id || $card_append)) {
 		return false;

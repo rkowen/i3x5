@@ -28,7 +28,7 @@ PAGE;
 }
 
 // get cards from db
-$cards = $db->cards(&$user->bids);
+$cards = $db->cards_(&$user->bids);
 $view->sort($cards);
 //$db->dumper($cards);
 

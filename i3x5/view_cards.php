@@ -146,7 +146,7 @@ elseif (isset($_POST["a_submit"])
 }
 
 // get cards from db
-$cards = $db->cards($user->bids);
+$cards = $db->cards_($user->bids);
 $view->sort($cards);
 //$db->dumper($cards);
 
@@ -177,6 +177,7 @@ if ($view->is_edit()
 	$js_ = "";
 }
 	card_head("{$user->project} - View Cards","main",1,$js_);
+	print $view->xml_settings();
 
 $x = "<!--{-->".table(
 	row(head($hhead))
