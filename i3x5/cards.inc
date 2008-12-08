@@ -112,4 +112,8 @@ END;
 			."\" target=\"options\">"
 			."$text</a>\n";
 	}
+	function xmlspecialchars($text) {
+		return str_replace('&#039;', '&apos;',
+			htmlspecialchars($text, ENT_QUOTES));
+	}
 ?>
