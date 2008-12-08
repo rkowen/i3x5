@@ -56,6 +56,52 @@ function catch_gets() {
 	}
 }
 
+// generate an XML representation of the view settings
+function xml_settings($indent = "") {
+	$buffer=$indent."<settings>\n";
+	global $user;
+	global $level_write;
+	global $level_read;
+
+	$sel_edit	= ($this->edit	== "edit" ? ' selected="1"' : "");
+	$sel_list	= ($this->edit	== "list" ? ' selected="1"' : "");
+	$sel_header	= ($this->body	== "header" ? ' selected="1"' : "");
+	$sel_full	= ($this->body	== "full" ? ' selected="1"' : "");
+	$sel_dates_show	= ($this->dates	== "show" ? ' selected="1"' : "");
+	$sel_dates_hide	= ($this->dates	== "hide" ? ' selected="1"' : "");
+	$sel_num	= ($this->key	== "num" ? ' selected="1"' : "");
+	$sel_title	= ($this->key	== "title" ? ' selected="1"' : "");
+	$sel_cdate	= ($this->key	== "cdate" ? ' selected="1"' : "");
+	$sel_mdate	= ($this->key	== "mdate" ? ' selected="1"' : "");
+	$sel_asc	= ($this->order	== "asc" ? ' selected="1"' : "");
+	$sel_des	= ($this->order	== "des" ? ' selected="1"' : "");
+	$sel_onone	= ($this->order	== "none" ? ' selected="1"' : "");
+	$sel_batch	= ($this->group	== "batch" ? ' selected="1"' : "");
+	$sel_none	= ($this->group	== "none" ? ' selected="1"' : "");
+
+	$buffer.=$indent."  <user level=\"$user->level\"/>\n";
+	$buffer.=$indent."  <write level=\"$level_write\"/>\n";
+	$buffer.=$indent."  <read level=\"$level_read\"/>\n";
+	$buffer.=$indent."  <action type=\"edit\"$sel_edit/>\n";
+	$buffer.=$indent."  <action type=\"list\"$sel_list/>\n";
+	$buffer.=$indent."  <view type=\"header\"$sel_header/>\n";
+	$buffer.=$indent."  <view type=\"full\"$sel_full/>\n";
+	$buffer.=$indent."  <dates type=\"show\"$sel_show/>\n";
+	$buffer.=$indent."  <dates type=\"hide\"$sel_hide/>\n";
+	$buffer.=$indent."  <key type=\"num\"$sel_num/>\n";
+	$buffer.=$indent."  <key type=\"title\"$sel_title/>\n";
+	$buffer.=$indent."  <key type=\"cdate\"$sel_cdate/>\n";
+	$buffer.=$indent."  <key type=\"mdate\"$sel_mdate/>\n";
+	$buffer.=$indent."  <order type=\"asc\"$sel_asc/>\n";
+	$buffer.=$indent."  <order type=\"desc\"$sel_desc/>\n";
+	$buffer.=$indent."  <order type=\"none\"$sel_onone/>\n";
+	$buffer.=$indent."  <group type=\"batch\"$sel_batch/>\n";
+	$buffer.=$indent."  <group type=\"none\"$sel_none/>\n";
+	$buffer.=$indent."</settings>\n";
+
+	return $buffer;
+}
+
 // retrieve the posted values and update attributes as needed
 function get_buttons() {
 
