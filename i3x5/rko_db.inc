@@ -37,12 +37,13 @@ function RKO_DB ($schema) {
 	$this->errmsg = "RKO_DB: ";
 	$this->schema = $schema;
 	if ($this->debug) {
-		echo "RKO_DB constructor($this)<BR>\n";
+		echo "RKO_DB constructor()<BR>\n";
 	}
 #	$this->dbconn = pg_Connect($host,$user,$passwd,$schema);
 	$this->dbconn = pg_Connect("dbname=i3x5 host=localhost port=5432 user=rk");
 	if (!$this->dbconn) {
-		$this->errmsg.="Can't connect as ($host,$user,$passwd,$schema)";
+		$this->errmsg
+			.="Can't connect as ($host,$user,$passwd,$schema)";
 		$this->errno=-1;
 		return false;
 	}
@@ -98,14 +99,14 @@ function debug ($q = -999) {
 		$this->debug = $q;
 	}
 	if ($this->debug > 0) {
-		echo "RKO_DB::debug($this,$q)<BR>\n";
+		echo "RKO_DB::debug($q)<BR>\n";
 	}
 	return $this->debug;
 }
 
 function query ($q = "") {
 	if ($this->debug > 0) {
-		echo "RKO_DB::query($this,$q)<BR>\n";
+		echo "RKO_DB::query($q)<BR>\n";
 	}
 	if ($q != "") {
 		$this->query = $q;
@@ -117,7 +118,7 @@ function query ($q = "") {
 // or sets which ones to use.  Must be used after the exec and before fetches
 function fields ($q = "") {
 	if ($this->debug > 0) {
-		echo "RKO_DB::fields($this,$q)<BR>\n";
+		echo "RKO_DB::fields($q)<BR>\n";
 	}
 	if (is_array($q)) {
 		$this->dbfset = true;
@@ -129,14 +130,14 @@ function fields ($q = "") {
 
 function errno () {
 	if ($this->debug > 0) {
-		echo "RKO_DB::errno($this)<BR>\n";
+		echo "RKO_DB::errno()<BR>\n";
 	}
 	return $this->errno;
 }
 
 function errmsg () {
 	if ($this->debug > 0) {
-		echo "RKO_DB::errmsg($this)<BR>\n";
+		echo "RKO_DB::errmsg()<BR>\n";
 	}
 	return $this->errmsg."\n";
 }
@@ -147,7 +148,7 @@ function errmsg () {
 // execute the query and return true or false
 function exec () {
 	if ($this->debug > 0) {
-		echo "RKO_DB::exec($this)<BR>\n";
+		echo "RKO_DB::exec()<BR>\n";
 	}
 	$this->dbresult = pg_query($this->dbconn,$this->query);
 	if (!$this->dbresult) {
@@ -171,7 +172,7 @@ function exec () {
 // returns false when no more
 function &fetch() {
 	if ($this->debug > 0) {
-		echo "RKO_DB::fetch($this)<BR>\n";
+		echo "RKO_DB::fetch()<BR>\n";
 	}
 	if ($this->dbrow >= $this->dbrnum) {
 		// must stop fetch before end, else get nasty warning
@@ -194,7 +195,7 @@ function &fetch() {
 // returns an indexed array of associative arrays
 function &fetch_array () {
 	if ($this->debug > 0) {
-		echo "RKO_DB::fetch_array($this)<BR>\n";
+		echo "RKO_DB::fetch_array()<BR>\n";
 	}
 	$t = array();
 	while ($row = $this->fetch()) {
@@ -207,7 +208,7 @@ function &fetch_array () {
 //   or executing simple SQL statements)
 function sql($q) {
 	if ($this->debug > 0) {
-		echo "RKO_DB::sql($this,$q)<BR>\n";
+		echo "RKO_DB::sql($q)<BR>\n";
 	}
 	if (! $this->query($q)) {
 		if ($this->showerr) {
@@ -237,7 +238,7 @@ function sql($q) {
 //
 function &multi_col ($col, $sql) {
 	if ($this->debug > 0) {
-		echo "RKO_DB::multi_col($this,$col,$sql)<BR>\n";
+		echo "RKO_DB::multi_col($col,$sql)<BR>\n";
 	}
 
 	if (! $this->query($sql)) {
@@ -269,7 +270,7 @@ function &multi_col ($col, $sql) {
 // return a hash array from a SQL select relating 2 of the columns (col1=>col2)
 function &two_col ($col1, $col2, $sql) {
 	if ($this->debug > 0) {
-		echo "RKO_DB::two_col($this,$sql)<BR>\n";
+		echo "RKO_DB::two_col($sql)<BR>\n";
 	}
 
 
@@ -299,7 +300,7 @@ function &two_col ($col1, $col2, $sql) {
 // return a hash array from a SQL select that returns a single row (or should)
 function &one_row ($sql) {
 	if ($this->debug > 0) {
-		echo "RKO_DB::one_row($this,$sql)<BR>\n";
+		echo "RKO_DB::one_row($sql)<BR>\n";
 	}
 
 	if (! $this->query($sql)) {
@@ -327,7 +328,7 @@ function escape($q) {
 #	$qq = pg_escape_string($q);
 	$qq = $q;
 	if ($this->debug > 0) {
-		echo "RKO_DB::escape($this,$q)=>$qq<BR>\n";
+		echo "RKO_DB::escape($q)=>$qq<BR>\n";
 	}
 	return $qq;
 }
@@ -336,7 +337,7 @@ function escape($q) {
 function dequote($q) {
 	$qq = preg_replace("/\\\\'/","'",$q);
 	if ($this->debug > 0) {
-		echo "RKO_DB::dequote($this,$q)=>$qq<BR>\n";
+		echo "RKO_DB::dequote($q)=>$qq<BR>\n";
 	}
 	return $qq;
 }
@@ -345,7 +346,7 @@ function dequote($q) {
 function quote($q) {
 	$qq = preg_replace("/'/","''",$q);
 	if ($this->debug > 0) {
-		echo "RKO_DB::quote($this,$q)=>$qq<BR>\n";
+		echo "RKO_DB::quote($q)=>$qq<BR>\n";
 	}
 	return $qq;
 }
