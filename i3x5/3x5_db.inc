@@ -128,7 +128,7 @@ function &batch_fieldnames($bid) {
 	return $one_row_data;
 }
 
-//
+// --{--
 // return a hash array for one card
 function &card ($card_id) {
 	if ($this->debug > 0) {
@@ -167,6 +167,11 @@ function &xml_card($card_id, $indent = "") {
 	while (list($kk,$vv) = each($v)) {
 		$buffer.=$indent."  <".$kk.">".xmlspecialchars($vv)
 		."</".$kk.">\n";
+		if ($kk == "title") {
+			$buffer.=$indent."  <".$kk."x>"
+			.strtolower(trim(xmlspecialchars($vv)))
+			."</".$kk."x>\n";
+		}
 	}
 	$buffer .= $indent."</xcard>\n";
 	return $buffer;
@@ -271,13 +276,39 @@ function &xml_card_batch($batch_id, $indent = "",$orderby = "") {
 		$this->xml_cards("AND n.bid=$bid",$orderby,$indent."  "));
 	return $buffer;
 }
+//
+// return XML for multiple batches
+//	$bids = hash from &bids()
+//	set $selected to false to get all cards for the user
+//	$orderby for the card batch
+function &xml_card_batches(&$bids, $selected = true,
+		$indent = "",$borderby = "", $orderby = "") {
+
+	if ($this->debug > 0) {
+		echo "3x5_DB::xml_card_batchs($batch_id,$selected,"
+		."$indent,$borderby,$orderby)<BR>\n";
+	}
+	$buffer = "";
+	$cnt = 0;
+	reset($bids);
+	while (list($k,$v) = each($bids)) {
+		if ($selected && ! $v["selected"]) {
+			continue;
+		}
+		$buffer .= $this->xml_card_batch($k,$indent."  ");
+		$cnt++;
+	}
+	$buffer .= $indent."</xbatches>\n";
+	return $indent."<xbatches>\n".$indent."  <count>$cnt</count>\n".$buffer;
+}
+// --}--
 
 //
 // return a hash array of cards for the given $bids
 // set $selected to false to get all cards for the user
 function &cards_ (&$bids, $selected = true) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::cards_($this,$bids,$selected)<BR>\n";
+		echo "3x5_DB::cards_($bids,$selected)<BR>\n";
 	}
 
 	if ($selected) {

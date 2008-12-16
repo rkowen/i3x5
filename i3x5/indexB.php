@@ -61,6 +61,7 @@ EOT;
 EOT;
 	}
 	print <<< EOT
+  <li> <a href="xcards.php?view_edit=list" target="main">XView</a>
 	 Batches
   <li> <a href="csv_cards.php" target="main">CSV file</a> $csvhelp
   </ul>

@@ -1,4 +1,32 @@
 /* 3x5 cards style sheet */
+.hidden		{ display: none; }
+.shown		{ display: ""; }
+.nonprint	{ display: ""; }
+@media print {
+.nonprint	{ display: none; }
+}
+
+h_id,h_number,h_title,h_cdate,h_mdate,h_batch,h_form {
+	background:	#f0f0f0;
+	font-weight:	bold;
+	border:		none 0;
+	text-align:	left;
+	padding-left:	.5em;
+}
+h_card {
+	background:	#f0f0f0;
+	font-weight:	bold;
+	border:		inset 1pt;
+	text-align:	left;
+	padding-left:	.5em;
+}
+b_id,b_number,b_title,b_cdate,b_mdate,b_card,b_form,b_check {
+	background:	#d0d0d0;
+	border:		none 0;
+	text-align:	left;
+	padding-left:	.5em;
+}
+/* legacy styles */
 #right {
 	text-align: right	!important;
 	padding-right: .5em	!important;
