@@ -66,7 +66,8 @@ CREATE TABLE i3x5_cards (
 
 CREATE TABLE i3x5_help (
 	key		TEXT,		-- keyword
-	help		TEXT		-- help text
+	help		TEXT,		-- help text
+	PRIMARY KEY(key)
 );
 
 --
