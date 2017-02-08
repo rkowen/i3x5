@@ -57,7 +57,7 @@ function js_one_array($arrayName = "selectOneArray", $selectd=false) {
 		}
 	}
 	// strip trailing ,
-	$s = ereg_replace(",\$","",$s);
+	$s = preg_replace("/,$/","",$s);
 	$s .= ");\n";
 	return $s;
 }

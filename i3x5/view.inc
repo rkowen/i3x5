@@ -86,14 +86,14 @@ function xml_settings($indent = "") {
 	$buffer.=$indent."  <action type=\"list\"$sel_list/>\n";
 	$buffer.=$indent."  <view type=\"header\"$sel_header/>\n";
 	$buffer.=$indent."  <view type=\"full\"$sel_full/>\n";
-	$buffer.=$indent."  <dates type=\"show\"$sel_show/>\n";
-	$buffer.=$indent."  <dates type=\"hide\"$sel_hide/>\n";
+	$buffer.=$indent."  <dates type=\"show\"$sel_dates_show/>\n";
+	$buffer.=$indent."  <dates type=\"hide\"$sel_dates_hide/>\n";
 	$buffer.=$indent."  <key type=\"num\"$sel_num/>\n";
 	$buffer.=$indent."  <key type=\"title\"$sel_title/>\n";
 	$buffer.=$indent."  <key type=\"cdate\"$sel_cdate/>\n";
 	$buffer.=$indent."  <key type=\"mdate\"$sel_mdate/>\n";
 	$buffer.=$indent."  <order type=\"asc\"$sel_asc/>\n";
-	$buffer.=$indent."  <order type=\"desc\"$sel_desc/>\n";
+	$buffer.=$indent."  <order type=\"desc\"$sel_des/>\n";
 	$buffer.=$indent."  <order type=\"none\"$sel_onone/>\n";
 	$buffer.=$indent."  <group type=\"batch\"$sel_batch/>\n";
 	$buffer.=$indent."  <group type=\"none\"$sel_none/>\n";
@@ -288,7 +288,7 @@ if ($this->edit == "edit") {
 		}
 if ($this->edit == "list") {
 	$card = $this->br($v["card"]);
-	if (ereg("^$", $user->bids[$v["bid"]]["num"])) {
+	if (preg_match("/^$/", $user->bids[$v["bid"]]["num"])) {
 		$tcolspan = 3;
 		$tper = "80%";
 		$tid = cell($xid,"class=\"b_cid\" colspan=1 width=10%");
@@ -298,14 +298,14 @@ if ($this->edit == "list") {
 		$tid = "";
 	}
 	$text .= row(cell(table(
-		(! ereg("^$",$user->bids[$v["bid"]]["num"])
+		(! preg_match("/^$/",$user->bids[$v["bid"]]["num"])
 		? row(	cell(senddesc($user->bids[$v["bid"]]["num"]
 				,$v["bid"],"num")
 				,"class=\"h_number\" width=10%")
 			.cell($v["num"],"class=\"$tcolor\" width=\"80%\"")
 			.cell($xid,"class=\"b_cid\" colspan=3 width=10%") )
 			: "" )
-	.(! ereg("^$",$user->bids[$v["bid"]]["title"])
+	.(! preg_match("/^$/",$user->bids[$v["bid"]]["title"])
 		? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
 				,$v["bid"],"title")
 				,"class=\"h_title\" width=10%")
@@ -313,7 +313,7 @@ if ($this->edit == "list") {
 		"class=\"b_title\" width=$tper colspan=$tcolspan").$tid)
 		: "" )
 	.((($this->body == "full")
-		&& (! ereg("^$",$user->bids[$v["bid"]]["card"])))
+		&& (! preg_match("/^$/",$user->bids[$v["bid"]]["card"])))
 		? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
 				,$v["bid"],"card")
 				,"class=\"h_card\" width=10%")
@@ -335,7 +335,7 @@ if ($this->edit == "list") {
 	$lines = max(count(preg_split("/\n/", $v["card"])),
 			strlen($v["card"])/75) + 1;
 $text .= row(cell(table(
-	row(	(! ereg("^$",$user->bids[$v["bid"]]["num"])
+	row(	(! preg_match("/^$/",$user->bids[$v["bid"]]["num"])
 		?cell(senddesc($user->bids[$v["bid"]]["num"],$v["bid"],
 			"num"),"class=\"h_number\" width=10%")
 		.cell(input("text","c_num[$k]",$v["num"],
@@ -354,7 +354,7 @@ $text .= row(cell(table(
 			.input("submit","del_[$k]",$delmsg,
 			  "onClick=\"return confirm('Are you sure?');\"")."\n"
 			,"class=\"$rcolor\" width=20% id=\"center\""))
-.(! ereg("^$",$user->bids[$v["bid"]]["title"])
+.(! preg_match("/^$/",$user->bids[$v["bid"]]["title"])
 	? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
 			,$v["bid"],"title")
 			,"class=\"h_title\" width=10% colspan=1")
@@ -367,7 +367,7 @@ $text .= row(cell(table(
 			,"class=\"b_title\" width=20% colspan=1"))
 	: "")
 .((($this->body == "full")
-	&& ! ereg("^$",$user->bids[$v["bid"]]["card"]))
+	&& ! preg_match("/^$/",$user->bids[$v["bid"]]["card"]))
 	? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
 			,$v["bid"],"card")
 			,"class=\"h_card\" width=10% valign=\"TOP\"")
@@ -386,7 +386,7 @@ $text .= row(cell(table(
 	} else {	// append only
 		$card = $this->br($v["card"]);
 $text .= row(cell(table(
-	row(	(! ereg("^$", $user->bids[$v["bid"]]["num"])
+	row(	(! preg_match("/^$/", $user->bids[$v["bid"]]["num"])
 		?cell(senddesc($user->bids[$v["bid"]]["num"],$v["bid"],
 			"num"),"class=\"h_number\" width=10%")
 		 .cell($v["num"],"class=\"$tcolor\" width=40%")
@@ -396,7 +396,7 @@ $text .= row(cell(table(
 			.input("submit","upd_[$k]","Append")
 			,"class=\"$tcolor\" colspan=2 width=40% id=\"center\"")
 		.cell($xid,"class=\"b_cid\" width=10%") )
-.(! ereg("^$",$user->bids[$v["bid"]]["title"])
+.(! preg_match("/^$/",$user->bids[$v["bid"]]["title"])
 	? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
 			,$v["bid"],"title")
 			,"class=\"h_title\" width=10% colspan=1")
@@ -407,7 +407,7 @@ $text .= row(cell(table(
 			,"class=\"b_title\" width=20% colspan=1"))
 	: "" )
 .((($this->body == "full")
-	&& ! ereg("^$",$user->bids[$v["bid"]]["card"]))
+	&& ! preg_match("/^$/",$user->bids[$v["bid"]]["card"]))
 	? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
 			,$v["bid"],"card")
 			,"class=\"h_card\" width=10% valign=\"top\"")

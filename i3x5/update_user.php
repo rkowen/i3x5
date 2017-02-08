@@ -13,7 +13,7 @@
 
 // get userpass data from DB if not done!
 	if (! isset($_POST["create_update_user"])
-	|| (! ereg("Done", $_POST["create_update_user"]))) {
+	|| (! preg_match("/Done/", $_POST["create_update_user"]))) {
 		if (! $db->query(
 "SELECT * FROM i3x5_userpass WHERE uid={$user->uid}")){
 			echo $db->errmsg();
@@ -36,7 +36,7 @@
 	$cuu->get_form();
 
 	if (isset($_POST["create_update_user"])
-	&&  ereg("Done", $_POST["create_update_user"])) {
+	&&  preg_match("/Done/", $_POST["create_update_user"])) {
 		// create query
 		$query = "UPDATE i3x5_userpass SET ";
 		reset ($cuu->list);

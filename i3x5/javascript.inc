@@ -74,7 +74,7 @@ EOV;
 	}
 	// tag ids should not have []'s
 	function js_debracket ($q) {
-		return ereg_replace("(\[|\])","",$q);
+		return preg_replace("/[\[\]]/","",$q);
 	}
 	// share menu select
 	function js_select($select_name, $doc_form_select, $selectArray) {

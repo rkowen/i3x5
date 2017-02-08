@@ -3,8 +3,9 @@
 	include_once "user.inc";
 
 	session_start();
-	session_register("user");
 	include_once "session.inc";
+	$_SESSION['user'] = $user;
+	//session_register("user");
 
 	include_once "cards.inc";
 	$project = "3x5 Cards";
@@ -31,7 +32,7 @@
 		$passwd = "";
 		session_destroy();
 		session_write_close();
-		$_GET["access"] = ereg_replace(".access","",$_GET["access"]);
+		$_GET["access"] = preg_replace("/\.access/","",$_GET["access"]);
 	}
 
 	function not_logged_in ($q) {

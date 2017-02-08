@@ -40,16 +40,16 @@ Header("Content-Disposition: inline; filename=\"$strName\"");
 function csv_out($t) {
 	$quoted = false;
 // check for quotes
-	if (ereg("\"" ,$t )) {
+	if (preg_match('/"/' ,$t )) {
 		$quoted = true;
 		$t = preg_replace("/\"/","\"\"",$t);
 	}
-	if (ereg("\n" ,$t )) {
+	if (preg_match("/\n/" ,$t )) {
 		$quoted = true;
 		$t = preg_replace("/\r/","",$t);
 		$t = preg_replace("/\n/","\\n",$t);
 	}
-	if (ereg("," ,$t )) {
+	if (preg_match("/,/" ,$t )) {
 		$quoted = true;
 	}
 	if ($quoted) {
@@ -67,30 +67,30 @@ while (list($k,$v) = each($cards)) {
 		// use first card batch for field names
 		$stack = array();
 		$firsttime = 0;
-		if(! ereg("^$",$user->bids[$v[bid]][num])) {
+		if(! preg_match("/^$/",$user->bids[$v[bid]][num])) {
 			array_push($stack,
 				csv_out($user->bids[$v[bid]][num]));
 		}
-		if(! ereg("^$",$user->bids[$v[bid]][title])) {
+		if(! preg_match("/^$/",$user->bids[$v[bid]][title])) {
 			array_push($stack,
 				csv_out($user->bids[$v[bid]][title]));
 		}
 		if (($view->body == "full")
-		&& (! ereg("^$",$user->bids[$v[bid]][card]))) {
+		&& (! preg_match("/^$/",$user->bids[$v[bid]][card]))) {
 			array_push($stack,
 				csv_out($user->bids[$v[bid]][card]));
 		}
 		print join(",",$stack)."\n";
 	}
 	$stack = array();
-	if(! ereg("^$",$user->bids[$v[bid]][num])) {
+	if(! preg_match("/^$/",$user->bids[$v[bid]][num])) {
 		array_push($stack, csv_out($v[num]));
 	}
-	if(! ereg("^$",$user->bids[$v[bid]][title])) {
+	if(! preg_match("/^$/",$user->bids[$v[bid]][title])) {
 		array_push($stack, csv_out($v[title]));
 	}
 	if (($view->body == "full")
-	&& (! ereg("^$",$user->bids[$v[bid]][card]))) {
+	&& (! preg_match("/^$/",$user->bids[$v[bid]][card]))) {
 		array_push($stack, csv_out($v[card]));
 	}
 	print join(",",$stack)."\n";

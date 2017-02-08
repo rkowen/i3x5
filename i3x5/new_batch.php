@@ -88,9 +88,13 @@
 // set name if GET
 if (isset($_GET["name"])) {
 	$_POST["name"] = $_GET["name"];
+} else {
+	$_GET["name"] = "";
 }
 if (isset($_GET["name_help"])) {
 	$_POST["name_help"] = $_GET["name_help"];
+} else {
+	$_GET["name_help"] = "";
 }
 if (isset($_GET["batch_select"])) {
 	$_POST["batch_select"] = $_GET["batch_select"];
@@ -267,7 +271,7 @@ if (isset($_GET["example"])) {
 		}
 	}
 //------------ validate the input fields --------------
-	// we have to have at least one that is a non-blank field
+	// we must have at least one non-blank field
 	$non_blank = 0;
 	$invalid = 0;
 	reset($list);

@@ -13,7 +13,7 @@
 
 	$cuu->get_form();
 
-	if (ereg("Done", $_POST["create_update_user"])) {
+	if (preg_match("/Done/", $_POST["create_update_user"])) {
 // it looks like have valid input ... now ship it off to the DB
 		$db->sql(
 "INSERT INTO i3x5_userpass (username,passwd_admin,passwd_w,passwd_a,passwd_r,".

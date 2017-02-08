@@ -3,8 +3,9 @@
 	include_once "user.inc";
 	include_once "view.inc";
 	session_start();
-	session_register("view");
 	include_once "session.inc";
+	$_SESSION['view'] = $view;
+//	session_register("view");
 	include_once "cards.inc";
 	include_once "many_batch.inc";
 	include_once "3x5_db.inc";
