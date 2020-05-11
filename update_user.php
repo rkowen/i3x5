@@ -6,21 +6,28 @@
 
 	include_once "cards.inc";
 	include_once "3x5_db.inc";
+	global $user;
 
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) {
+		print "update_user initial:".$db->errmsg()."<br/>\n"; exit; }
 	// $db->debug(1);
 
 // get userpass data from DB if not done!
 	if (! isset($_POST["create_update_user"])
 	|| (! preg_match("/Done/", $_POST["create_update_user"]))) {
 		if (! $db->query(
-"SELECT * FROM i3x5_userpass WHERE uid={$user->uid}")){
-			echo $db->errmsg();
+"SELECT * FROM i3x5_userpass WHERE uid=".$user->uid)){
+			echo "update_user error1: ".$db->errmsg();
 		}
-		if (! $db->exec()) { echo $db->errmsg(); }
+		if (! $db->exec()) {
+			echo "update_user error2: ".$db->errmsg();
+		}
 		$data = $db->fetch();
-		if (! $data ) { echo "No Data for uid={$user->uid}\n"; }
+		if (! $data ) {
+			echo "No Data for uid=".$user->uid."\n";
+			// echo "<pre>user = ".print_r($user)."</pre>\n";
+		}
 		// set values
 		reset($data);
 		while (list($k,$v) = each($data)) {
@@ -51,8 +58,8 @@
 		$query = preg_replace("/,$/","",$query);
 		$query .= " WHERE username='".$_POST["username"]."'";
 		$result = $db->sql($query);
-		// print "query = $query<BR>\n";
-		// print "result = $result<BR>\n";
+		// print "query = $query<br/>\n";
+		// print "result = $result<br/>\n";
 
 		$cuu->show_form($user->project." - Update User", "update user");
 
@@ -60,8 +67,8 @@
 			print <<<EOT
 </center>
 <p>
-Your '{$user->project}' has not been updated properly!<BR>
-result = $result<BR>
+Your '{$user->project}' has not been updated properly!<br/>
+result = $result<br/>
 </body>
 </html>
 EOT;
@@ -69,7 +76,8 @@ EOT;
 			print <<<EOT
 </center>
 <p>
-Your '{$user->project}' user profile has been updated.<BR>
+Your '{$user->project}' user profile has been updated.<br/>
+Project changes will not be evident until next login.<br/>
 Click on a menu item to the left to do something else.
 </body>
 </html>
