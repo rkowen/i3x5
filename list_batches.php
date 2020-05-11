@@ -10,17 +10,17 @@
 
 	$insert = true;			// governs how data is input to table
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
  
 	// list of fields
 	$list = array(
-	"bid"	=> "Batch<BR>Id (bid)",
-	"name"	=> "Batch<BR>Name",
-	"number"=> "Number<BR>Field",
-	"title"	=> "Title<BR>Field",
-	"card"	=> "Card<BR>Field",
+	"bid"	=> "Batch<br/>Id (bid)",
+	"name"	=> "Batch<br/>Name",
+	"number"=> "Number<br/>Field",
+	"title"	=> "Title<br/>Field",
+	"card"	=> "Card<br/>Field",
 	"misc"	=> inform("Relation (bid)"),
-	"count"	=> "Card<BR>Count"
+	"count"	=> "Card<br/>Count"
 	);
 	$help = array(
 	"bid"	=> "batch id",
