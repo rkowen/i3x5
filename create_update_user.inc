@@ -152,7 +152,7 @@ function validate_weak($q, &$msg) {
 function validate_strong($q, &$msg) {
 	if (! $this->validate_weak($q, $msg)) { return 0; }
 	$q = preg_replace("/[^a-z]/",":",$q);
-	if (count(split(':',$q)) < 4) {
+	if (count(preg_split('/:/',$q)) < 4) {
 		$msg = cell(warn(
 		"Must have at least 3 non-lower case characters"));
 		return 0;
