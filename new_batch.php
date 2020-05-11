@@ -12,7 +12,7 @@
 	$insert = true;			// governs how data is input to table
 	$relmsg = "";			// unneeded actually
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
  
 	// list of fields
 	$list = array(
@@ -125,7 +125,7 @@ if (isset($_POST["copy_relate"])) {
 // check if example (overrides everything)
 if (isset($_GET["example"])) {
 	if ($_GET["example"] == "card") {
-// print "-----card<BR>\n";
+// print "-----card<br/>\n";
 		$_POST["name"] = $_GET["name"];
 		$_POST["name_help"] = $_GET["name_help"];
 		$_POST["number"] = "Number";
@@ -137,7 +137,7 @@ if (isset($_GET["example"])) {
 		$_POST["card_help"] = "Card of info";
 
 	} elseif ($_GET["example"] == "journal") {
-// print "-----journal<BR>\n";
+// print "-----journal<br/>\n";
 		$_POST["number"] = "Date";
 		$_POST["title"] = "Entry";
 		$_POST["card"] = "Journal";
@@ -146,7 +146,7 @@ if (isset($_GET["example"])) {
 		$_POST["card_help"] = "Detailed daily journal entry";
 
 	} elseif ($_GET["example"] == "people") {
-// print "-----people<BR>\n";
+// print "-----people<br/>\n";
 		$_POST["number"] = "";
 		$_POST["title"] = "Name";
 		$_POST["card"] = "Info";
@@ -155,7 +155,7 @@ if (isset($_GET["example"])) {
 		$_POST["card_help"] =
 			"Address, Phone, Misc Information";
 	} elseif ($_GET["example"] == "recipe") {
-// print "-----recipe<BR>\n";
+// print "-----recipe<br/>\n";
 		$_POST["number"] = "Calories";
 		$_POST["title"] = "Recipe";
 		$_POST["card"] = "Ingredients";
@@ -315,7 +315,7 @@ $db->escape($_POST["card_help"])."')";
 		$sql = 
 "UPDATE i3x5_batch SET ".
 "batch='".$db->escape($_POST["name"])."',".
-"batch_help='".$db->escape($_POST["name_name"])."',".
+"batch_help='".$db->escape($_POST["name_help"])."',".
 "rid=".$_POST["rid"]." WHERE ".
 "bid=".$bid." AND ".
 "uid=".$user->uid;
@@ -349,7 +349,7 @@ $db->escape($_POST["card_help"])."')";
 
 card_head($header);
 
-$hbatch = sendhelp("Batch<BR>Property","batch property");
+$hbatch = sendhelp("Batch<br/>Property","batch property");
 $hlabel = sendhelp("Label","batch label");
 $hhelp = sendhelp("Helpful Description","batch help");
 
@@ -421,15 +421,15 @@ $url= "new_batch.php?name=".urlencode($_POST["name"])
 	$url .= "&example";
 
 print row(cell(
-	"\nEmpty fields will not be shown in {$user->project}<br>\n"
+	"\nEmpty fields will not be shown in {$user->project}<br/>\n"
 	.sendhelp("Card","card example")
-	." <a href=\"$url=card\">".inform("Example")."</a> (default)<br>\n"
+	." <a href=\"$url=card\">".inform("Example")."</a> (default)<br/>\n"
 	.sendhelp("Journal","journal example")
-	." <a href=\"$url=journal\">".inform("Example")."</a><br>\n"
+	." <a href=\"$url=journal\">".inform("Example")."</a><br/>\n"
 	.sendhelp("People","people example")
-	." <a href=\"$url=people\">".inform("Example")."</a><br>\n"
+	." <a href=\"$url=people\">".inform("Example")."</a><br/>\n"
 	.sendhelp("Recipe","recipe example")
-	." <a href=\"$url=recipe\">".inform("Example")."</a><br>\n"
+	." <a href=\"$url=recipe\">".inform("Example")."</a><br/>\n"
 ,"id=\"left\""))."\n</table><!--}-->\n";
 	showphpinfo();
 	card_foot();
