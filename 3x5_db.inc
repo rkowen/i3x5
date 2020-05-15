@@ -60,22 +60,21 @@ WHERE	n.bid IS NOT NULL wherexxx
 //////////////////////////////////////////////////////////////////////////
 // constructor
 //////////////////////////////////////////////////////////////////////////
-function i3x5_DB ($schema = "3x5") {
+function __construct ($schema = "3x5") {
 	$this->debug = 0;
 	$this->showerr = 1;
 	$this->errno = 0;
 	$this->errmsg = "i3x5_DB: ";
 	$this->schema = $schema;
 	if ($this->debug) {
-		echo "3x5_DB constructor()<BR>\n";
-		echo "dbconn = pg_Connect({$this->host},{$this->user},{$this->passwd}, {$this->schema})<br>\n";
+		echo "3x5_DB constructor()<br/>\n";
+		echo "dbconn = pg_Connect(".$this->connect.") <br/>\n";
 	}
-//	$this->dbconn = pg_Connect($this->host,$this->user,$this->passwd,
-//		$this->schema);
-	$this->dbconn = pg_Connect("dbname=i3x5 host=localhost port=5432 user=rk");
+	parent::__construct($schema);
+	$this->dbconn = pg_Connect($this->connect);
 	if (!$this->dbconn) {
 		$this->errmsg.="Can't connect as ".
-			"($this->host,$this->user,$this->passwd,$this->schema)";
+			"(".$this->connect.")";
 		$this->errno=-1;
 		return false;
 	}
@@ -88,7 +87,7 @@ function i3x5_DB ($schema = "3x5") {
 // return bids array (suitable for $user->bid)
 function &bids ($uid) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::bids($this,$uid)<BR>\n";
+		echo "3x5_DB::bids($uid)<br/>\n";
 	}
 	return $this->multi_col("bid",
 "(SELECT bid, batch, rid, 0 AS selected,\n".
@@ -110,7 +109,7 @@ function &bids ($uid) {
 // return the field names for a given bid
 function &batch_fieldnames($bid) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::batch_fieldnames($this,$bid)<BR>\n";
+		echo "3x5_DB::batch_fieldnames($bid)<br/>\n";
 	}
 	// keep recursing until find one which is not "related"
 	while ($bid) {
@@ -132,7 +131,7 @@ function &batch_fieldnames($bid) {
 // return a hash array for one card
 function &card ($card_id) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::card($card_id)<BR>\n";
+		echo "3x5_DB::card($card_id)<br/>\n";
 	}
 	// reject if $card_id is not a number
 	if (! is_int($card_id)) {
@@ -150,7 +149,7 @@ function &card ($card_id) {
 //	$card_id = id, query multi_col, or card hash
 function &xml_card($card_id, $indent = "") {
 	if ($this->debug > 0) {
-		echo "3x5_DB::xml_card($card_id,$indent)<BR>\n";
+		echo "3x5_DB::xml_card($card_id,$indent)<br/>\n";
 	}
 	$buffer = $indent."<xcard>\n";
 	if (is_array($card_id)) {
@@ -179,7 +178,7 @@ function &xml_card($card_id, $indent = "") {
 
 function &cards ($select,$orderby="") {
 	if ($this->debug > 0) {
-		echo "3x5_DB::cards($select)<BR>\n";
+		echo "3x5_DB::cards($select)<br/>\n";
 	}
 
 	$query = str_replace("wherexxx",$select,$this->selectcards);
@@ -192,7 +191,7 @@ function &cards ($select,$orderby="") {
 //	pass in a select or a query multi_col
 function &xml_cards($select = "", $orderby = "", $indent = "") {
 	if ($this->debug > 0) {
-		echo "3x5_DB::xml_cards($select,$orderby,$indent)<BR>\n";
+		echo "3x5_DB::xml_cards($select,$orderby,$indent)<br/>\n";
 	}
 	$buffer = $indent."<xcards>\n";
 	if (is_array($select)) {
@@ -211,7 +210,7 @@ function &xml_cards($select = "", $orderby = "", $indent = "") {
 // return a hash array for one batch
 function &batch ($batch_id) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::batch($batch_id)<BR>\n";
+		echo "3x5_DB::batch($batch_id)<br/>\n";
 	}
 	// reject if $batch_id is not a number
 	if (! is_int($batch_id)) {
@@ -229,7 +228,7 @@ function &batch ($batch_id) {
 //	$batch_id = id, query multi_col, or batch hash
 function &xml_batch($batch_id, $indent = "",$card_batch = "") {
 	if ($this->debug > 0) {
-		echo "3x5_DB::xml_batch($batch_id,$indent,...)<BR>\n";
+		echo "3x5_DB::xml_batch($batch_id,$indent,...)<br/>\n";
 	}
 	$buffer = $indent."<xbatch>\n";
 	if (is_array($batch_id)) {
@@ -257,7 +256,7 @@ function &xml_batch($batch_id, $indent = "",$card_batch = "") {
 //	$orderby for the card batch
 function &xml_card_batch($batch_id, $indent = "",$orderby = "") {
 	if ($this->debug > 0) {
-		echo "3x5_DB::xml_card_batch($batch_id,$indent,$orderby)<BR>\n";
+	  echo "3x5_DB::xml_card_batch($batch_id,$indent,$orderby)<br/>\n";
 	}
 	if (is_array($batch_id)) {
 		$r = $batch_id;
@@ -286,7 +285,7 @@ function &xml_card_batches(&$bids, $selected = true,
 
 	if ($this->debug > 0) {
 		echo "3x5_DB::xml_card_batchs($batch_id,$selected,"
-		."$indent,$borderby,$orderby)<BR>\n";
+		."$indent,$borderby,$orderby)<br/>\n";
 	}
 	$buffer = "";
 	$cnt = 0;
@@ -308,7 +307,7 @@ function &xml_card_batches(&$bids, $selected = true,
 // set $selected to false to get all cards for the user
 function &cards_ (&$bids, $selected = true) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::cards_($bids,$selected)<BR>\n";
+		echo "3x5_DB::cards_($bids,$selected)<br/>\n";
 	}
 
 	if ($selected) {
@@ -344,7 +343,7 @@ function &cards_ (&$bids, $selected = true) {
 // returns false if bad input
 function insert_card ($bid, $object, $append = false) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::insert_card($this,$bid,$object,$append)<BR>\n";
+		echo "3x5_DB::insert_card($bid,$object,$append)<br/>\n";
 	}
 	if (is_array($object)) {	// array of things
 		if (! ($object["num"] || $object["title"] || $object["card"])) {
@@ -385,7 +384,7 @@ function insert_card ($bid, $object, $append = false) {
 // returns false if bad input
 function update_card ($id, $rid, $object) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::update_card($this,$object)<BR>\n";
+		echo "3x5_DB::update_card($object)<br/>\n";
 	}
 	if (! ($object["num"] || $object["title"] || $object["card"]
 	|| $object["formatted"])) {
@@ -412,7 +411,7 @@ function update_card ($id, $rid, $object) {
 // returns false if bad input else id or card appended to
 function append_card ($id, $rid, $card_append, $card_formatted) {
 	if ($this->debug > 0) {
-		echo "3x5_DB::append_card($rid,$card_append,$card_formatted)<BR>\n";
+	  echo "3x5_DB::append_card($rid,$card_append,$card_formatted)<br/>\n";
 	}
 	if (! ($id || $card_append)) {
 		return false;
