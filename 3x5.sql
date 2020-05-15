@@ -122,7 +122,7 @@ CREATE TRIGGER ut_cards BEFORE UPDATE
 	EXECUTE PROCEDURE uf_cards();
 
 --
---CREATE USER nobody
+--CREATE USER "www-data"
 --WITH PASSWORD cardaccess
 --NOCREATEDB NOCREATEUSER;
 --
@@ -131,10 +131,10 @@ INSERT INTO i3x5_userpass
 	(uid,username,passwd_admin,author,email) VALUES
 	(0,'root','dogstar','R.K. Owen,Ph.D.','rk@owen.sj.ca.us');
 
-GRANT SELECT,INSERT,UPDATE,DELETE ON i3x5_cards TO nobody;
-GRANT SELECT,INSERT,UPDATE,DELETE ON i3x5_batch TO nobody;
-GRANT SELECT,INSERT,UPDATE ON i3x5_userpass TO nobody;
-GRANT SELECT,UPDATE ON i3x5_batch_bid_seq TO nobody;
-GRANT SELECT,UPDATE ON i3x5_cards_id_seq TO nobody;
-GRANT SELECT,UPDATE ON i3x5_userpass_uid_seq TO nobody;
-GRANT SELECT ON i3x5_help TO nobody;
+GRANT SELECT,INSERT,UPDATE,DELETE ON i3x5_cards TO "www-data";
+GRANT SELECT,INSERT,UPDATE,DELETE ON i3x5_batch TO "www-data";
+GRANT SELECT,INSERT,UPDATE ON i3x5_userpass TO "www-data";
+GRANT SELECT,UPDATE ON i3x5_batch_bid_seq TO "www-data";
+GRANT SELECT,UPDATE ON i3x5_cards_id_seq TO "www-data";
+GRANT SELECT,UPDATE ON i3x5_userpass_uid_seq TO "www-data";
+GRANT SELECT ON i3x5_help TO "www-data";
