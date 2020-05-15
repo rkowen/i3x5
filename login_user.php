@@ -1,6 +1,7 @@
 <?php
 // DESC: prompts for username and password
 	include_once "user.inc";
+	global $user;
 
 	session_start();
 	include_once "session.inc";
@@ -48,7 +49,7 @@
 		card_head("User Login");
 print <<<NOT_LOGGED_IN
 $hlogin
-<br>
+<br/>
 Version: $version
 <p>
 NOT_LOGGED_IN;

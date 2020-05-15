@@ -21,25 +21,7 @@
 //
 // functions
 //
-	function xcard_head ($title="", $class="main", $center=1, $extra="") {
-		header("Content-type: text/xml");
-
-$x ='<?xml-stylesheet type="text/xsl" href="3x5.xsl"?>'."\n";
-		print <<<HEAD
-<?xml version="1.0" encoding="utf-8" ?>
-$x
-<!-- 
-- 3x5 XML Dump
--->
-<i3x5>
-HEAD;
-	}
-	function xcard_foot ($center=1) {
-		PRINT <<<END
-</i3x5>
-END;
-	}
-	function card_head ($title="", $extra="") {
+	function card_head ($title="", $class="main", $center=1, $extra="") {
 		print <<<HEAD
 <html>
 <head>
@@ -72,22 +54,11 @@ BODY;
 </html>
 END;
 	}
-	function xmlshowphpinfo ($opt = INFO_VARIABLES) {
-		global $phpinfo;
-		ob_start();
-		if ($phpinfo) {phpinfo($opt);}
-		phpinfo($opt);
-		$pinfo = ob_get_contents();
-		ob_end_clean();
-		//$fn=dirname($_SERVER["SCRIPT_FILENAME"])."/phpinfo.html";
-		$fn="/tmp/phpinfo.html";
-		$fb=fopen($fn,"wb");
-		fwrite($fb,$pinfo);
-		fclose($fb);
-	}
+	// INFO_ALL or INFO_VARIABLES
 	function showphpinfo ($opt = INFO_VARIABLES) {
 		global $phpinfo;
 		if ($phpinfo) {phpinfo($opt);}
+		// echo "<pre>".print_r($_SESSION)."</pre>\n";
 	}
 	function warn($q) {
 		return "<em class=\"warn\">$q</em>";

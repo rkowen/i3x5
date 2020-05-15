@@ -8,14 +8,13 @@ include_once "cards.inc";
 include_once "javascript.inc";
 
 class OneBatch {
-	var $id;	// should be a unique identifier
+	public $id;	// should be a unique identifier
 			// defaults to "_", which may not be unique
-	var $bid;	// last selected bid
-	var $ops;	// last operation requested
+	public $bid;	// last selected bid
+	public $ops;	// last operation requested
 
 // constructor
-function OneBatch (	$id	= "_",
-			$bid = false) {
+function __construct(	$id	= "_", $bid = false) {
 
 	$this->id	= $id;
 	$this->bid	= $bid;
@@ -34,7 +33,9 @@ function get_one_batch() {
 	}
 	// maybe something fancy (id="[...]" array)
 	$f = preg_replace("/[\[\]]/","",$this->id);
-	if (($f != $this->id) and is_array($_POST["one_batch_"])) {
+	if (($f != $this->id)
+	and isset($_POST["one_batch_"])
+	and is_array($_POST["one_batch_"])) {
 		$this->bid = $_POST["one_batch_"][$f];
 	}
 
@@ -104,7 +105,9 @@ function get_ops_batch() {
 	}
 	// maybe something fancy (id="[...]" array)
 	$f = preg_replace("/[\[\]]/","",$this->id);
-	if (($f != $this->id) and is_array($_POST["ops_batch_"])) {
+	if (($f != $this->id)
+	and isset($_POST["ops_batch_"])
+	and is_array($_POST["ops_batch_"])) {
 		$this->ops = $_POST["ops_batch_"][$f];
 	}
 

@@ -65,7 +65,7 @@
 		if ($bid) {
 			if ("Update" == $batch_select) {
 				$msg = cell(warn(
-			"may update a pre-existing batch name"));
+		"may update a pre-existing batch name, if still unique"));
 				$insert = false;
 				return 1;	// it's OK anyways
 			} else {
@@ -171,7 +171,7 @@ if (isset($_GET["example"])) {
 	// find bid & set up fields
 	if (isset($_GET["name"])) {
 		// not given bid already
-		if (! $_GET["bid"]) {
+		if (! isset($_GET["bid"])) {
 			$bid = $db->sql(
 	"SELECT bid FROM i3x5_batch WHERE uid={$user->uid} AND batch='".
 				$_GET["name"]."'");
@@ -220,7 +220,8 @@ if (isset($_GET["example"])) {
 		$_POST["number"] = $fn["num"];
 		$_POST["title"] = $fn["title"];
 		$_POST["card"] = $fn["card"];
-		$_POST["batch_help"] = $fn["batch_help"];
+		$_POST["batch_help"] = (isset($fn["batch_help"]) ?
+			$fn["batch_help"] : "");
 		$_POST["number_help"] = $fn["num_help"];
 		$_POST["title_help"] = $fn["title_help"];
 		$_POST["card_help"] = $fn["card_help"];
@@ -277,7 +278,9 @@ if (isset($_GET["example"])) {
 	reset($list);
 	while(list($k,$v) = each($list)) {
 		$check = $list[$k]["check"];
-		if (! $check($$k, $list[$k]["msg"])) { $invalid++; }
+		if (isset($$k)
+		and isset($list[$k]["msg"])
+		and (! $check($$k, $list[$k]["msg"]))) { $invalid++; }
 	}
 	if (!$non_blank) {
 		$_POST["create_batch"] = "Invalid";
@@ -311,7 +314,7 @@ $db->escape($_POST["card_help"])."')";
 		$sqlmsg = "Batch was added";
 	}
 } elseif ("Update" == $_POST["create_batch"]) {
-	if ($one_batch__ && $copy_relate == "Relate") {
+	if ($one_batch__ && isset($copy_relate) && $copy_relate == "Relate") {
 		$sql = 
 "UPDATE i3x5_batch SET ".
 "batch='".$db->escape($_POST["name"])."',".
@@ -395,7 +398,7 @@ print	row(head(
 		.input("submit","check","Check")
 		.input("reset","reset","Reset")
 		.input("submit","clear","Clear")
-		.input("hidden","bid",$bid)
+		.input("hidden","bid",(isset($bid)?$bid:""))
 		.input("hidden","batch_select",$batch_select)
 	,"colspan=3"))."\n</table><!--}-->\n</form>\n</th></tr>\n";
 

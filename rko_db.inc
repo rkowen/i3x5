@@ -5,45 +5,47 @@
 // DESC: direct connection to DB with generalized operations
 //
 //////////////////////////////////////////////////////////////////////////
+include_once "db_connect.inc";
+
 class RKO_DB {
 //////////////////////////////////////////////////////////////////////////
 // attributes
 //////////////////////////////////////////////////////////////////////////
-	var $host;
-	var $user;
-	var $passwd;
-	var $schema;
-	var $query;
-	var $debug;
-	var $showerr;
-	var $errno;
-	var $errmsg;			// append errmsgs only
-	var $dbconn;
-	var $dbresult;
-	var $dbfetch;
-	var $dbrnum;			// number of rows
-	var $dbrow;			// current row
-	var $dbfields;			// array of fields (to accept)
-	var $dbfnum;			// number of fields
-	var $dbfset;			// was dbfields changed?
+	public $schema;
+	public $connect;
+	public $query;
+	public $debug;
+	public $showerr;
+	public $errno;
+	public $errmsg;			// append errmsgs only
+	public $dbconn;
+	public $dbresult;
+	public $dbfetch;
+	public $dbrnum;			// number of rows
+	public $dbrow;			// current row
+	public $dbfields;		// array of fields (to accept)
+	public $dbfnum;			// number of fields
+	public $dbfset;			// was dbfields changed?
 
 //////////////////////////////////////////////////////////////////////////
 // constructor
 //////////////////////////////////////////////////////////////////////////
-function RKO_DB ($schema) {
+function __construct ($schema) {
+	global $db_connect;
 	$this->debug = 0;
-	$this->showerr = 0;
+	$this->showerr = 1;
 	$this->errno = 0;
 	$this->errmsg = "RKO_DB: ";
 	$this->schema = $schema;
 	if ($this->debug) {
-		echo "RKO_DB constructor()<BR>\n";
+		echo "RKO_DB constructor()<br/>\n";
 	}
-#	$this->dbconn = pg_Connect($host,$user,$passwd,$schema);
-	$this->dbconn = pg_Connect("dbname=i3x5 host=localhost port=5432 user=rk");
+	$this->connect = $db_connect;
+	$this->dbconn = pg_connect($this->connect);
 	if (!$this->dbconn) {
 		$this->errmsg
-			.="Can't connect as ($host,$user,$passwd,$schema)";
+			.="Can't connect as ($this->connect) "
+                        . pg_last_error();
 		$this->errno=-1;
 		return false;
 	}
@@ -53,27 +55,25 @@ function RKO_DB ($schema) {
 // object dump
 //////////////////////////////////////////////////////////////////////////
 function dump () {
-	echo "<BR>=========== RKO_DB ====<BR>\n";
-	echo "host	= ".$this->host."<BR>\n";
-	echo "user	= ".$this->user."<BR>\n";
-	echo "passwd	= ".$this->passwd."<BR>\n";
-	echo "schema	= ".$this->schema."<BR>\n";
-	echo "query	= ".$this->query."<BR>\n";
-	echo "debug	= ".$this->debug."<BR>\n";
-	echo "errno	= ".$this->errno."<BR>\n";
-	echo "errmsg	= ".$this->errmsg."<BR>\n";
-	echo "dbconn	= ".$this->dbconn."<BR>\n";
-	echo "dbresult	= ".$this->dbresult."<BR>\n";
-	echo "dbfetch	= ".$this->dbfetch."<BR>\n";
-	echo "dbrnum	= ".$this->dbrnum."<BR>\n";
-	echo "dbrow	= ".$this->dbrow."<BR>\n";
-	echo "dbfnum	= ".$this->dbfnum."<BR>\n";
-	echo "dbfields	= ".$this->dbfields."<BR>\n";
+	echo "<br/>=========== RKO_DB ====<br/>\n";
+	echo "connect	= ".$this->connect."<br/>\n";
+	echo "schema	= ".$this->schema."<br/>\n";
+	echo "query	= ".$this->query."<br/>\n";
+	echo "debug	= ".$this->debug."<br/>\n";
+	echo "errno	= ".$this->errno."<br/>\n";
+	echo "errmsg	= ".$this->errmsg."<br/>\n";
+	echo "dbconn	= ".$this->dbconn."<br/>\n";
+	echo "dbresult	= ".$this->dbresult."<br/>\n";
+	echo "dbfetch	= ".$this->dbfetch."<br/>\n";
+	echo "dbrnum	= ".$this->dbrnum."<br/>\n";
+	echo "dbrow	= ".$this->dbrow."<br/>\n";
+	echo "dbfnum	= ".$this->dbfnum."<br/>\n";
+	echo "dbfields	= ".$this->dbfields."<br/>\n";
 	for ($i = 0; $i < $this->dbfnum; $i++) {
 		echo " ".$this->dbfields[$i];
 	}
-	echo "<BR>\n";
-	echo "dbfset	= ".$this->dbfset."<BR>\n";
+	echo "<br/>\n";
+	echo "dbfset	= ".$this->dbfset."<br/>\n";
 }
 
 function dumper ($obj, $level = 0) {
@@ -83,7 +83,7 @@ function dumper ($obj, $level = 0) {
 			for($i = 0; $i < $level; $i++) {
 				echo "  ";
 			}
-			echo "[$key] => '$value' <BR>\n";
+			echo "[$key] => '$value' <br/>\n";
 			if (is_array($value) || is_object($value)) {
 				$this->dumper($value, $level + 1);
 			}
@@ -99,14 +99,14 @@ function debug ($q = -999) {
 		$this->debug = $q;
 	}
 	if ($this->debug > 0) {
-		echo "RKO_DB::debug($q)<BR>\n";
+		echo "RKO_DB::debug($q)<br/>\n";
 	}
 	return $this->debug;
 }
 
 function query ($q = "") {
 	if ($this->debug > 0) {
-		echo "RKO_DB::query($q)<BR>\n";
+		echo "RKO_DB::query($q)<br/>\n";
 	}
 	if ($q != "") {
 		$this->query = $q;
@@ -118,7 +118,7 @@ function query ($q = "") {
 // or sets which ones to use.  Must be used after the exec and before fetches
 function fields ($q = "") {
 	if ($this->debug > 0) {
-		echo "RKO_DB::fields($q)<BR>\n";
+		echo "RKO_DB::fields($q)<br/>\n";
 	}
 	if (is_array($q)) {
 		$this->dbfset = true;
@@ -130,14 +130,14 @@ function fields ($q = "") {
 
 function errno () {
 	if ($this->debug > 0) {
-		echo "RKO_DB::errno()<BR>\n";
+		echo "RKO_DB::errno()<br/>\n";
 	}
 	return $this->errno;
 }
 
 function errmsg () {
 	if ($this->debug > 0) {
-		echo "RKO_DB::errmsg()<BR>\n";
+		echo "RKO_DB::errmsg()<br/>\n";
 	}
 	return $this->errmsg."\n";
 }
@@ -148,7 +148,7 @@ function errmsg () {
 // execute the query and return true or false
 function exec () {
 	if ($this->debug > 0) {
-		echo "RKO_DB::exec()<BR>\n";
+		echo "RKO_DB::exec()<br/>\n";
 	}
 	$this->dbresult = pg_query($this->dbconn,$this->query);
 	if (!$this->dbresult) {
@@ -171,12 +171,13 @@ function exec () {
 // fetch each row as an assoc array from the query result
 // returns false when no more
 function &fetch() {
+	$ret = false;
 	if ($this->debug > 0) {
-		echo "RKO_DB::fetch()<BR>\n";
+		echo "RKO_DB::fetch()<br/>\n";
 	}
 	if ($this->dbrow >= $this->dbrnum) {
 		// must stop fetch before end, else get nasty warning
-		return false;
+		return $ret;
 	}
 	$this->dbfetch = pg_fetch_object($this->dbresult, $this->dbrow);
 //		PGSQL_ASSOC);
@@ -195,7 +196,7 @@ function &fetch() {
 // returns an indexed array of associative arrays
 function &fetch_array () {
 	if ($this->debug > 0) {
-		echo "RKO_DB::fetch_array()<BR>\n";
+		echo "RKO_DB::fetch_array()<br/>\n";
 	}
 	$t = array();
 	while ($row = $this->fetch()) {
@@ -208,19 +209,19 @@ function &fetch_array () {
 //   or executing simple SQL statements)
 function sql($q) {
 	if ($this->debug > 0) {
-		echo "RKO_DB::sql($q)<BR>\n";
+		echo "RKO_DB::sql($q)<br/>\n";
 	}
 	if (! $this->query($q)) {
 		if ($this->showerr) {
-		print "RKO_DB::sql->query:".$this->errmsg()."<BR>\n"; 
-		} else { print "QUERY error 0<br>\n"; }
+		print "RKO_DB::sql->query:".$this->errmsg()."<br/>\n"; 
+		} else { print "QUERY error 0<br/>\n"; }
 		exit;
 	}
 
 	if (! $this->exec()) {
 		if ($this->showerr) {
-		print "RKO_DB::sql->exec:".$this->errmsg()."<BR>\n";
-		} else { print "EXEC error 0<br>\n"; }
+		print "RKO_DB::sql->exec:".$this->errmsg()."<br/>\n";
+		} else { print "EXEC error 0<br/>\n"; }
 		exit;
 	}
 	if ($data = $this->fetch()) {
@@ -238,20 +239,20 @@ function sql($q) {
 //
 function &multi_col ($col, $sql) {
 	if ($this->debug > 0) {
-		echo "RKO_DB::multi_col($col,$sql)<BR>\n";
+		echo "RKO_DB::multi_col($col,$sql)<br/>\n";
 	}
 
 	if (! $this->query($sql)) {
 		if ($this->showerr) {
-		print "RKO_DB::multi_col->query:".$this->errmsg()."<BR>\n"; 
-		} else { print "QUERY error 1<br>\n"; }
+		print "RKO_DB::multi_col->query:".$this->errmsg()."<br/>\n"; 
+		} else { print "QUERY error 1<br/>\n"; }
 		exit;
 	}
 
 	if (! $this->exec()) {
 		if ($this->showerr) {
-		print "RKO_DB::multi_col->exec:".$this->errmsg()."<BR>\n";
-		} else { print "EXEC error 1<br>\n"; }
+		print "RKO_DB::multi_col->exec:".$this->errmsg()."<br/>\n";
+		} else { print "EXEC error 1<br/>\n"; }
 		exit;
 	}
 
@@ -270,21 +271,21 @@ function &multi_col ($col, $sql) {
 // return a hash array from a SQL select relating 2 of the columns (col1=>col2)
 function &two_col ($col1, $col2, $sql) {
 	if ($this->debug > 0) {
-		echo "RKO_DB::two_col($sql)<BR>\n";
+		echo "RKO_DB::two_col($sql)<br/>\n";
 	}
 
 
 	if (! $this->query($sql)) {
 		if ($this->showerr) {
-		print "RKO_DB::two_col->query:".$this->errmsg()."<BR>\n"; 
-		} else { print "QUERY error 2<br>\n"; }
+		print "RKO_DB::two_col->query:".$this->errmsg()."<br/>\n"; 
+		} else { print "QUERY error 2<br/>\n"; }
 		exit;
 	}
 
 	if (! $this->exec()) {
 		if ($this->showerr) {
-		print "RKO_DB::two_col->exec:".$this->errmsg()."<BR>\n";
-		} else { print "EXEC error 2<br>\n"; }
+		print "RKO_DB::two_col->exec:".$this->errmsg()."<br/>\n";
+		} else { print "EXEC error 2<br/>\n"; }
 		exit;
 	}
 
@@ -300,20 +301,20 @@ function &two_col ($col1, $col2, $sql) {
 // return a hash array from a SQL select that returns a single row (or should)
 function &one_row ($sql) {
 	if ($this->debug > 0) {
-		echo "RKO_DB::one_row($sql)<BR>\n";
+		echo "RKO_DB::one_row($sql)<br/>\n";
 	}
 
 	if (! $this->query($sql)) {
 		if ($this->showerr) {
-		print "RKO_DB::one_row->query:".$this->errmsg()."<BR>\n"; 
-		} else { print "QUERY error 3<br>\n"; }
+		print "RKO_DB::one_row->query:".$this->errmsg()."<br/>\n"; 
+		} else { print "QUERY error 3<br/>\n"; }
 		exit;
 	}
 
 	if (! $this->exec()) {
 		if ($this->showerr) {
-		print "RKO_DB::one_row->exec:".$this->errmsg()."<BR>\n";
-		} else { print "EXEC error 3<br>\n"; }
+		print "RKO_DB::one_row->exec:".$this->errmsg()."<br/>\n";
+		} else { print "EXEC error 3<br/>\n"; }
 		exit;
 	}
 
@@ -325,10 +326,10 @@ function &one_row ($sql) {
 
 // escapes the PostgreSQL special characters
 function escape($q) {
-#	$qq = pg_escape_string($q);
-	$qq = $q;
+	$qq = pg_escape_string($q);
+#	$qq = $q;
 	if ($this->debug > 0) {
-		echo "RKO_DB::escape($q)=>$qq<BR>\n";
+		echo "RKO_DB::escape($q)=>$qq<br/>\n";
 	}
 	return $qq;
 }
@@ -337,7 +338,7 @@ function escape($q) {
 function dequote($q) {
 	$qq = preg_replace("/\\\\'/","'",$q);
 	if ($this->debug > 0) {
-		echo "RKO_DB::dequote($q)=>$qq<BR>\n";
+		echo "RKO_DB::dequote($q)=>$qq<br/>\n";
 	}
 	return $qq;
 }
@@ -346,7 +347,7 @@ function dequote($q) {
 function quote($q) {
 	$qq = preg_replace("/'/","''",$q);
 	if ($this->debug > 0) {
-		echo "RKO_DB::quote($q)=>$qq<BR>\n";
+		echo "RKO_DB::quote($q)=>$qq<br/>\n";
 	}
 	return $qq;
 }

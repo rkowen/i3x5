@@ -6,6 +6,7 @@
 // DESC: 	user
 // DESC: 	view
 //
+	global $user, $view;
 	if (isset($_SESSION["user"])) {
 		$user =& $_SESSION["user"];
 	}

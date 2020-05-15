@@ -19,11 +19,10 @@ appending information to existing cards only, or the most
 restrictive of read-only.
 
 Requires:
-	Apache		- web server
-	PHP5		- embedded scripting and display
-	Postgres 8.x	- database
+	Apache2		- web server
+	PHP7		- embedded scripting and display
+	Postgres 10.x	- database
 		(with plpgsql - Postgres procedural language - for triggers)
-	Dojo 0.4	- AJAX framework
 
 
 Principle Author:	R.K. Owen, Ph.D.
@@ -34,30 +33,36 @@ All configurable color and site values are given in cards.inc .
 
 
 INSTALLATION:
-Apache -
-Should be running as user/group "nobody", but some out-of-the-box
-distributions (such as RedHat 7.2) have it set to user/group "apache".
-This can be changed by editing the httpd.conf and editing it to:
-	User nobody
-	Group nobody
+Apache2 -
+Should be running as user/group "www-data" or the equivalent non-privileged
+user/group, The Ubuntu distribution uses "www-data".
+The user/group is defined in apache2/envvars.
+
+This can be changed by editing the envvars or apache2.conf and editing it to:
+	User www-data
+	Group www-data
 
 Or if this is not feasible then edit the 3x5.sql file replacing
-"nobody" with whatever user the httpd daemon runs as.
+"www-data" with whatever user the httpd daemon runs as.
 
 Postgres -
-Needs the procedural language to be loaded, which is not loaded
-by default.  If you use the >7.2 rpms, then just do the following command:
+Needs the procedural language to be loaded, which is now loaded by default.
+Check by executing psql and giving \dL at the prompt.  Should see
+plpgsql in the list.
+
+Older versions of Postgres required installing the PL/PostgreSQL
+procedural language manually with something like:
 	createlang plpgsql template1
-else read src/pl/plpgsql/src/INSTALL in the PostgreSQL sources for further
+Read src/pl/plpgsql/src/INSTALL in the PostgreSQL sources for further
 info.
 
 Create the database with (must be a user that can do this ... if
 not as yourself, then as the postgres user.)
 	createdb i3x5
 
-Create a user "nobody", the default user the httpd daemon user,
+Create a user "www-data", the default user the httpd daemon user,
 which will be given access to the i3x5 schema:
-	createuser -D -A nobody
+	createuser -D -A www-data
 
 Create tables by starting the PostgreSQL interactive terminal
 and invoking the sql scripts.  The prompt is given as "i3x5=#".
@@ -71,14 +76,33 @@ PHP5 -
 The configuration options are given here (tailor the path to your own site)
 
 configure \
-	--with-apxs --prefix=/php_path/php/4.0.6 \
-	--with-config-file-path=/php_path/php/4.0.6/lib \
-	--with-exec-dir=/php_path/php/4.0.6/bin --with-openssl \
+	--with-apxs --prefix=/php_path/php/7.2 \
+	--with-config-file-path=/php_path/php/7.2/lib \
+	--with-exec-dir=/php_path/php/7.2/bin --with-openssl \
 	--without-pear --enable-xml --enable-wddx \
 	--with-pgsql --with-gdbm
 
-Dojo -
-Copy over the dojo.js file into the i3x5/ directory.
+Or use packages.  The following are the list for Ubuntu.
+
+php
+php-common
+php-pgsql
+
+Create a file named db_connect.inc with the following lines
+or edit db_connect.template, copy to db_connect.inc changing the
+password to whatever you used.
+------------------------------------------------------------------------
+<?php
+//////////////////////////////////////////////////////////////////////////
+//
+// DESC: db_connect.inc
+// DESC: DB connection string
+//
+//////////////////////////////////////////////////////////////////////////
+$db_connect = "user=www-data password=SomePassword dbname=i3x5 port=5432 host=localhost";
+?>
+------------------------------------------------------------------------
+
 
 Web page layout: page and (frame)
 				indexF.php
