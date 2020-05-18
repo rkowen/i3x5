@@ -102,8 +102,8 @@ indexB.php
 			sel_batches.php
 			csv_cards.php
 
-indexF.php
-    sets up frames title/options/main
+index.php
+    sets up iframes title/options/main
 	include:	cards.inc
 	action:		indexM.php
 			login_user.php

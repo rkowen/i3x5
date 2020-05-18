@@ -127,7 +127,7 @@ showphpinfo();
 
 			$db->bids($uid));
 
-		header("Location: indexF.php");
+		header("Location: index.php");
 
 	} else {
 		not_logged_in("Password does not match at any level!");

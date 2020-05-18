@@ -103,9 +103,18 @@ $db_connect = "user=www-data password=SomePassword dbname=i3x5 port=5432 host=lo
 ?>
 ------------------------------------------------------------------------
 
+========================================================================
+Install the libjs-jquery-ui package and dependencies
+apt install libjs-jquery-ui
 
-Web page layout: page and (frame)
-				indexF.php
+The interface now uses jQuery to dynamically set some heights and widths.
+Note that iframes default to 150x300 pixels, and no CSS appears to change
+this unless values are explicitly given.  I.e. it doesn't recognize 100%.
+
+========================================================================
+
+Web page layout: page and (iframe)
+				index.php
 				(_parent)
 +----------------+-----------------------------------------------------+
 |                |                                                     |

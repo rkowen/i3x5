@@ -9,7 +9,7 @@
 	if (isset($_POST["logout"])) {
 		session_destroy();
 		session_write_close();
-		header("Location: indexF.php");
+		header("Location: index.php");
 		return;
 	}
 	if (isset($_POST["back"])) {
