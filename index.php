@@ -29,6 +29,8 @@
 	<iframe name="title" id="title" src="indexT.php"></iframe>
 <br/>
 	<iframe name="options" id="options" src="indexB.php"></iframe>
+<br/>
+	<iframe name="helptext" id="helptext"></iframe>
 </div>
 <div id="bodyright">
 	<iframe name="main" id="main" src="$what"></iframe>
@@ -45,7 +47,8 @@ function FrameSize() {
 	$("#bodyright").height(hit).width(wid - $("#bodyleft").width());
 	$("#main").width($("#bodyright").width()).height(hit);
 	$("#title").width($("#bodyleft").width()).height(150);
-	$("#options").width($("#bodyleft").width()).height(hit - 150);
+	$("#options").width($("#bodyleft").width()).height(hit - 150 - 150);
+	$("#helptext").width($("#bodyleft").width()).height(150);
 }
 
 $(document).ready(function() {

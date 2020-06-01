@@ -1,24 +1,14 @@
 <?php
-// DESC: options frame, shows access level and selection options,
-// DESC: displays the help information when clicked upon elsewhere
+// DESC: options frame, shows access level and selection options
 	include_once "user.inc";
 	session_start();
 	include_once "session.inc";
 	include_once "cards.inc";
-	if (isset($_GET["bid"])) {
-		$bid = $_GET["bid"];
-	}
-	if (isset($_GET["property"])) {
-		$property = $_GET["property"];
-	}
-	if (isset($_GET["help"])) {
-		$help = $_GET["help"];
-	}
 	card_head("Button Frame","options",0);
 if (isset($user)) {
-	print "<H4>".sendhelp($level_names[$user->level],
+	print "<h4>".sendhelp($level_names[$user->level],
 		$level_names[$user->level])
-		." Access Menus</H4>\n";
+		." Access Menus</h4>\n";
 //	print "access level = $access_level\n";
 
 	print "<ul>\n";
@@ -27,7 +17,7 @@ if (isset($user)) {
 		print <<< EOT
 <li> View/Update:
   <ul>
-  <li> <A HREF="update_user.php" TARGET="main">User Info</A><BR>
+  <li> <A HREF="update_user.php" TARGET="main">User Info</A><br/>
   </ul>
 EOT;
 	}
@@ -69,20 +59,5 @@ EOT;
 EOT;
 
 }
-	print "\n<HR>\n";
-
-	include_once "3x5_db.inc";
-	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
-
-	if (isset($help)) {
-		print "<H4>Help</H4>\n";
-		print "<P class=\"help\">".help($db->helpmsg($help))."\n";
-	} elseif (isset($bid)) {
-		print "<H4>Project Help</H4>\n";
-		print "<P class=\"help\">"
-			.help($db->helpdesc($bid,$property))."\n";
-	}
-	
 	card_foot(0);
 ?>

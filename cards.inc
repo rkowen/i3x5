@@ -103,15 +103,15 @@ END;
 		}
 	}
 	function sendhelp($text, $key = "unknown") {
-		return "<a class=\"help\" href=\"indexB.php"
+		return "<a class=\"help\" href=\"indexH.php"
 			."?help=".urlencode($key)
-			."\" target=\"options\">"
+			."\" target=\"helptext\">"
 			."$text</a>\n";
 	}
 	function senddesc($text, $bid, $property) {
-		return "<a class=\"help\" href=\"indexB.php"
+		return "<a class=\"help\" href=\"indexH.php"
 			."?bid=$bid&property=$property"
-			."\" target=\"options\">"
+			."\" target=\"helptext\">"
 			."$text</a>\n";
 	}
 	function xmlspecialchars($text) {
