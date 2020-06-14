@@ -1,15 +1,13 @@
 <?php
 // DESC: options frame, shows access level and selection options
 	include_once "user.inc";
-	session_start();
 	include_once "session.inc";
 	include_once "cards.inc";
-	card_head("Button Frame","options",0);
 if (isset($user)) {
-	print "<h4>".sendhelp($level_names[$user->level],
+	print sendhelp($level_names[$user->level],
 		$level_names[$user->level])
-		." Access Menus</h4>\n";
-//	print "access level = $access_level\n";
+		." Menus\n";
+	//print "access level = $access_level<br/>\n";
 
 	print "<ul>\n";
 
@@ -59,5 +57,4 @@ EOT;
 EOT;
 
 }
-	card_foot(0);
 ?>

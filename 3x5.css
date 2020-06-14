@@ -49,42 +49,48 @@ a.help:link,a.help:active,a.help:visited {
 	color: #805000;
 }
 #title {
-	background: #afffaf;
-	border-style: none;
-	height: "20%";
-	width: "100%";
+	background:	#afffaf;
+	border-style:	none;
+	padding:	2px;
+	height:		"20%";
+	width:		"100%";
 }
 #options {
-	background: #afafff;
-	border-style: none;
-	height: "80%";
-	width: "100%";
+	background:	#afafff;
+	border-style:	none;
+	padding:	2px;
+	height:		"80%";
+	width:		"100%";
 }
 #main {
-	background: #efefef;
-	border-style: none;
-	height: "100%";
-	width: "100%";
+	background:	#efefef;
+	border-style:	none;
+	height:		"100%";
+	width:		"100%";
 }
 #bodyleft {
-	float: left;
-	height: "100%";
-	width: "20%";
+	float:		left;
+	height:		"100%";
+	width:		"20%";
 }
 #bodyright {
-	float: right;
-	height: "100%";
-	width: "80%";
+	float:		right;
+	height:		"100%";
+	width:		"80%";
 }
 #page {
-	width: "100%";
-	height: "100%";
+	width:		"100%";
+	height:		"100%";
 }
 /* Clear floats after the columns */
 #page:after {
-  content: "";
-  display: table;
-  clear: both;
+	content:	"";
+	display:	table;
+	clear:		both;
+}
+
+iframe {
+	border:		0;
 }
 
 ul {

@@ -88,9 +88,13 @@ php
 php-common
 php-pgsql
 
+You may want to increase the value for session.gc_maxlifetime
+in /etc/php/X.Y/apache2/php.ini .  The default time is 24 minutes.
+Increase this time and a person can be "logged" in longer.
+
 Create a file named db_connect.inc with the following lines
 or edit db_connect.template, copy to db_connect.inc changing the
-password to whatever you used.
+password to whatever you have used.
 ------------------------------------------------------------------------
 <?php
 //////////////////////////////////////////////////////////////////////////
@@ -115,23 +119,23 @@ this unless values are explicitly given.  I.e. it doesn't recognize 100%.
 
 Web page layout: page and (iframe)
 				index.php
-				(_parent)
+				[_parent]
 +----------------+-----------------------------------------------------+
 |                |                                                     |
 |  indexT.php    |                    indexM.php                       |
 |    (title)     |                  and all others                     |
-|                |                      (main)                         |
+|                |                      [main]                         |
 +----------------+                                                     |
-|                |                                                     |
 |                |                                                     |
 |  indexB.php    |                                                     |
 |   (options)    |                                                     |
 |                |                                                     |
-|      and       |                                                     |
++----------------+                                                     |
 |                |                                                     |
 |    context     |                                                     |
 |   sensitive    |                                                     |
 |     help       |                                                     |
+|   [helptext]   |                                                     |
 |                |                                                     |
 +----------------+-----------------------------------------------------+
 

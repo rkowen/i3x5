@@ -1,15 +1,10 @@
 <?php
-// DESC: sets up iframes title/options/main
+// DESC: sets up areas and iframes title/options/helptext/main
+	include_once "cards.inc";
+	include_once "user.inc";
 	session_start();
 
-	include_once "cards.inc";
-
 	if (isset($_SESSION["user"])) {
-/*
-		if (isset($_GET["_parent"])) {
-			header("Window-target: _parent");
-		}
-*/
 		$what = "indexM.php";
 	} else {
 		$what = "login_user.php";
@@ -18,37 +13,51 @@
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="3x5.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <head>
 <title>3x5 Cards Project</title>
-<link rel="stylesheet" type="text/css" href="3x5.css">
 </head>
-<body>
+<body id="body">
 <div id="page">
-<div id="bodyleft">
-	<iframe name="title" id="title" src="indexT.php"></iframe>
-<br/>
-	<iframe name="options" id="options" src="indexB.php"></iframe>
-<br/>
-	<iframe name="helptext" id="helptext"></iframe>
-</div>
-<div id="bodyright">
+  <div id="bodyleft">
+    <div id="menu">
+<h3>User Project</h3>
+      <div id="title" class="title">
+PAGE;
+	include_once "indexT.php";
+	print <<<PAGE
+      </div>
+<h3>Access Menus</h3>
+      <div id="options" class="options">
+PAGE;
+	include_once "indexB.php";
+	print <<<PAGE
+      </div>
+    </div>
+	<iframe name="helptext" id="helptext">Load Failed</iframe>
+  </div>
+  <div id="bodyright">
 	<iframe name="main" id="main" src="$what"></iframe>
 </div>
 </div>
 <script>
 
 function FrameSize() {
+	var wid = window.innerWidth - 32;
+	var hit = window.innerHeight;
+/*
 	var wid = $("body").width();
 	var hit = $("body").height();
+*/
 /* set some iframe widths (else default 150x300 */
 	$("#page").height(hit);
 	$("#bodyleft").height(hit).width(Math.min(250,wid*.25));
+	$("#menu").height(hit*.6).width($("#bodyleft").width());
 	$("#bodyright").height(hit).width(wid - $("#bodyleft").width());
 	$("#main").width($("#bodyright").width()).height(hit);
-	$("#title").width($("#bodyleft").width()).height(150);
-	$("#options").width($("#bodyleft").width()).height(hit - 150 - 150);
-	$("#helptext").width($("#bodyleft").width()).height(150);
+	$("#helptext").width($("#bodyleft").width()).height(hit*.4);
 }
 
 $(document).ready(function() {
@@ -60,6 +69,11 @@ $(document).ready(function() {
 	if (url != refer) {
 		window.open(url,"_top");
 	}
+	$("#menu").accordion({
+		collapsible:	true,
+		active:		false,
+		heightStyle:	"fill"
+	});
 });
 </script>
 </body>

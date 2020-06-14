@@ -2,15 +2,12 @@
 // DESC: title frame, shows username
 	include_once "user.inc";
 	include_once "cards.inc";
-
-	session_start();
 	include_once "session.inc";
 
-	card_head("Title Frame","title",0);
 if (isset($user)) {
-	print "<B>".$user->project."</B><BR>\n"
-		."username: <B>{$user->uname}</B><BR>\n"
-		."access: <B>{$level_names[$user->level]}</B>\n";
+	print "<b>".$user->project."</b><br/>\n"
+		."username: <b>{$user->uname}</b><br/>\n"
+		."access: <b>{$level_names[$user->level]}</b>\n";
 }
 
 print "<ul>\n";
@@ -27,5 +24,4 @@ print <<<PAGE
 PAGE;
 }
 	print "</ul>\n";
-	card_foot(0);
 ?>
