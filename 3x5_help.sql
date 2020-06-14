@@ -23,7 +23,7 @@ or login as a different user (and project)
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'unknown','
 Keyword does not exist in the help database ... This is an error!
-Notify administrator of the specific conditions.');
+Notify the administrator of the specific conditions.');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'create user','
 The user name needs to be unique to all other usernames
@@ -41,6 +41,12 @@ Must be unique with respect to all other projects in the 3x5 card database.
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'project','
 The project name is the descriptive title.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'passwd_root','
+The root password for the 3x5 database ...
+DO NOT FORGET THIS PASSWORD!
+The root administrator has all power over ALL cards and batches.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'passwd_admin','
@@ -89,7 +95,7 @@ INSERT INTO i3x5_help (key,help) VALUES ( 'response','
 The "correct" answer for the "challenge" question.
 ');
 
-INSERT INTO i3x5_help (key,help) VALUES ( 'Administration','
+INSERT INTO i3x5_help (key,help) VALUES ( 'Admin','
 The administrator can move / relate / delete cards or batches
 and change batch properties.
 The administrator is all powerful with respect to the project.
