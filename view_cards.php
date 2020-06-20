@@ -182,7 +182,13 @@ if ($view->is_edit()
 $x = "<!--{-->".table(
 	row(head($hhead))
 	.(isset($errmsg)?row(head(warn($errmsg))):"")
-	.row(cell("Batches: $blist","class=\"h_batch\""))
+	.row(cell(
+span("","id=\"togcard_def\" class=".(($view->body == "full")
+	? "shown" : "hidden"))
+.ahref("javascript:hidecardall('togcard')",
+span(span((($view->body == "full") ? "Hide" : "Show"),"id=\"togcard\"")
+	." All ","class=\"noprint\""))
+."Batches: $blist","class=\"h_batch\""))
 	.$bselect_top
 	.row(cell($view->string_cards($cards,$check_all)))
 	.$bselect_bot

@@ -19,13 +19,26 @@
 		$level_append	=> "Append-Only",
 		$level_read	=> "Read-Only",
 		0		=> "Invalid");
+	$xhidden	= "<span style=\"font-size: larger\">&blacktriangleright;</span>";
+	$xshown		= "<span style=\"font-size: larger\">&blacktriangledown;</span>";
 
 //
 // functions
 //
+	function script_head() {
+		print <<<SCRIPT
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="3x5.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="3x5.js"></script>
+SCRIPT;
+	}
 	function card_head ($title="", $class="main", $center=1, $extra="") {
+		print "<html>\n";
+		script_head();
 		print <<<HEAD
-<html>
 <head>
 <link rel="stylesheet" type="text/css" href="3x5.css">
 HEAD;
@@ -90,12 +103,25 @@ END;
 		return "<form action=\"$action\" method=\"POST\" $op>"
 		."$q</form>\n";
 	}
-	function input($type,$name,$value,$op="") {
+	function label($name, $q, $op="") {
+		return "<label for=\"$name\" $op>"
+		."$q</label>\n";
+	}
+	function input($type, $name, $value, $op="") {
 		return "<input type=\"$type\" name=\"$name\""
 		." value = \"$value\" $op>";
 	}
 	function textarea($name,$value,$op="") {
 		return "<textarea name=\"$name\" $op>".$value."</textarea>\n";
+	}
+	function span($q, $op="") {
+		return "<span $op>$q</span>\n";
+	}
+	function div($q, $op="") {
+		return "<div $op>$q</div>\n";
+	}
+	function ahref($href, $q, $op="") {
+		return "<a href=\"$href\" $op>$q</a>\n";
 	}
 	function pre($q, $op="") {
 		if ($op == "t") {
@@ -119,5 +145,12 @@ END;
 	function xmlspecialchars($text) {
 		return str_replace('&#039;', '&apos;',
 			htmlspecialchars($text, ENT_QUOTES));
+	}
+	function toghide($cid,$full) {
+		global $xshown, $xhidden;
+		return
+" <a id=\"tog_$cid\" class=\"togcard_but\" "
+." href=\"javascript:hidecard('card_$cid','tog_$cid');\">"
+.(($full == "full") ? $xshown : $xhidden )."</a>";
 	}
 ?>

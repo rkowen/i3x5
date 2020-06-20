@@ -9,13 +9,9 @@
 	} else {
 		$what = "login_user.php";
 	}
+	print "<html>\n";
+	script_head();
 	print <<<PAGE
-<html>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="3x5.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <head>
 <title>3x5 Cards Project</title>
 </head>
@@ -42,8 +38,7 @@ PAGE;
 	<iframe name="main" id="main" src="$what"></iframe>
 </div>
 </div>
-<script>
-
+<script type="text/javascript">
 function FrameSize() {
 	var wid = window.innerWidth - 32;
 	var hit = window.innerHeight;

@@ -28,7 +28,8 @@ function View (	$edit	= "edit",	// or "list"
 	global $level_read;
 
 	// check the access level
-	if ($user->level <= $level_read) {
+	if (isset($user->level)
+	and ($user->level <= $level_read)) {
 		$this->edit	= "list";
 	} else {
 		$this->edit	= $edit;
@@ -291,7 +292,8 @@ if ($this->edit == "list") {
 	if (preg_match("/^$/", $user->bids[$v["bid"]]["num"])) {
 		$tcolspan = 3;
 		$tper = "80%";
-		$tid = cell($xid,"class=\"b_cid\" colspan=1 width=10%");
+		$tid = cell($xid." ".toghide($k, $this->body)
+,"class=\"b_cid\" colspan=1 width=10%");
 	} else {
 		$tcolspan = 4;
 		$tper = "90%";
@@ -303,7 +305,8 @@ if ($this->edit == "list") {
 				,$v["bid"],"num")
 				,"class=\"h_number\" width=10%")
 			.cell($v["num"],"class=\"$tcolor\" width=\"80%\"")
-			.cell($xid,"class=\"b_cid\" colspan=3 width=10%") )
+			.cell($xid." ".toghide($k, $this->body)
+,"class=\"b_cid\" colspan=3 width=10%") )
 			: "" )
 	.(! preg_match("/^$/",$user->bids[$v["bid"]]["title"])
 		? row(	cell(senddesc($user->bids[$v["bid"]]["title"]
@@ -312,14 +315,16 @@ if ($this->edit == "list") {
 			.cell($v["title"],
 		"class=\"b_title\" width=$tper colspan=$tcolspan").$tid)
 		: "" )
-	.((($this->body == "full")
-		&& (! preg_match("/^$/",$user->bids[$v["bid"]]["card"])))
-		? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
+	.row(	cell(senddesc($user->bids[$v["bid"]]["card"]
 				,$v["bid"],"card")
 				,"class=\"h_card\" width=10%")
 			.cell(($v["formatted"]=="t"
 				? pre($v["card"],"t") : $this->br($v["card"]))
-				,"class=\"b_card\" width=90% colspan=4")) : "")
+				,"class=\"b_card\" width=90% colspan=4"),
+	"id=\"card_$k\" class=\"togcard "
+	.((($this->body == "full")
+	&& ! preg_match("/^$/",$user->bids[$v["bid"]]["card"]))
+	? "shown\"" : "hidden\""))
 	.($this->dates != "hide" ?
 		row(	cell(	table(	row(
 			cell("created: ".$v["cdate"],"class=\"h_dates\"")
@@ -344,7 +349,7 @@ $text .= row(cell(table(
 		: cell("&nbsp;","class=\"$tcolor\" colspan=2 width=30%") )
 		.cell(input("checkbox","c_check[$k]","true",
 			($check_all?"CHECKED":""))
-			.$xid,"width=15% id=\"center\"")
+			.$xid.toghide($k,$this->body),"width=15% id=\"center\"")
 		.head(	 $cbatch[$k]->js_string_ops_batch()
 			.$cbatch[$k]->js_string_one_batch()
 			,"width=35%")
@@ -366,14 +371,16 @@ $text .= row(cell(table(
 			.sendhelp("Formatted","formatted")."\n"
 			,"class=\"b_title\" width=20% colspan=1"))
 	: "")
-.((($this->body == "full")
-	&& ! preg_match("/^$/",$user->bids[$v["bid"]]["card"]))
-	? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
+	.row(	cell(senddesc($user->bids[$v["bid"]]["card"]
 			,$v["bid"],"card")
 			,"class=\"h_card\" width=10% valign=\"TOP\"")
 		.cell(textarea("c_card[$k]",$v["card"],
 			"cols=80 rows=$lines")
-			,"class=\"b_card\" width=90% colspan=4")) : "")
+			,"class=\"b_card\" width=90% colspan=4"),
+	"id=\"card_$k\" class=\"togcard "
+	.((($this->body == "full")
+	&& ! preg_match("/^$/",$user->bids[$v["bid"]]["card"]))
+	? "shown\"" : "hidden\""))
 .($this->dates != "hide" ?
 	row(	cell(	table(	row(
 			cell("created: ".$v["cdate"],"class=\"h_dates\"")
@@ -448,9 +455,9 @@ function is_edit() {
 	return ($this->edit == "edit" ? true : false);
 }
 
-// put in <BR>s wherever there is a newline
+// put in <br/>s wherever there is a newline
 function br (&$card) {
-	return preg_replace("/\n/","<BR>",$card);
+	return preg_replace("/\n/","<br/>",$card);
 }
 
 // reset the session values
@@ -466,7 +473,7 @@ function dump() {
 	$a = get_object_vars($this);
 	reset($a);
 	while (list($k, $v) = each($a)) {
-		print "\$view->$k	= $v<BR>\n";
+		print "\$view->$k	= $v<br/>\n";
 	}
 }
 
