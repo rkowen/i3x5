@@ -187,7 +187,7 @@ span("","id=\"togcard_def\" class=".(($view->body == "full")
 	? "shown" : "hidden"))
 .ahref("javascript:hidecardall('togcard')",
 span(span((($view->body == "full") ? "Hide" : "Show"),"id=\"togcard\"")
-	." All ","class=\"noprint\""))
+	." All ","class=\"noprint\""),"class=\"nonprint\"")
 ."Batches: $blist","class=\"h_batch\""))
 	.$bselect_top
 	.row(cell($view->string_cards($cards,$check_all)))

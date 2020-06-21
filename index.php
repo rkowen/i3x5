@@ -48,7 +48,12 @@ function FrameSize() {
 */
 /* set some iframe widths (else default 150x300 */
 	$("#page").height(hit);
-	$("#bodyleft").height(hit).width(Math.min(250,wid*.25));
+	if ($("#bodyleft").css("display") == "none") {
+		// probably in print mode
+		$("#bodyleft").height(hit).width(0);
+	} else {
+		$("#bodyleft").height(hit).width(Math.min(250,wid*.25));
+	}
 	$("#menu").height(hit*.6).width($("#bodyleft").width());
 	$("#bodyright").height(hit).width(wid - $("#bodyleft").width());
 	$("#main").width($("#bodyright").width()).height(hit);

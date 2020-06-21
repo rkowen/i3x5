@@ -40,7 +40,6 @@ SCRIPT;
 		script_head();
 		print <<<HEAD
 <head>
-<link rel="stylesheet" type="text/css" href="3x5.css">
 HEAD;
 		if ($title != "") {
 			print <<<TITLE
@@ -149,7 +148,7 @@ END;
 	function toghide($cid,$full) {
 		global $xshown, $xhidden;
 		return
-" <a id=\"tog_$cid\" class=\"togcard_but\" "
+" <a id=\"tog_$cid\" class=\"nonprint togcard_but\" "
 ." href=\"javascript:hidecard('card_$cid','tog_$cid');\">"
 .(($full == "full") ? $xshown : $xhidden )."</a>";
 	}

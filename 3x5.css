@@ -238,7 +238,25 @@ pre br {
 
 /* PRINT-ONLY styles */
 @media print {
+#main {
+	background:	#ffffff;
+	border-style:	none;
+	height:		"100%";
+	width:		"100%";
+}
+#bodyleft {
+	float:		left;
+	height:		"100%";
+	width:		0;
+	display:	none;
+}
+#bodyright {
+	float:		right;
+	height:		"100%";
+	width:		"100%";
+}
 table.outer {
+	background: #ffffff;	/* box_color */
 	text-align: center;
 	border: none 0;
 /*	padding: 2em; */
@@ -246,12 +264,14 @@ table.outer {
 	width: 100%;
 }
 table.tight {
+	background: #ffffff;	/* box_color */
 	text-align: center;
 	border: none 0;
 	padding: 10px;
 	margin: 0;
 }
 table.form {
+	background: #ffffff;	/* form_color */
 	text-align: center;
 	border: solid 1pt;
 	padding: 0;
@@ -259,6 +279,7 @@ table.form {
 	width: 100%;
 }
 table.batch {
+	background: #ffffff;
 	text-align: center;
 	border: none 0;
 	padding: 0;
@@ -266,6 +287,7 @@ table.batch {
 	width: 100%;
 }
 table.cardview {
+	background: #ffffff;
 	text-align: center;
 	border: solid 1pt;
 	padding: 0;
@@ -273,6 +295,7 @@ table.cardview {
 	width: 100%;
 }
 table.cardview_relate {
+	background: #ffffff;
 	text-align: center;
 	border: solid 1pt;
 	padding: 0;
@@ -280,10 +303,47 @@ table.cardview_relate {
 	width: 100%;
 }
 table.dates {
+	background: #ffffff;
 	text-align: center;
 	border: none 0;
 	padding: 0;
 	margin: 0;
 	width: 100%;
+}
+h_id,h_number,h_title,h_cdate,h_mdate,h_batch,h_form {
+	background:	#ffffff;
+	font-weight:	bold;
+	border:		none 0;
+	text-align:	left;
+	padding-left:	.5em;
+}
+h_card {
+	background:	#ffffff;
+	font-weight:	bold;
+	border:		1pt;
+	text-align:	left;
+	padding-left:	.5em;
+}
+b_id,b_number,b_title,b_cdate,b_mdate,b_card,b_form,b_check {
+	background:	#ffffff;
+	border:		none 0;
+	text-align:	left;
+	padding-left:	.5em;
+}
+td.h_number,td.h_title,td.h_card,td.h_batch,td.h_form {
+	background:	#ffffff;
+	border:		none 0;
+	text-align:	left;
+	padding-left:	.5em;
+}
+td.b_number,td.b_title,td.b_card,td.b_form {
+	background:	#ffffff;
+	border:		none 0;
+	text-align:	left;
+	padding-left:	.5em;
+}
+td.b_cid {
+	background: #ffffff;
+	border: 0;
 }
 }
