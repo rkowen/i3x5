@@ -186,13 +186,13 @@ within the project.
 INSERT INTO i3x5_help (key,help) VALUES ( 'batch number','
 The label for the batch card number.
 If blank, this field will not be shown.
-Sorting can be performed on either the number or the tile.
+Sorting can be performed on either the number or the title.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'batch title','
 The label for the batch card title.
 If blank, this field will not be shown.
-Sorting can be performed on either the number or the tile.
+Sorting can be performed on either the number or the title.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'batch card','
