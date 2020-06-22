@@ -4,6 +4,9 @@
 var downarrow = "<span style=\"font-size: larger\">&blacktriangledown;</span>";
 var rightarrow ="<span style=\"font-size: larger\">&blacktriangleright;</span>";
 
+function printpage() {
+	window.print();
+}
 function hidecard(cid,tid) {
 	var item = $("#"+cid);
 	if (! item) { return; }

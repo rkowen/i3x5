@@ -113,6 +113,9 @@ END;
 	function textarea($name,$value,$op="") {
 		return "<textarea name=\"$name\" $op>".$value."</textarea>\n";
 	}
+	function button($name, $q, $op="", $type="button") {
+		return "<button name=\"$name\" type=\"$type\" $op>$q</button>\n";
+	}
 	function span($q, $op="") {
 		return "<span $op>$q</span>\n";
 	}

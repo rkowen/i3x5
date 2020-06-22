@@ -185,9 +185,12 @@ $x = "<!--{-->".table(
 	.row(cell(
 span("","id=\"togcard_def\" class=".(($view->body == "full")
 	? "shown" : "hidden"))
-.ahref("javascript:hidecardall('togcard')",
+.button("pageprint","Print",
+	"class=\"nonprint button\" onclick=\"javascript:printpage()\"")
+.button("togcard",
 span(span((($view->body == "full") ? "Hide" : "Show"),"id=\"togcard\"")
-	." All ","class=\"noprint\""),"class=\"nonprint\"")
+	." All ","class=\"noprint\""),
+"class=\"nonprint\" onclick=\"javascript:hidecardall('togcard')\"")
 ."Batches: $blist","class=\"h_batch\""))
 	.$bselect_top
 	.row(cell($view->string_cards($cards,$check_all)))
