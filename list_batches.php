@@ -77,7 +77,8 @@ PAGE;
 reset($_SESSION['user']->bids);
 while (list($k,$v) = each($_SESSION['user']->bids)) {
 	$fn = $db->batch_fieldnames($k);
-print	row(cell($k,"class=\"h_form\" id=\"right\"")
+print	row(cell(ahref("view_cards.php?view_edit=list&bid=$k",$k),
+	"class=\"h_form\" id=\"right\"")
 	."\n  ".cell(senddesc($v["batch"],$k,"batch"),"class=\"b_form\"")
 	."\n    ".cell(senddesc($fn["num"],$k,"num"),"class=\"b_form\"")
 	."\n      ".cell(senddesc($fn["title"],$k,"title"),"class=\"b_form\"")

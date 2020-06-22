@@ -15,7 +15,7 @@ if (isset($user)) {
 		print <<< EOT
 <li> View/Update:
   <ul>
-  <li> <A HREF="update_user.php" TARGET="main">User Info</A><br/>
+  <li> <a href="update_user.php" target="main">User Info</a><br/></li>
   </ul>
 EOT;
 	}
@@ -24,16 +24,16 @@ EOT;
 	if ($user->level >= $level_write) {
 		print <<< EOT
   <li> <a href="new_batch.php?batch_select=New&example=card" target="main">Create</a>
-   or <a href="batches.php" target="main">Update</a> Batch
+   or <a href="batches.php" target="main">Update</a> Batch</li>
 EOT;
 	}
 	if ($user->level >= $level_admin) {
 		print <<< EOT
-  <li> <a href="del_batch.php" target="main">Delete Batch</a>
+  <li> <a href="del_batch.php" target="main">Delete Batch</a></li>
 EOT;
 	}
 	print <<< EOT
-  <li> <a href="list_batches.php" target="main">List Batches</a>
+  <li> <a href="list_batches.php" target="main">List Batches</a></li>
   </ul>
 EOT;
 	$csvhelp = sendhelp("(help)", "csv file");
@@ -50,9 +50,9 @@ EOT;
 	}
 	print <<< EOT
   <li> <a href="xcards.php?view_edit=list" target="main">XView</a>
-	 Batches
-  <li> <a href="csv_cards.php" target="main">CSV file</a> $csvhelp
-  </ul>
+	 Batches</li>
+  <li> <a href="csv_cards.php" target="main">CSV file</a> $csvhelp</li>
+  </ul></li>
 </ul>
 EOT;
 

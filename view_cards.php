@@ -8,7 +8,7 @@
 	include_once "3x5_db.inc";
 	include_once "javascript.inc";
 
-if (! isset($view) || ! $user->selected_count()) {
+if ((! isset($view) || ! $user->selected_count()) && (! isset($_GET["bid"]))) {
 	$_SESSION['view'] = new View();
 	$view =& $_SESSION['view'];
 	session_write_close();
@@ -146,7 +146,24 @@ elseif (isset($_POST["a_submit"])
 }
 
 // get cards from db
+reset($user->bids);
+while (list($k,$v) = each($user->bids)) {
+	if (isset($user->bid)) {
+		if ($user->bid == $k) {
+			$user->bids[$k]["selected"] = 1;
+		} else {
+			if ($v["selected"]) {
+				$user->bids[$k]["selected"] = 0;
+			}
+		}
+	}
+}
 $cards = $db->cards_($user->bids);
+if (isset($user->bid)) {
+	// clear bid if set
+	$user->bids[$user->bid]["selected"] = 0;
+	unset($user->bid);
+}
 $view->sort($cards);
 //$db->dumper($cards);
 
@@ -203,5 +220,10 @@ if ($view->is_edit()) {
 	print $x."\n";
 }
 	showphpinfo();
+/*
+	print "<pre style='text-align: left;'>\n";
+	print_r($_SESSION);
+	print "</pre>\n";
+*/
 	card_foot();
 ?>

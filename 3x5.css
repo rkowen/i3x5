@@ -279,20 +279,21 @@ table.tight {
 	margin: 0;
 }
 table.form {
-	background: #ffffff;	/* form_color */
-	text-align: center;
-	border: solid 1pt;
-	padding: 0;
-	margin: 0;
-	width: 100%;
+	background:	#ffffff;	/* form_color */
+	text-align:	center;
+	border:		solid 1pt;
+	border-collapse: collapse;
+	padding:	0;
+	margin:		0;
+	width:		100%;
 }
 table.batch {
-	background: #ffffff;
-	text-align: center;
-	border: none 0;
-	padding: 0;
-	margin: 0;
-	width: 100%;
+	background:	#ffffff;
+	text-align:	center;
+	border:		none 0;
+	padding:	0;
+	margin:		0;
+	width:		100%;
 }
 table.cardview {
 	background:	#ffffff;

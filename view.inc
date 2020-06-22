@@ -55,6 +55,9 @@ function catch_gets() {
 	if ($user->level <= $level_read) {
 		$this->edit	= "list";
 	}
+	if (isset($_GET["bid"])) {
+		$user->bid	= $_GET["bid"];
+	}
 }
 
 // generate an XML representation of the view settings

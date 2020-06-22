@@ -40,7 +40,7 @@ if (isset($_POST["submit"]) && ($_POST["submit"] == "Submit")) {
 			card_head("{$user->project} - Selected Batches");
 			print <<<PAGE
 <h2>
-Pick a ``Select Batches'' operation from left menu<BR>
+Pick a ``Select Batches'' operation from left menu<br/>
 </h2>
 </center>
 PAGE;
