@@ -338,6 +338,35 @@ function &cards_ (&$bids, $selected = true) {
 "WHERE n.bid in ($list) AND r.id=n.rid AND n.rid IS NOT NULL\n");
 }
 
+//
+// return a hash array of cards from a simple search
+// set $case to true for a case sensitive search
+function &cards_simple ($uid, $keyword, $case = false) {
+	if ($this->debug > 0) {
+		echo "3x5_DB::cards_simple($keyword,$case)<br/>\n";
+	}
+	$safekey = pg_escape_string($keyword);
+	if ($case) {
+		$like = "~";
+	} else {
+		$like = "~*";
+	}
+
+	return $this->multi_col("id",
+"SELECT id,bid,n.rid,num,title,card,
+ (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
+ TO_CHAR(n.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+ TO_CHAR(n.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
+ formatted
+FROM i3x5_cards n
+JOIN i3x5_batch b
+USING (bid)
+WHERE uid = $uid
+AND (title $like '$safekey' OR card $like '$safekey')
+AND n.rid IS NULL");
+
+}
+
 // insert a card, return the id
 // $object = array(num=>, title=>, card=>, formatted=> )  or rid
 // returns false if bad input

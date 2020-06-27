@@ -15,12 +15,13 @@ class View {
 	var $key;
 	var $order;
 	var $group;
+	var $cards;
 
 // constructor
 function View (	$edit	= "edit",	// or "list"
 		$body	= "full",	// or "header"
-		$dates	= "show",	// or "hide"
-		$key	= "num",	// or "title","cdate","mdate"
+		$dates	= "hide",	// or "show"
+		$key	= "mdate",	// or "num","title","cdate"
 		$order	= "des",	// or "asc"
 		$group	= "batch") {	// or "none"
 
@@ -39,6 +40,7 @@ function View (	$edit	= "edit",	// or "list"
 	$this->key	= $key;
 	$this->order	= $order;
 	$this->group	= $group;
+	$this->cards	= NULL;
 }
 
 // catch_gets - capture those view values we want to override via the URL
@@ -165,18 +167,18 @@ row(	cell("Card View Attributes",
 	.cell(	input("radio","view_body","header",$sel_header)
 		." Header Only", "colspan=2 id=\"left\""))
 .row(	cell(sendhelp("Dates:","view dates"),"class=\"h_form\" id=\"left\"")
-	.cell(	input("radio","view_dates","show",$sel_dates_show)
-		." Show dates", "colspan=2 id=\"left\"")
 	.cell(	input("radio","view_dates","hide",$sel_dates_hide)
-		." Hide dates", "colspan=2 id=\"left\""))
+		." Hide dates", "colspan=2 id=\"left\"")
+	.cell(	input("radio","view_dates","show",$sel_dates_show)
+		." Show dates", "colspan=2 id=\"left\""))
 .row(	cell(sendhelp("Key:","view key"),"class=\"h_form\" id=\"left\"")
-	.cell(	input("radio","view_key","num",$sel_num)." Number",
-		"id=\"left\"")
-	.cell(	input("radio","view_key","title",$sel_title)." Title",
-		"id=\"left\"")
 	.cell(	input("radio","view_key","mdate",$sel_mdate)." Mdate",
 		"id=\"left\"")
 	.cell(	input("radio","view_key","cdate",$sel_cdate)." Cdate",
+		"id=\"left\"")
+	.cell(	input("radio","view_key","num",$sel_num)." Number",
+		"id=\"left\"")
+	.cell(	input("radio","view_key","title",$sel_title)." Title",
 		"id=\"left\""))
 .row(	cell(sendhelp("Order:","view order"),"class=\"h_form\" id=\"left\"")
 	.cell(	input("radio","view_order","des",$sel_des)

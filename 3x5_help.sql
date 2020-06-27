@@ -264,6 +264,15 @@ When satisfied with the selection then click on the "View"
 button.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'search select','
+Search all the cards associated with this project.
+A simple or advanced search can be performed.
+The simple search will find the given text string
+in the title or card.
+The advance search gives more options and uses
+POSIX regular expressions.
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'view attributes','
 Card viewing attributes select whether to view or edit the
 cards, view the full card or not, and how to sort, group, or

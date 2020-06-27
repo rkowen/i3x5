@@ -117,7 +117,7 @@ this unless values are explicitly given.  I.e. it doesn't recognize 100%.
 
 ========================================================================
 
-Web page layout: page and (iframe)
+Web page layout: page and [iframe]
 				index.php
 				[_parent]
 +----------------+-----------------------------------------------------+

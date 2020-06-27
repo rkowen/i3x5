@@ -19,8 +19,10 @@
 		$level_append	=> "Append-Only",
 		$level_read	=> "Read-Only",
 		0		=> "Invalid");
-	$xhidden	= "<span style=\"font-size: larger\">&blacktriangleright;</span>";
-	$xshown		= "<span style=\"font-size: larger\">&blacktriangledown;</span>";
+	$xhidden	=
+	"<span style=\"font-size: larger\">&blacktriangleright;</span>";
+	$xshown		=
+	"<span style=\"font-size: larger\">&blacktriangledown;</span>";
 
 //
 // functions
@@ -102,20 +104,40 @@ END;
 		return "<form action=\"$action\" method=\"POST\" $op>"
 		."$q</form>\n";
 	}
-	function label($name, $q, $op="") {
-		return "<label for=\"$name\" $op>"
-		."$q</label>\n";
-	}
 	function input($type, $name, $value, $op="") {
 		return "<input type=\"$type\" name=\"$name\""
 		." value = \"$value\" $op>";
+	}
+	function label($name, $q, $op="") {
+		return "<label for=\"$name\" $op>"."$q</label>\n";
 	}
 	function textarea($name,$value,$op="") {
 		return "<textarea name=\"$name\" $op>".$value."</textarea>\n";
 	}
 	function button($name, $q, $op="", $type="button") {
-		return "<button name=\"$name\" type=\"$type\" $op>$q</button>\n";
+		return"<button name=\"$name\" type=\"$type\" $op>$q</button>\n";
 	}
+
+	function select($name,$q,$op="") {
+		return "<select name=\"$name\" $op>".$q."</select>\n";
+	}
+	function option($value, $q, $op="") {
+		return "<option value=\"$value\" $op>".$q."</option>\n";
+	}
+
+	function h($n, $q, $op="") {
+		return "<h$n $op>$q</h$n>\n";
+	}
+	function ul($q, $op="") {
+		return "<ul $op>$q</ul>\n";
+	}
+	function ol($q, $op="") {
+		return "<ol $op>$q</ol>\n";
+	}
+	function li($q, $op="") {
+		return "<li $op>$q</li>\n";
+	}
+
 	function span($q, $op="") {
 		return "<span $op>$q</span>\n";
 	}
@@ -132,6 +154,7 @@ END;
 			return "$q";
 		}
 	}
+
 	function sendhelp($text, $key = "unknown") {
 		return "<a class=\"help\" href=\"indexH.php"
 			."?help=".urlencode($key)

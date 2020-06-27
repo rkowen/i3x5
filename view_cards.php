@@ -8,7 +8,9 @@
 	include_once "3x5_db.inc";
 	include_once "javascript.inc";
 
-if ((! isset($view) || ! $user->selected_count()) && (! isset($_GET["bid"]))) {
+if ((! isset($view) || ! $user->selected_count()) 
+&&  (! isset($view->cards))
+&&  (! isset($_GET["bid"]))) {
 	$_SESSION['view'] = new View();
 	$view =& $_SESSION['view'];
 	session_write_close();
@@ -18,7 +20,7 @@ if ((! isset($view) || ! $user->selected_count()) && (! isset($_GET["bid"]))) {
 }
 
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 	$check_all = false;
 
 //
@@ -146,23 +148,46 @@ elseif (isset($_POST["a_submit"])
 }
 
 // get cards from db
-reset($user->bids);
-while (list($k,$v) = each($user->bids)) {
-	if (isset($user->bid)) {
-		if ($user->bid == $k) {
-			$user->bids[$k]["selected"] = 1;
-		} else {
-			if ($v["selected"]) {
-				$user->bids[$k]["selected"] = 0;
+if (isset($view->cards)) {
+	$cards = $view->cards;
+	// find all bids and sort them
+	$cbids = array();
+	reset($cards);
+	while(list($k,$v) = each($cards)) {
+		$i = $v['bid'];
+		$cbids[$i] = (isset($cbids[$i])?$cbids[$i] + 1 : 1);
+	}
+	ksort($cbids);
+	// reset the bids selected to those found in search
+	reset($user->bids);
+	foreach($user->bids as $k => $v) {
+		$v["selected"] = 0;
+	}
+	reset($cbids);
+	foreach($cbids as $cbid => $cnt) {
+		$user->bids[$cbid]["selected"] = 1;
+	}
+} else {
+// (Get the cards from all selected batches)
+	reset($user->bids);
+	while (list($k,$v) = each($user->bids)) {
+		if (isset($user->bid)) {
+			// only one batch selected from list
+			if ($user->bid == $k) {
+				$user->bids[$k]["selected"] = 1;
+			} else {
+				if ($v["selected"]) {
+					$user->bids[$k]["selected"] = 0;
+				}
 			}
 		}
 	}
-}
-$cards = $db->cards_($user->bids);
-if (isset($user->bid)) {
-	// clear bid if set
-	$user->bids[$user->bid]["selected"] = 0;
-	unset($user->bid);
+	$cards = $db->cards_($user->bids);
+	if (isset($user->bid)) {
+		// clear bid if set
+		//$user->bids[$user->bid]["selected"] = 0;
+		unset($user->bid);
+	}
 }
 $view->sort($cards);
 //$db->dumper($cards);
@@ -222,8 +247,12 @@ if ($view->is_edit()) {
 	showphpinfo();
 /*
 	print "<pre style='text-align: left;'>\n";
-	print_r($_SESSION);
+//	print_r($_SESSION);
+	print_r($view);
 	print "</pre>\n";
 */
+	if (isset($view->cards)) {
+		unset($view->cards);
+	}
 	card_foot();
 ?>

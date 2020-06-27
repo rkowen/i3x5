@@ -122,15 +122,14 @@ function js_string_ops_batch($arrayName = "selectOneArray") {
 }
 
 function string_ops_batch($delete = false) {
-	return 
-		"<!--ops_batch-->\n"
-		."<SELECT NAME=\"ops_batch_{$this->id}\" SIZE=1>\n"
-		.($delete?"":"<OPTION SELECTED VALUE=\"NONE\"></OPTION>\n")
-		."<OPTION VALUE=\"RELATE\">Relate To</OPTION>\n"
-		."<OPTION VALUE=\"COPY\">Copy To</OPTION>\n"
-		."<OPTION VALUE=\"MOVE\">Move To</OPTION>\n"
-	.($delete?"<OPTION VALUE=\"DELETE\">Delete Checked</OPTION>\n":"")
-		."</SELECT>\n";
+	return	"<!--{ops_batch-->\n"
+		.select("ops_batch_{$this->id}",
+		($delete?"":option("NONE","","selected"))
+		.option("RELATE","Relate To")
+		.option("COPY","Copy To")
+		.option("Move","Move To")
+		.($delete?option( "DELETE","Delete Checked"):""),
+		"size=1")."<!--}-->";
 }
 
 function show_ops_batch() {

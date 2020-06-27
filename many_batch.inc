@@ -144,8 +144,8 @@ PAGE;
 </select>
 </th><td valign="top">
 PAGE;
-	$text .= inform("Try left click or<BR>ctrl or shift-left click<BR>"
-		."for multiple<BR>selections")."\n";
+	$text .= inform("Try left click or<br/>ctrl or shift-left click<br/>"
+		."for multiple<br/>selections")."\n";
 	$text .= "</td></tr></table>\n";
 
 	// pass along status of $selected
@@ -168,13 +168,12 @@ function dump() {
 	$a = get_object_vars($this);
 	reset($a);
 	while (list($k, $v) = each($a)) {
-		print "ManyBatch->$k	= $v<BR>\n";
+		print "ManyBatch->$k	= $v<br/>\n";
 	}
 	reset($this->bids);
 	while (list($k, $v) = each($this->bids)) {
-		print "ManyBatch->bids[$k]	= $v<BR>\n";
+		print "ManyBatch->bids[$k]	= $v<br/>\n";
 	}
-	
 }
 
 }

@@ -111,7 +111,7 @@ showphpinfo();
 	reset($pswd);
 	while (list($k,$v) = each($pswd)) {
 		if (1 == $db->sql(
-			"SELECT count(*) FROM i3x5_userpass ".
+			"SELECT COUNT(1) FROM i3x5_userpass ".
 			"WHERE username='$username' AND $k='$passwd'")) {
 				$access_level=$v;
 		}
@@ -124,8 +124,7 @@ showphpinfo();
 			"WHERE username='$username'");
 		$_SESSION['user']
 			= New User($uid, $username,$access_level,$project,
-
-			$db->bids($uid));
+				$db->bids($uid));
 
 		header("Location: index.php");
 

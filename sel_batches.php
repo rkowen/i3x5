@@ -63,8 +63,8 @@ $hhead = sendhelp("{$user->project} - Select Batches", "batch select");
 				input("submit","submit","Submit")
 				.input("submit","submit","Check")
 				.input("reset","reset","Reset")
-				.input("submit","clear","Clear"))))))
-	,"class=\"tight\""))."\n";
+				.input("submit","clear","Clear")))))."<!--}-->")
+	,"class=\"tight\"")."<!--}-->")."\n";
 	showphpinfo();
 	card_foot();
 ?>
