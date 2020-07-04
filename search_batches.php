@@ -373,16 +373,21 @@ row(head(sendhelp("Advanced Search","advanced search")
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
 .cell(label("createdate","Creation Date"),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
-.cell(sqlcomp("4","date")).cell(input("datetime-local","createdate1","")))
+.cell(sqlcomp("4","date")).cell(input("datetime-local","createdate1","",
+	"style=\"font-size:60%;\"")))
+
 .row(cell(sendhelp("BETWEEN","sql between"))
-	.cell(input("datetime-local","createdate2","")))
+	.cell(input("datetime-local","createdate2","",
+	"style=\"font-size:60%;\"")))
 .row(cell(sqlandor("5"),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
 .cell(label("moddate","Modication Date"),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
-.cell(sqlcomp("5","date")).cell(input("datetime-local","moddate1","")))
+.cell(sqlcomp("5","date")).cell(input("datetime-local","moddate1","",
+	"style=\"font-size:60%;\"")))
 .row(cell(sendhelp("BETWEEN","sql between"))
-	.cell(input("datetime-local","moddate2","")))
+	.cell(input("datetime-local","moddate2","",
+	"style=\"font-size:60%;\"")))
 .row(cell(sqlandor("6"),
 	"style=\"text-align:center; vertical-align: top;\"")
 .cell(label("createdatex","Creation Date"),
