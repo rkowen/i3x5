@@ -161,11 +161,13 @@ if (isset($view->cards)) {
 	// reset the bids selected to those found in search
 	reset($user->bids);
 	foreach($user->bids as $k => $v) {
-		$v["selected"] = 0;
+		$user->bids[$k]["selected"] = 0;
 	}
 	reset($cbids);
 	foreach($cbids as $cbid => $cnt) {
-		$user->bids[$cbid]["selected"] = 1;
+		if ($cnt) {
+			$user->bids[$cbid]["selected"] = 1;
+		}
 	}
 } else {
 // (Get the cards from all selected batches)
@@ -248,7 +250,7 @@ if ($view->is_edit()) {
 /*
 	print "<pre style='text-align: left;'>\n";
 //	print_r($_SESSION);
-	print_r($view);
+	print_r($user->bids);
 	print "</pre>\n";
 */
 	if (isset($view->cards)) {

@@ -364,7 +364,28 @@ USING (bid)
 WHERE uid = $uid
 AND (title $like '$safekey' OR card $like '$safekey')
 AND n.rid IS NULL");
+}
 
+//
+// return a hash array of cards from an advance search
+// $sql needs to be sanitized before call.
+function &cards_advance ($uid, $sql) {
+	if ($this->debug > 0) {
+		echo "3x5_DB::cards_advance($sql)<br/>\n";
+	}
+
+	return $this->multi_col("id",
+"SELECT id,bid,n.rid,num,title,card,
+ (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
+ TO_CHAR(n.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+ TO_CHAR(n.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
+ formatted
+FROM i3x5_cards n
+JOIN i3x5_batch b
+USING (bid)
+WHERE uid = $uid
+AND ($sql)
+AND n.rid IS NULL");
 }
 
 // insert a card, return the id

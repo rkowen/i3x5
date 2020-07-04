@@ -220,7 +220,7 @@ Usually the card number is unimportant.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'recipe example','
-The recipies can be sorted by calories per serving or by creating
+The recipes can be sorted by calories per serving or by creating
 different batches that classify the recipe (e.g. beef, poultry, dessert,
 etc.).
 ');
@@ -290,6 +290,8 @@ Select whether to include the "card" body when viewing
 or editing.
 Selecting "Header Only" will only show the "number" and "title"
 fields.  Selecting "Full" will show the "card" body too.
+Viewing or hiding the card can be toggled by clicking the labeled
+button.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'view dates','
@@ -307,6 +309,7 @@ if the date fields are not shown.)
 INSERT INTO i3x5_help (key,help) VALUES ( 'view order','
 Select whether to order the cards with the given key in an
 ascending or descending fashion.
+When descending the higher values or dates are near the top.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'view group','
@@ -319,39 +322,74 @@ batch designation will be maintained.
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'card view','
 This is where the cards are edited or viewed given the
-card attributes selected prior.<BR>
+card attributes selected prior.<br/>
 If editing, then the first card is an insert card where the batch
 properties shown reflect the first batch, but the actual batch
-the card belongs to is given by the batch selector.<BR>
+the card belongs to is given by the batch selector.<br/>
 All cards can be moved, copied, or related to other batches (the
 original batch is shown by default), otherwise the fields can be
 edited.  Cards can be updated individually or collectively (with
-some restrictions).<BR>
+some restrictions).<br/>
 Be aware of fields with differing colors
-these usually denotes an exceptional condition.<BR>
+these usually denotes an exceptional condition.<br/>
 Listing cards creates a more printer friendly web page
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'csv file','
-Comma Separated Values - a common ASCII flatfile format.<BR>
-For lack of a authorative definition.  The following will be used.
+Comma Separated Values - a common ASCII flat-file format.<br/>
+For lack of a authoritative definition.  The following will be used.
 Each field is followed by a comma except the last in a record.
 Each record is followed by a newline.  Values are double quoted if they
-contain commas(,), double quotes ("), or newlines (\\n).<BR>
+contain commas(,), double quotes ("), or newlines (\\n).<br/>
 
 Values which contain double quotes (") each are expanded to
-a pair of double quotes ("").<BR>
+a pair of double quotes ("").<br/>
 Values which contain embedded newlines are reduced to the (\\n) characters,
-and it is up to the importing program to handle them correctly.<BR>
+and it is up to the importing program to handle them correctly.<br/>
 The first line usually has the field names, which will be defined
 by the first card''s batch field names.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'formatted','
 Display the given card as <TT>fixed width formatted</TT>
-when listed.  (Have it look like the "editted" version when listed.)
+when listed.  (Have it look like the "edited" version when listed.)
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'sql comp','
+IS : equal to the given value (synonymous with "=")<br/>
+NOT : not equal to given value (synonymous with "!=")<br/>
+LIKE : _ match any single character, % matches any number of characters<br/>
+ILIKE: ignore case LIKE<br/>
+SIMILAR TO: a cross of LIKE and regex pattern-matching<br/>
+~  : POSIX regex pattern-matching<br/>
+~* : ignore case ~<br/>
+!  : NOT for above<br/>
+IS [NOT] NULL: whether data field is NULL or not
+<a href="https://www.postgresql.org/docs/current/functions-matching.html" target="_blank">PostgreSQL docs</a>.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'sql and or','
+AND statements are collected first and grouped together<br/>
+OR statements are then added to the end.<br/>
+NOT negates the given statement.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'sql between','
+If the second value is given then the search will assume a BETWEEN
+search for values between the first and second given values inclusive.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'keyword search','
+This simple search just looks for the given keyword or character string within
+the card title or card body.  Check whether to make the search
+case sensitive or not.  The case insensitive search is default.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'advanced search','
+Leave fields blank that are not to be considered in the advanced search.
+The AND statements are collected first and grouped together
+followed by the OR statements.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'xxx','
 ');
-

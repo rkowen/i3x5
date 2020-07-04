@@ -109,7 +109,8 @@ function xml_settings($indent = "") {
 }
 
 // retrieve the posted values and update attributes as needed
-function get_buttons() {
+// if need more than one then specify a unique $n
+function get_buttons($n = "") {
 
 	$view_stuff = array (	"edit",
 				"body",
@@ -122,7 +123,7 @@ function get_buttons() {
 	// if the variables have been posted then read them in to the vars
 	reset($view_stuff);
 	while (list($k,$v) = each($view_stuff)) {
-		$t = "view_".$v;
+		$t = "view_".$v.$n;
 		if (isset($_POST[$t])) {
 			$this->$v = $_POST[$t];
 		}
@@ -130,7 +131,8 @@ function get_buttons() {
 }
 
 // show the radio button table
-function string_buttons() {
+// if need more than one then specify a unique $n
+function string_buttons($n = "") {
 	global $user;
 	global $level_read;
 
@@ -157,47 +159,47 @@ row(	cell("Card View Attributes",
 	.cell(
 	($user->level <= $level_read
 		? noselect("Edit")."\n"
-		: input("radio","view_edit","edit",$sel_edit)." Edit"),
+		: input("radio","view_edit$n","edit",$sel_edit)." Edit"),
 	"colspan=2 id=\"left\"")
-	.cell(	input("radio","view_edit","list",$sel_list)." List",
+	.cell(	input("radio","view_edit$n","list",$sel_list)." List",
 	"colspan=2 id=\"left\""))
 .row(	cell(sendhelp("Show:","view show"),"class=\"h_form\" id=\"left\"")
-	.cell(	input("radio","view_body","full",$sel_full)
+	.cell(	input("radio","view_body$n","full",$sel_full)
 		." Full", "colspan=2 id=\"left\"")
-	.cell(	input("radio","view_body","header",$sel_header)
+	.cell(	input("radio","view_body$n","header",$sel_header)
 		." Header Only", "colspan=2 id=\"left\""))
 .row(	cell(sendhelp("Dates:","view dates"),"class=\"h_form\" id=\"left\"")
-	.cell(	input("radio","view_dates","hide",$sel_dates_hide)
+	.cell(	input("radio","view_dates$n","hide",$sel_dates_hide)
 		." Hide dates", "colspan=2 id=\"left\"")
-	.cell(	input("radio","view_dates","show",$sel_dates_show)
+	.cell(	input("radio","view_dates$n","show",$sel_dates_show)
 		." Show dates", "colspan=2 id=\"left\""))
 .row(	cell(sendhelp("Key:","view key"),"class=\"h_form\" id=\"left\"")
-	.cell(	input("radio","view_key","mdate",$sel_mdate)." Mdate",
+	.cell(	input("radio","view_key$n","mdate",$sel_mdate)." Mdate",
 		"id=\"left\"")
-	.cell(	input("radio","view_key","cdate",$sel_cdate)." Cdate",
+	.cell(	input("radio","view_key$n","cdate",$sel_cdate)." Cdate",
 		"id=\"left\"")
-	.cell(	input("radio","view_key","num",$sel_num)." Number",
+	.cell(	input("radio","view_key$n","num",$sel_num)." Number",
 		"id=\"left\"")
-	.cell(	input("radio","view_key","title",$sel_title)." Title",
+	.cell(	input("radio","view_key$n","title",$sel_title)." Title",
 		"id=\"left\""))
 .row(	cell(sendhelp("Order:","view order"),"class=\"h_form\" id=\"left\"")
-	.cell(	input("radio","view_order","des",$sel_des)
+	.cell(	input("radio","view_order$n","des",$sel_des)
 		." Descending", "colspan=2 id=\"left\"")
-	.cell(	input("radio","view_order","asc",$sel_asc)
+	.cell(	input("radio","view_order$n","asc",$sel_asc)
 		." Ascending", "colspan=2 id=\"left\""))
 .row(	cell(sendhelp("Group By:","view group"),"class=\"h_form\" id=\"left\"")
-	.cell(	input("radio","view_group","batch",$sel_batch)
+	.cell(	input("radio","view_group$n","batch",$sel_batch)
 		." Batch",
 	"colspan=2 id=\"left\"")
-	.cell(	input("radio","view_group","none",$sel_none)
+	.cell(	input("radio","view_group$n","none",$sel_none)
 		." None",
 	"colspan=2 id=\"left\""))
 ,"class=\"form\" width=\"100%\" border=1")."<!--}-->\n";
 }
 
 // show the radio button table
-function show_buttons() {
-	print $this->string_buttons();
+function show_buttons($n = "") {
+	print $this->string_buttons($n);
 }
 
 // takes the $cards hash and sort it according to the view parameters
