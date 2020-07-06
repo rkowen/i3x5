@@ -54,12 +54,14 @@ EOT;
 	print <<< EOT
     </ul>
   </ul>
+</ul>
+EOT;
+/*
   <li> <a href="xcards.php?view_edit=list" target="main">XView</a>
 	 Batches</li>
   <li> <a href="csv_cards.php" target="main">CSV file</a> $csvhelp</li>
   </ul></li>
-</ul>
-EOT;
+*/
 
 }
 ?>
