@@ -7,6 +7,7 @@
 	include_once "cards.inc";
 	include_once "3x5_db.inc";
 	include_once "javascript.inc";
+$debug = 0;
 
 if ((! isset($view) || ! $user->selected_count()) 
 &&  (! isset($view->cards))
@@ -32,9 +33,11 @@ if ((! isset($view) || ! $user->selected_count())
 //
 
 // process a global change only for real cards (not relations)
+$db->debug($debug);
 if (isset($_POST["upd_all"])
 && $_POST["upd_all"]=="Update All Cards"
 && is_array($_POST["c_rid"])) {
+	if ($debug) { print("##### update all cards #####<br/>\n"); }
 	reset($_POST["c_rid"]);
 	while (list($k,$v) = each($_POST["c_rid"])) {
 		if (! $v) {
@@ -60,6 +63,7 @@ if (isset($_POST["upd_all"])
 // process a selective update change
 elseif (isset($_POST["upd_"])
 && is_array($_POST["upd_"])) {
+	if ($debug) { print("##### update one card #####<br/>\n"); }
 	// only one value
 	reset($_POST["upd_"]);
 	list($k,$v) = each($_POST["upd_"]);
@@ -98,6 +102,7 @@ elseif (isset($_POST["upd_"])
 // process a selective delete change
 elseif (isset($_POST["del_"])
 && is_array($_POST["del_"])) {
+	if ($debug) { print("##### delete one card #####<br/>\n"); }
 	reset($_POST["del_"]);
 	/* only one value */
 	list($k,$v) = each($_POST["del_"]);
@@ -108,6 +113,7 @@ elseif (isset($_POST["del_"])
 // insert a card
 elseif (isset($_POST["ins__"])
 && $_POST["ins__"]=="Insert") {
+	if ($debug) { print("##### insert one card #####<br/>\n"); }
 	$db->insert_card($_POST["one_batch_i"],
 		array(	"num"=>$_POST["i_num"],
 			"title"=>$_POST["i_title"],
@@ -119,11 +125,13 @@ elseif (isset($_POST["ins__"])
 		($user->level >= $level_write ? false : "append"));
 }
 elseif (isset($_POST["a_submit"])
-&& $_POST["a_submit"]=="Batch Submit") {
+&& $_POST["a_submit"] == "Batch Submit") {
+	if ($debug) { print("##### batch submit  #####<br/>\n"); }
 	// get one_batch info
 	$onebatch = new OneBatch("a");
 	$ops = $onebatch->get_ops_batch();
 	$bid = $onebatch->get_one_batch();
+	if ($debug) { print("##### ops=$ops bid=$bid  #####<br/>\n"); }
 	reset($_POST["c_check"]);
 	while (list($k,$v) = each($_POST["c_check"])) {
 		$id = $k;
@@ -140,15 +148,18 @@ elseif (isset($_POST["a_submit"])
 }
 elseif (isset($_POST["a_submit"])
 && $_POST["a_submit"]=="Check All") {
+	if ($debug) { print("##### check all  #####<br/>\n"); }
 	$check_all = true;
 }
 elseif (isset($_POST["a_submit"])
 && $_POST["a_submit"]=="Uncheck All") {
+	if ($debug) { print("##### uncheck all  #####<br/>\n"); }
 	$check_all = false;
 }
 
 // get cards from db
 if (isset($view->cards)) {
+	if ($debug) { print("##### cards from search  #####<br/>\n"); }
 	$cards = $view->cards;
 	// find all bids and sort them
 	$cbids = array();
@@ -171,6 +182,7 @@ if (isset($view->cards)) {
 	}
 } else {
 // (Get the cards from all selected batches)
+	if ($debug) { print("##### selected batches  #####<br/>\n"); }
 	reset($user->bids);
 	while (list($k,$v) = each($user->bids)) {
 		if (isset($user->bid)) {
@@ -247,14 +259,15 @@ if ($view->is_edit()) {
 	print $x."\n";
 }
 	showphpinfo();
-/*
 	print "<pre style='text-align: left;'>\n";
 //	print_r($_SESSION);
-	print_r($user->bids);
+	print("_POST : ");
+	print_r($_POST);
+	print("cards : ");
+	print_r($user->cards);
+//	print_r($user->bids);
 	print "</pre>\n";
+/*
 */
-	if (isset($view->cards)) {
-		unset($view->cards);
-	}
 	card_foot();
 ?>

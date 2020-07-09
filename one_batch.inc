@@ -127,7 +127,7 @@ function string_ops_batch($delete = false) {
 		($delete?"":option("NONE","","selected"))
 		.option("RELATE","Relate To")
 		.option("COPY","Copy To")
-		.option("Move","Move To")
+		.option("MOVE","Move To")
 		.($delete?option( "DELETE","Delete Checked"):""),
 		"size=1")."<!--}-->";
 }
