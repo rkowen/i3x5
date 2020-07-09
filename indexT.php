@@ -14,14 +14,19 @@ print "<ul>\n";
 if (!isset($user)) {
 print <<<PAGE
 <li><a href="login_user.php?login=Login+User" target="main">
-	Login New User</a>
-<li><a href="create_user.php" target="main">Create New User</a>
+	Login New User</a></li>
+<li><a href="create_user.php" target="main">Create New User</a></li>
 PAGE;
 } else {
 print <<<PAGE
-<li><a href="logout_user.php" target="main">Logout User</a>
-<li><a href="login_user.php?access" target="main">Change Access</a>
+<li><a href="logout_user.php" target="main">Logout User</a></li>
+<li><a href="login_user.php?access" target="main">Change Access</a></li>
 PAGE;
+if ($user->reallevel == $level_admin) {
+	print <<<PAGE
+<li><a href="user_role.php" target="main">Change Role</a></li>
+PAGE;
+}
 }
 	print "</ul>\n";
 ?>

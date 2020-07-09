@@ -391,5 +391,10 @@ The AND statements are collected first and grouped together
 followed by the OR statements.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'change role','
+The project Admin can try out the lower levels of access.
+Just select "Change Role" again to restore to the admin level.
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'xxx','
 ');
