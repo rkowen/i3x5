@@ -2,6 +2,7 @@
 // DESC: List batch properties as a table
 	include_once "cards.inc";
 	include_once "user.inc";
+	include_once "view.inc";
 
 	session_start();
 	include_once "session.inc";
@@ -53,6 +54,10 @@
 		return $cnt;
 	}
 
+	// clear search cards
+	if (isset($view->cards)) {
+		unset($view->cards);
+	}
 	$hhead = sendhelp("{$_SESSION['user']->project} - List Batches", "list batches");
 	card_head("{$_SESSION['user']->project} - List Batches");
 print <<<PAGE

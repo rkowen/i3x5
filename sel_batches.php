@@ -31,6 +31,10 @@ if (isset($_POST["submit"]) && ($_POST["submit"] == "Submit")) {
 	|| (count($_POST["many_batch__"]) == 0)) {
 		$errmsg = "Nothing to view! Select some batches.";
 	} else {
+		if (isset($view->cards)) {
+			// clear the 'search' results
+			unset($view->cards);
+		}
 		$manybid->set_user_selected();
 		if (isset($view->edit)) {
 			session_write_close();
