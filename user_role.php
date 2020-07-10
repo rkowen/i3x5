@@ -53,6 +53,18 @@ function cul($lvl) {
 		return input("radio","level",$lvl);
 	}
 }
+function hul($key,$lbl) {
+	return label($key,sendhelp($lbl,$lbl));
+}
+function sul($level,$text) {
+	global $user;
+	// show only if level <= $user->reallevel
+	if ($level <= $user->reallevel) {
+		return $text;
+	} else {
+		return "";
+	}
+}
 
 $hhead = sendhelp("{$user->project} - Change Access Level", "change role");
 	card_head("{$user->project} - Change Access Level");
@@ -60,14 +72,17 @@ $hhead = sendhelp("{$user->project} - Change Access Level", "change role");
 	"<!--{-->".table(row(head($hhead))
 		.(isset($errmsg)?row(head(warn($errmsg)))."\n":"")
 		.row(head("<!--{-->".table(
+	sul($level_admin,
 			row(cell(cul("admin"), "style=\"text-align:right;\"")
-				.cell(label("admin","Admin")))
-			.row(cell(cul("write"), "style=\"text-align:right;\"")
-				.cell(label("write","Write")))
-			.row(cell(cul("append"), "style=\"text-align:right;\"")
-				.cell(label("append","Append-Only")))
+				.cell(hul("admin","Admin"))))
+	.sul($level_write,
+			row(cell(cul("write"), "style=\"text-align:right;\"")
+				.cell(hul("write","Write"))))
+	.sul($level_append,
+			row(cell(cul("append"), "style=\"text-align:right;\"")
+				.cell(hul("append","Append-Only"))))
 			.row(cell(cul("read"), "style=\"text-align:right;\"")
-				.cell(label("read","Read-Only")))
+				.cell(hul("read","Read-Only")))
 			.row(head(
 				input("submit","submit","Submit")
 				.input("reset","reset","Reset"),

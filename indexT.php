@@ -18,15 +18,23 @@ print <<<PAGE
 <li><a href="create_user.php" target="main">Create New User</a></li>
 PAGE;
 } else {
-print <<<PAGE
+	print <<<PAGE
 <li><a href="logout_user.php" target="main">Logout User</a></li>
 <li><a href="login_user.php?access" target="main">Change Access</a></li>
 PAGE;
-if ($user->reallevel == $level_admin) {
-	print <<<PAGE
+	if ($user->reallevel > $level_append) {
+		print <<<PAGE
 <li><a href="user_role.php" target="main">Change Role</a></li>
 PAGE;
-}
+	}
+	if ($user->level >= $level_admin) {
+		print <<< EOT
+<li> View/Update:
+  <ul>
+  <li> <a href="update_user.php" target="main">User Info</a><br/></li>
+  </ul>
+EOT;
+	}
 }
 	print "</ul>\n";
 ?>
