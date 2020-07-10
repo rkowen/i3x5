@@ -409,7 +409,8 @@ row(head(sendhelp("Advanced Search","advanced search")
 $(document).ready(function() {
         $("#smenu").accordion({
                 collapsible:    true,
-                active:         0
+                active:         0,
+		heightStyle:	"content"
         });
 });
 </script>
