@@ -51,6 +51,7 @@ if (isset($_POST["simple"]) && ($_POST["simple"] == "Search")) {
 		}
 		$view->cards = $db->cards_simple($user->uid,
 			$_POST["keyword"], $case);
+		$view->lastcardsql($db->lastcardsql());
 		session_write_close();
 		header("Location: view_cards.php");
 	} else {
@@ -248,6 +249,7 @@ moddateend:
 if (!$debug) {
 	if (!strlen($errmsg)) {
 		$view->cards = $db->cards_advance($user->uid,$sql);
+		$view->lastcardsql($db->lastcardsql());
 		session_write_close();
 		header("Location: view_cards.php");
 	}

@@ -7,7 +7,9 @@
 	include_once "cards.inc";
 	include_once "3x5_db.inc";
 	include_once "javascript.inc";
+
 $debug = 0;
+$cardsrerun = 0;
 
 if ((! isset($view) || ! $user->selected_count()) 
 &&  (! isset($view->cards))
@@ -28,6 +30,7 @@ if ((! isset($view) || ! $user->selected_count())
 // catch any GETS
 //
 	$view->catch_gets();
+	$db->lastcardsql($view->lastcardsql());
 //
 // process any changes
 //
@@ -59,6 +62,7 @@ if (isset($_POST["upd_all"])
 			}
 		}
 	}
+	$cardsrerun = 1;
 }
 // process a selective update change
 elseif (isset($_POST["upd_"])
@@ -97,6 +101,7 @@ elseif (isset($_POST["upd_"])
 		} elseif ($ops == "MOVE") {
 			$db->move_card($k,$bid);
 		}
+		$cardsrerun = 1;
 	}
 }
 // process a selective delete change
@@ -109,6 +114,7 @@ elseif (isset($_POST["del_"])
 	if ($v == "Delete" || $v == "Delete All") {
 		$db->delete_card($k);
 	}
+	$cardsrerun = 1;
 }
 // insert a card
 elseif (isset($_POST["ins__"])
@@ -123,6 +129,7 @@ elseif (isset($_POST["ins__"])
 				?$_POST["i_formatted"]:false)
 		),
 		($user->level >= $level_write ? false : "append"));
+	$cardsrerun = 1;
 }
 elseif (isset($_POST["a_submit"])
 && $_POST["a_submit"] == "Batch Submit") {
@@ -145,6 +152,7 @@ elseif (isset($_POST["a_submit"])
 			$db->move_card($k,$bid);
 		}
 	}
+	$cardsrerun = 1;
 }
 elseif (isset($_POST["a_submit"])
 && $_POST["a_submit"]=="Check All") {
@@ -159,6 +167,9 @@ elseif (isset($_POST["a_submit"])
 
 // get cards from db
 if (isset($view->cards)) {
+	if ($cardsrerun) {
+		$view->cards = $db->cards_rerun();
+	}
 	if ($debug) { print("##### cards from search  #####<br/>\n"); }
 	$cards = $view->cards;
 	// find all bids and sort them
@@ -259,15 +270,16 @@ if ($view->is_edit()) {
 	print $x."\n";
 }
 	showphpinfo();
+if ($debug) {
 	print "<pre style='text-align: left;'>\n";
-//	print_r($_SESSION);
 	print("_POST : ");
 	print_r($_POST);
+	print("_SESSION : ");
+	print_r($_SESSION);
 	print("cards : ");
 	print_r($user->cards);
 //	print_r($user->bids);
 	print "</pre>\n";
-/*
-*/
+}
 	card_foot();
 ?>

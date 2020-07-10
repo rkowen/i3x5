@@ -18,7 +18,8 @@ class View {
 	var $cards;
 
 // constructor
-function View (	$edit	= "edit",	// or "list"
+function __construct (
+		$edit	= "edit",	// or "list"
 		$body	= "full",	// or "header"
 		$dates	= "hide",	// or "show"
 		$key	= "mdate",	// or "num","title","cdate"
@@ -59,6 +60,17 @@ function catch_gets() {
 	}
 	if (isset($_GET["bid"])) {
 		$user->bid	= $_GET["bid"];
+	}
+}
+
+// read/set lastcardsql
+function lastcardsql($sql = "") {
+	if ($sql == "") {
+		if (isset($this->lastcardsql)) {
+			return $this->lastcardsql;
+		}
+	} else {
+		$this->lastcardsql = $sql;
 	}
 }
 

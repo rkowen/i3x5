@@ -12,7 +12,7 @@ class ManyBatch {
 	var $bids;	// selected bids
 
 // constructor
-function ManyBatch (	$id	= "_",
+function __construct (	$id	= "_",
 			$bids = array()) {
 
 	$this->id	= $id;

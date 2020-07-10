@@ -320,7 +320,7 @@ function &cards_ (&$bids, $selected = true) {
 	} else {
 		$list = join(",",array_keys($bids));
 	}
-	return $this->multi_col("id",
+	$this->lastcardsql = 
 "SELECT id,bid,rid,num,title,card,\n".
 " (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,\n".
 " TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,\n".
@@ -335,7 +335,9 @@ function &cards_ (&$bids, $selected = true) {
 "TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,\n".
 "r.formatted AS formatted\n".
 "FROM i3x5_cards n, i3x5_cards r\n".
-"WHERE n.bid in ($list) AND r.id=n.rid AND n.rid IS NOT NULL\n");
+"WHERE n.bid in ($list) AND r.id=n.rid AND n.rid IS NOT NULL\n";
+
+	return $this->multi_col("id",$this->lastcardsql);
 }
 
 //
@@ -352,7 +354,7 @@ function &cards_simple ($uid, $keyword, $case = false) {
 		$like = "~*";
 	}
 
-	return $this->multi_col("id",
+	$this->lastcardsql = 
 "SELECT id,bid,n.rid,num,title,card,
  (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
  TO_CHAR(n.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
@@ -363,7 +365,9 @@ JOIN i3x5_batch b
 USING (bid)
 WHERE uid = $uid
 AND (title $like '$safekey' OR card $like '$safekey')
-AND n.rid IS NULL");
+AND n.rid IS NULL";
+
+	return $this->multi_col("id",$this->lastcardsql);
 }
 
 //
@@ -373,8 +377,7 @@ function &cards_advance ($uid, $sql) {
 	if ($this->debug > 0) {
 		echo "3x5_DB::cards_advance($sql)<br/>\n";
 	}
-
-	return $this->multi_col("id",
+	$this->lastcardsql = 
 "SELECT id,bid,n.rid,num,title,card,
  (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
  TO_CHAR(n.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
@@ -385,7 +388,32 @@ JOIN i3x5_batch b
 USING (bid)
 WHERE uid = $uid
 AND ($sql)
-AND n.rid IS NULL");
+AND n.rid IS NULL";
+
+	return $this->multi_col("id",$this->lastcardsql);
+}
+//
+// rerun the last cards SQL query to have updated infor
+// and return a hash array of cards.
+function &cards_rerun () {
+	if ($this->debug > 0) {
+		echo "3x5_DB::cards_rerun(".
+		$this->lastcardsql.")<br/>\n";
+	}
+	if (isset($this->lastcardsql)) {
+		return $this->multi_col("id",$this->lastcardsql);
+	}
+}
+//
+// read/set lastcardsql
+function lastcardsql($sql = "") {
+	if ($sql == "") {
+		if (isset($this->lastcardsql)) {
+			return $this->lastcardsql;
+		}
+	} else {
+		$this->lastcardsql = $sql;
+	}
 }
 
 // insert a card, return the id
