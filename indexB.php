@@ -10,15 +10,6 @@ if (isset($user)) {
 	//print "access level = $access_level<br/>\n";
 
 	print "<ul>\n";
-
-	if ($user->level >= $level_admin) {
-		print <<< EOT
-<li> View/Update:
-  <ul>
-  <li> <a href="update_user.php" target="main">User Info</a><br/></li>
-  </ul>
-EOT;
-	}
 	print "<li> Batch Properties\n  <ul>\n";
 
 	if ($user->level >= $level_write) {

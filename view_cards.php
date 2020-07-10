@@ -101,8 +101,8 @@ elseif (isset($_POST["upd_"])
 		} elseif ($ops == "MOVE") {
 			$db->move_card($k,$bid);
 		}
-		$cardsrerun = 1;
 	}
+	$cardsrerun = 1;
 }
 // process a selective delete change
 elseif (isset($_POST["del_"])
