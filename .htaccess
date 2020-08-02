@@ -1,6 +1,6 @@
 # ErrorDocument 404 
 <IfModule mod_dir.c>
-	DirectoryIndex indexF.php
+	DirectoryIndex index.php
 </IfModule>
 # enable this for secure communication (requires mod_ssl)
 SSLRequireSSL
@@ -11,3 +11,13 @@ AddType application/x-httpd-php .html
 php_flag	register_globals		Off
 php_flag	session_gc_maxlifetime		864000
 php_flag	session_cache_expire		14400
+
+IndexIgnore *
+<Files .htacess >
+	Order allow,deny
+	Deny from all
+</Files>
+<Files db_connect.inc >
+	Order allow,deny
+	Deny from all
+</Files>

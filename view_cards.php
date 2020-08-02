@@ -11,7 +11,11 @@
 $debug = 0;
 $cardsrerun = 0;
 
-if ((! isset($view) || ! $user->selected_count()) 
+if (! isset($view)) {
+	$_SESSION['view'] = new View();
+	$view =& $_SESSION['view'];
+}
+if ((! $user->selected_count()) 
 &&  (! isset($view->cards))
 &&  (! isset($_GET["bid"]))) {
 	$_SESSION['view'] = new View();
