@@ -9,9 +9,9 @@ The 3x5 Cards project provides an intuitive web interface to a
 database.  The metaphor is the 3"x5" index card.
 Each card has a number, a title, and the contents of the card itself.
 The cards can be arranged by either the number or the title, and
-can be collected in batches.  Unlike the 3"x5" index card ... the
+can be collected in batches.  Unlike the 3"x5" index card ... an individual
 3x5 card can exist in multiple batches, and the characteristics
-of batches can be related together.
+of a batch can be related to another.
 
 Access can be granted, through a password mechanism, to allow
 full administrative access, writing and creating cards,
@@ -71,8 +71,18 @@ and invoking the sql scripts.  The prompt is given as "i3x5=#".
 	i3x5=# \i 3x5_help.sql
 	i3x5=# \q
 
+------------------------------------------------------------------------
+Most hosting services do not provide an adequate environment for running
+psql from the commandline.  However, most offer phpPgAdmin from the
+CPanel web interface.  This should be sufficient for creating and
+populating the necessary tables.
 
-PHP5 - 
+You will find in the far upper right hand corner "SQL | History | Find".
+Click on "SQL" and in the dialog box use the "or upload an SQL script"
+to choose the appropriate .sql script to process.
+------------------------------------------------------------------------
+
+PHP - 
 The configuration options are given here (tailor the path to your own site)
 
 configure \
@@ -103,7 +113,8 @@ password to whatever you have used.
 // DESC: DB connection string
 //
 //////////////////////////////////////////////////////////////////////////
-$db_connect = "user=www-data password=SomePassword dbname=i3x5 port=5432 host=localhost";
+$db_pass = "SomePassword";
+$db_connect = "user=www-data password=$db_pass dbname=i3x5 port=5432 host=localhost";
 ?>
 ------------------------------------------------------------------------
 
