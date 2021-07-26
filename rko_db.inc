@@ -13,6 +13,7 @@ class RKO_DB {
 //////////////////////////////////////////////////////////////////////////
 	public $schema;
 	public $connect;
+	public $pass;
 	public $query;
 	public $debug;
 	public $showerr;
@@ -31,7 +32,7 @@ class RKO_DB {
 // constructor
 //////////////////////////////////////////////////////////////////////////
 function __construct ($schema) {
-	global $db_connect;
+	global $db_connect, $db_pass;
 	$this->debug = 0;
 	$this->showerr = 1;
 	$this->errno = 0;
@@ -41,11 +42,13 @@ function __construct ($schema) {
 		echo "RKO_DB constructor()<br/>\n";
 	}
 	$this->connect = $db_connect;
+	$this->pass = $db_pass;
 	$this->dbconn = pg_connect($this->connect);
 	if (!$this->dbconn) {
 		$this->errmsg
-			.="Can't connect as ($this->connect) "
-                        . pg_last_error();
+			.="Can't connect as "
+			. str_replace($this->pass, "*******",
+			$this->connect . " " . pg_last_error());
 		$this->errno=-1;
 		return false;
 	}
