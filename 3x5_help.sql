@@ -396,5 +396,43 @@ The project Admin can try out the lower levels of access.
 Just select "Change Role" again to restore to the admin level.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'bid','
+The Batch ID (bid) is assigned by 3x5 and is unique to each batch of cards.
+The attributes can be related to those of another batch.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'cid','
+The Card ID (cid) is assigned by 3x5 and is unique to each card whether
+a data card or a related card.  However, searches can only be performed
+for the source card (i.e. not a card related to a source card).
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'number','
+The NUMBER field is one of the three fields a card creator can use
+to identify a given card.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'title','
+The TITLE field is one of the three fields a card creator can use
+to identify a given card, and is a simple text string.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'card','
+The CARD field is one of the three fields a card creator can use
+to define a given card, and is usually the bulk data field which
+can be formatted with HTML or fixed-width characters.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'createdate','
+The creation date and timestamp when a card was created (in the timezone
+defined for the database).  This date is never updated for a card.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'moddate','
+The modification date and timestamp when a card was last modified
+(in the timezone defined for the database).  A card never updated
+will have the same value as the creation date.
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'xxx','
 ');

@@ -59,6 +59,7 @@ if (isset($_POST["simple"]) && ($_POST["simple"] == "Search")) {
 	}
 	return;
 } else if (isset($_POST["advanced"]) && ($_POST["advanced"] == "Search")) {
+	$sqli = "";
 	$sqln = "";
 	$sqlt = "";
 	$sqlc = "";
@@ -69,6 +70,38 @@ if (isset($_POST["simple"]) && ($_POST["simple"] == "Search")) {
 	$errmsg = "";
 	$view->get_buttons("2");
 // parse through statements
+//	CID
+	if (isset($_POST["comp0"]) && (strpos($_POST["comp0"],"NULL") > 0)) {
+		$sqli .= "( id ".$_POST["comp0"].") ";
+		goto cidend;
+	}
+	if (isOK("cid2")) {
+		// BETWEEN
+		if (!isOK("cid1")) {
+			$errmsg .=
+		"Card ID: must give a range of numbers for BETWEEN.  ";
+			goto cidend;
+		}
+		$sqli .= "(id BETWEEN ";
+		if ($_POST["cid1"] < $_POST["cid2"]) {
+			$sqli .= $_POST["cid1"]." AND ".$_POST["cid2"].") ";
+		} else {
+			$sqli .= $_POST["cid2"]." AND ".$_POST["cid1"].") ";
+		}
+		goto cidend;
+	}
+	if (isOK("cid1")) {
+		// search
+		$sqli .= "( id ".$_POST["comp1"].$_POST["cid1"].") ";
+	}
+cidend:
+	if (strlen($sqli)) {
+		if (strpos($_POST["andor0"],"AND") !== FALSE) {
+			$sqla .= $_POST["andor0"].$sqli;
+		} else {
+			$sqlo .= $_POST["andor0"].$sqli;
+		}
+	}
 //	Number
 	if (isset($_POST["comp1"]) && (strpos($_POST["comp1"],"NULL") > 0)) {
 		$sqln .= "( num ".$_POST["comp1"].") ";
@@ -352,28 +385,35 @@ row(head(sendhelp("Advanced Search","advanced search")
 	."<br/><hr/>","colspan=\"4\""))
 .row(head(sendhelp("AND/OR","sql and or")).cell(" ")
 	.head(sendhelp("Comparison","sql comp")).cell(" "))
+.row(cell(sqlandor("0"),
+	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
+.cell(label("cid",sendhelp("Card ID","cid")),
+	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
+.cell(sqlcomp("0","number")).cell(input("number","cid1","")))
+.row(cell(sendhelp("BETWEEN","sql between"))
+	.cell(input("number","cid2","")))
 .row(cell(sqlandor("1"),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
-.cell(label("number","Number"),
+.cell(label("number",sendhelp("Number","number")),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
 .cell(sqlcomp("1","number")).cell(input("number","num1","")))
 .row(cell(sendhelp("BETWEEN","sql between"))
 	.cell(input("number","num2","")))
 .row(cell(sqlandor("2"),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
-.cell(label("title","Title"),
+.cell(label("title",sendhelp("Title","title")),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
 .cell(sqlcomp("2")).cell(input("text","title1","")))
 .row(cell(sendhelp("BETWEEN","sql between"))
 	.cell(input("text","title2","")))
 .row(cell(sqlandor("3"),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"1\"")
-.cell(label("card","Card"),
+.cell(label("card",sendhelp("Card","card")),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"1\"")
 .cell(sqlcomp("3")).cell(input("text","card1","")))
 .row(cell(sqlandor("4"),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
-.cell(label("createdate","Creation Date"),
+.cell(label("createdate",sendhelp("Creation Date","createdate")),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
 .cell(sqlcomp("4","date")).cell(input("datetime-local","createdate1","",
 	"style=\"font-size:60%;\"")))
@@ -383,7 +423,7 @@ row(head(sendhelp("Advanced Search","advanced search")
 	"style=\"font-size:60%;\"")))
 .row(cell(sqlandor("5"),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
-.cell(label("moddate","Modication Date"),
+.cell(label("moddate",sendhelp("Modication Date","moddate")),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
 .cell(sqlcomp("5","date")).cell(input("datetime-local","moddate1","",
 	"style=\"font-size:60%;\"")))
@@ -392,10 +432,10 @@ row(head(sendhelp("Advanced Search","advanced search")
 	"style=\"font-size:60%;\"")))
 .row(cell(sqlandor("6"),
 	"style=\"text-align:center; vertical-align: top;\"")
-.cell(label("createdatex","Creation Date"),
+.cell(label("createdatex",sendhelp("Creation Date","createdate")),
 	"style=\"text-align:center; vertical-align: top;\"")
 .cell(sqlcomp("6","datex"))
-.cell(label("moddatex","Modication Date"),
+.cell(label("moddatex",sendhelp("Modication Date","moddate")),
 	"style=\"text-align:center; vertical-align: top;\""))
 .row(head($view->string_buttons("2"),"colspan=\"4\""))
 .row(head(
