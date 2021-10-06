@@ -55,7 +55,7 @@ function FrameSize() {
 		$("#bodyleft").height(hit).width(Math.min(250,wid*.25));
 	}
 	$("#menu").height(hit*.6).width($("#bodyleft").width());
-	$("#bodyright").height(hit).width(wid - $("#bodyleft").width());
+	$("#bodyright").height(hit).width(wid -4 - $("#bodyleft").width());
 	$("#main").width($("#bodyright").width()).height(hit);
 	$("#helptext").width($("#bodyleft").width()).height(hit*.4);
 }
