@@ -219,6 +219,16 @@ function sort(&$cards) {
 	uasort($cards, "card_cmp");
 }
 
+// span and link for related cards
+function spanrel($spid) {
+	global $xshowmore, $xshowless;
+	if ($spid < 0) return "";	// no related cards
+	$x = ahref("javascript:showmore($spid);","$xshowmore",
+		"class=\"showmore\" id=\"cid$spid\"")
+		.span("","class=\"showmore\" id=\"span$spid\"");
+	return $x;
+}
+
 // display the cards according to view parameters
 function string_cards(&$cards, $check_all = false) {
 	global $user;
@@ -284,15 +294,18 @@ if ($this->edit == "edit") {
 			$rcolor = "none";
 			$delmsg = "Delete";
 			$entrytableopt = "class=\"cardview_relate\"";
+			$spanid = $k;
 		} else {
 			$xid = $k;
 			$tcolor = "b_number";
 			if ($v["nrid"]) {
 				$rcolor = "related_warn";
 				$delmsg = "Delete All";
+				$spanid = $k;
 			} else {
 				$rcolor = "b_number";
 				$delmsg = "Delete";
+				$spanid = -1;
 			}
 			$entrytableopt = "class=\"cardview\"";
 		}
@@ -306,7 +319,7 @@ if ($this->edit == "edit") {
 			"class=\"h_batch\" id=\"left\" colspan=5"))
 				,$entrytableopt)))."\n";
 		}
-if ($this->edit == "list") {
+if ($this->edit == "list") {					/* list */
 	$card = $this->br($v["card"]);
 	if (preg_match("/^$/", $user->bids[$v["bid"]]["num"])) {
 		$tcolspan = 3;
@@ -352,7 +365,7 @@ if ($this->edit == "list") {
 		"class=\"dates\" colspan=5"))
 	: "")
 	,$entrytableopt)))."\n";
-} else {
+} else {							/* edit */
 	if ($user->level >= $level_write) {
 	$card = $this->br($v["card"]);
 	$cbatch[$k] = new OneBatch("[$k]",$v["bid"]);
@@ -371,6 +384,7 @@ $text .= row(cell(table(
 			.$xid.toghide($k,$this->body),"width=15% id=\"center\"")
 		.head(	 $cbatch[$k]->js_string_ops_batch()
 			.$cbatch[$k]->js_string_one_batch()
+			.$this->spanrel($spanid)
 			,"width=35%")
 		.cell(	 input("hidden","c_rid[$k]",$c_rid)."\n"
 			.input("hidden","c_nrid[$k]",$c_nrid)."\n"

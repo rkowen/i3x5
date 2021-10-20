@@ -23,16 +23,22 @@
 	"<span style=\"font-size: larger\">&blacktriangleright;</span>";
 	$xshown		=
 	"<span style=\"font-size: larger\">&blacktriangledown;</span>";
+	$xshowmore	=
+	"<span style=\"font-size: larger\">&diams;</span>";
+	$xshowless	=
+	"<span style=\"font-size: larger\">&blacksquare;</span>";
+	$relate_color	=	"#a0a0dd";	// light blue
+	$related_warn	=	"#cc5050";	// red
+
 
 //
 // functions
 //
 	function script_head() {
 		print <<<SCRIPT
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="3x5.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="3x5.js"></script>
 SCRIPT;

@@ -34,6 +34,20 @@ b_id,b_number,b_title,b_cdate,b_mdate,b_card,b_form,b_check {
 	text-align:	left;
 	padding-left:	.5em;
 }
+td.relate_color {
+	background-color: #a0a0dd		!important;
+}
+td.related_warn_color {
+	background-color: #cc5050		!important;
+}
+/* batch pop-up */
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+.no-close .ui-dialog-titlebar {
+  display: none;
+}
+
 /* legacy styles */
 #right {
 	text-align: right	!important;
@@ -211,6 +225,14 @@ td.related_warn {
 	text-align: left;
 	padding-left: .5em;
 	background: #cc5050;
+}
+table.ajaxbatch {
+	border-spacing: 0;
+}
+table.ajaxbatch td {
+	border: none 0;
+	padding-left: .5em;
+	padding-right: .5em;
 }
 em.warn {
 	font-style: normal;

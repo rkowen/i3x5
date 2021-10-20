@@ -3,10 +3,13 @@
  */
 var downarrow = "<span style=\"font-size: larger\">&blacktriangledown;</span>";
 var rightarrow ="<span style=\"font-size: larger\">&blacktriangleright;</span>";
+var xshowmore = "<span style=\"font-size: larger\">&diams;</span>";
+var xshowless = "<span style=\"font-size: larger\">&blacksquare;</span>";
 
 function printpage() {
 	window.print();
 }
+
 function hidecard(cid,tid) {
 	var item = $("#"+cid);
 	if (! item) { return; }
@@ -48,4 +51,54 @@ function hidecardall(togid) {
 
 	$("#"+togid+"_def").removeClass(state).addClass(notstate);
 	$("#"+togid).html(notstate=='hidden'?'Show':'Hide');
+}
+
+function showmore(cid) {
+	var item = $("#cid"+cid);
+	if (! item) { return; }
+	var classlist = item.attr('class');
+	if (! classlist) { return; }
+	$(classlist.split(/\s+/)).each(function(index,xclass) {
+		if (xclass === 'showmore') {
+			item.removeClass('showmore');
+			item.addClass('showless');
+			$("#cid"+cid).html(xshowless);
+			$("#span"+cid).dialog({
+				autoOpen: false,
+				resizable: false,
+				height: "auto",
+				width: "auto",
+				dialogClass: "no-close",
+				draggable: false,
+				position: {
+					my: "right top",
+					at: "left top",
+					of: "#cid"+cid
+				},
+				show: {
+					effect: "blind",
+					duration: 1000
+				},
+				hide: {
+					effect: "explode",
+					duration: 1000
+				}
+			});
+			$.get({
+				url:	"cardbatches.php?cid="+cid,
+				success: function(result) {
+					$("#span"+cid).html(result);
+					$("#span"+cid).dialog('open');
+				}});
+			return;
+		}
+		if (xclass === 'showless') {
+			item.removeClass('showless');
+			item.addClass('showmore');
+			$("#cid"+cid).html(xshowmore);
+			$("#span"+cid).dialog('close');
+			return;
+		}
+	});
+	return;
 }

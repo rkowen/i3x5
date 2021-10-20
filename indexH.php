@@ -27,6 +27,4 @@
 		print "<p class=\"help\">"
 			.help($db->helpdesc($bid,$property))."</p>\n";
 	}
-	
-	card_foot(0);
 ?>
