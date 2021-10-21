@@ -127,6 +127,42 @@ function &batch_fieldnames($bid) {
 	return $one_row_data;
 }
 
+//
+// return the field names for a card with related cards
+function &card_batches($uid, $id) {
+	if ($this->debug > 0) {
+		echo "3x5_DB::card_batches($uid, $id)<br/>\n";
+	}
+/* check input $id */
+	if (!preg_match('/^\d+$/',$id))	return false;
+	return $this->multi_col("id",
+"SELECT	c.id, bid, b.batch, c.basecard
+FROM	i3x5_batch			b
+JOIN	(
+	SELECT	id, bid, false AS basecard
+	FROM	i3x5_cards
+	WHERE	rid = (
+		SELECT	rid
+		FROM	i3x5_cards
+		WHERE	id = $id
+	)
+	UNION
+	SELECT	n.id AS id, n.bid, true AS basecard
+	FROM	i3x5_cards		n
+	JOIN	i3x5_cards		r
+	ON	(r.rid = n.id)
+	WHERE	r.id = $id
+	UNION
+	SELECT	id, bid, id=COALESCE(rid,id) AS basecard
+	FROM	i3x5_cards
+	WHERE	id = $id
+	  OR	rid = $id
+)					c
+USING	(bid)
+WHERE	uid = $uid
+");
+}
+
 // --{--
 // return a hash array for one card
 function &card ($card_id) {
@@ -373,7 +409,8 @@ AND n.rid IS NULL";
 //
 // return a hash array of cards from an advance search
 // $sql needs to be sanitized before call.
-function &cards_advance ($uid, $sql) {
+// set $norel = false to allow related cards in search
+function &cards_advance ($uid, $sql, $norel = true) {
 	if ($this->debug > 0) {
 		echo "3x5_DB::cards_advance($sql)<br/>\n";
 	}
@@ -387,8 +424,8 @@ FROM i3x5_cards n
 JOIN i3x5_batch b
 USING (bid)
 WHERE uid = $uid
-AND ($sql)
-AND n.rid IS NULL";
+AND ($sql)";
+	if ($norel) $this->lastcardsql .= "\nAND n.rid IS NULL";
 
 	return $this->multi_col("id",$this->lastcardsql);
 }
