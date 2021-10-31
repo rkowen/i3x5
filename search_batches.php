@@ -287,6 +287,15 @@ if (!$debug) {
 		header("Location: view_cards.php");
 	}
 }
+} else if (isset($_GET["cidbatch"])) {	/* show all related cards */
+	$cid = $_GET["cidbatch"];
+	if (!preg_match('/^d+$/', $cid)) {
+		$errmsg = "Invalid string for card id - don't do that again!";
+	}
+	$view->cards = $db->related_cards($cid);
+	$view->lastcardsql($db->lastcardsql());
+	session_write_close();
+	header("Location: view_cards.php");
 }
 
 function sqlcomp($n = "",$t = "string") {

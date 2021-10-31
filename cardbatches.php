@@ -23,16 +23,20 @@ $maincard = "";
 $relcard  = "";
 
 while (list($k,$v) = each($cb)) {
-	$x = cell($k,"style=\"text-align: right;\"")
-		.cell($v["batch"]).cell("(".$v["bid"].")",
-		"style=\"text-align: right;\"");
+	$x = cell($v["batch"]).cell("(".$v["bid"].")","style=\"text-align: right;\"");
 	if ($v["basecard"] == "t") {
 		$y = "style=\"bgcolor: $related_warn;\"";
-		$maincard = row($x, "style=\"background-color: $related_warn;\"")."\n";
+		$maincard = row(
+			cell(ahref(
+"search_batches.php?view_body=header&cidbatch=$k",$k,
+			"class=\"relcard\""),
+			"style=\"text-align: right;\"").$x,
+			"style=\"background-color: $related_warn;\"")."\n";
 	} else {
 		$y = "class=\"relate_color\"";
-		$relcard = $relcard .
-			row($x, "style=\"background-color: $relate_color;\"")."\n";
+		$relcard = $relcard . row(
+			cell($k,"style=\"text-align: right;\"").$x,
+			"style=\"background-color: $relate_color;\"")."\n";
 	}
 }
 print row(head(sendhelp("cid","cid"))

@@ -70,6 +70,10 @@ a.help:link,a.help:active,a.help:visited {
 	text-decoration: none;
 	color: #805000;
 }
+a.relcard:link,a.relcard:active,a.relcard:visited {
+	text-decoration: none;
+	color: #00FFFF;
+}
 #title {
 	background:	#afffaf;
 	border-style:	none;

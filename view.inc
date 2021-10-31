@@ -138,6 +138,8 @@ function get_buttons($n = "") {
 		$t = "view_".$v.$n;
 		if (isset($_POST[$t])) {
 			$this->$v = $_POST[$t];
+		} elseif (isset($_GET[$t])) {
+			$this->$v = $_GET[$t];
 		}
 	}
 }

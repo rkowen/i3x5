@@ -14,7 +14,7 @@ class i3x5_DB extends RKO_DB {
 //////////////////////////////////////////////////////////////////////////
 	protected $selectcards = "SELECT nn.*,b.batch FROM (
  SELECT id,bid,rid,num,title,card,
- (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
+ (SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
  createdate,TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
  moddate,TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
  formatted
@@ -177,6 +177,23 @@ function &card ($card_id) {
 	} 
 	$query = str_replace("wherexxx","AND n.id=$card_id",$this->selectcards);
 	$query = str_replace("orderbyxxx","",$query);
+	return $this->multi_col("id",$query);
+}
+
+// return all related cards given the base card_id
+function &related_cards ($card_id) {
+	if ($this->debug > 0) {
+		echo "3x5_DB::card_related($card_id)<br/>\n";
+	}
+	// reject if $card_id is not a number
+	if (!preg_match('/^\d+$/',$card_id)) {
+		$this->errmsg.="card_related:($card_id) not integer";
+		$this->errno=-1;
+		return NULL;
+	}
+	$query = str_replace("wherexxx",
+		"AND (n.id=$card_id OR n.rid = $card_id)",$this->selectcards);
+	$query = str_replace("orderbyxxx","ORDER BY nrid DESC, id ASC",$query);
 	return $this->multi_col("id",$query);
 }
 
@@ -358,7 +375,7 @@ function &cards_ (&$bids, $selected = true) {
 	}
 	$this->lastcardsql = 
 "SELECT id,bid,rid,num,title,card,\n".
-" (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,\n".
+" (SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,\n".
 " TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,\n".
 " TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,\n".
 " formatted\n".
@@ -392,7 +409,7 @@ function &cards_simple ($uid, $keyword, $case = false) {
 
 	$this->lastcardsql = 
 "SELECT id,bid,n.rid,num,title,card,
- (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
+ (SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
  TO_CHAR(n.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
  TO_CHAR(n.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
  formatted
@@ -416,7 +433,7 @@ function &cards_advance ($uid, $sql, $norel = true) {
 	}
 	$this->lastcardsql = 
 "SELECT id,bid,n.rid,num,title,card,
- (SELECT count(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
+ (SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
  TO_CHAR(n.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
  TO_CHAR(n.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
  formatted
