@@ -39,7 +39,6 @@ function isOK($x = "") {
 	return $ret;
 }
 
-
 // process batches if given view go-ahead
 if (isset($_POST["simple"]) && ($_POST["simple"] == "Search")) {
 	$view->get_buttons("1");
@@ -295,7 +294,7 @@ if (!$debug) {
 	$view->cards = $db->related_cards($cid);
 	$view->lastcardsql($db->lastcardsql());
 	session_write_close();
-	header("Location: view_cards.php");
+	header("Location: view_cards.php?view_body=header");
 }
 
 function sqlcomp($n = "",$t = "string") {
@@ -384,10 +383,9 @@ row(cell(label("keyword",sendhelp("Keyword","keyword search")),
 .row(head($view->string_buttons("1"),"colspan=2"))
 .row(head(
 	input("submit","simple","Search")
-	.input("reset","r                } else {
-eset","Clear"),"colspan=2"))
-,"class=\"tight\"")."<!--}-->\n")
-  .h(3,"Advanced")
+	.input("reset","reset","Clear"),"colspan=2"))
+		,"class=\"tight\"")."<!--}-->\n")
+.h(3,"Advanced")
    .div(
 	"<!--{-->".table(
 row(head(sendhelp("Advanced Search","advanced search")

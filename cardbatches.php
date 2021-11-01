@@ -28,7 +28,7 @@ while (list($k,$v) = each($cb)) {
 		$y = "style=\"bgcolor: $related_warn;\"";
 		$maincard = row(
 			cell(ahref(
-"search_batches.php?view_body=header&cidbatch=$k",$k,
+		"search_batches.php?cidbatch=$k",$k,
 			"class=\"relcard\""),
 			"style=\"text-align: right;\"").$x,
 			"style=\"background-color: $related_warn;\"")."\n";

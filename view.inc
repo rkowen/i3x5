@@ -61,6 +61,12 @@ function catch_gets() {
 	if (isset($_GET["bid"])) {
 		$user->bid	= $_GET["bid"];
 	}
+
+	if (isset($_GET["view_body"])
+	&& ($_GET["view_body"] == "full"
+	|| $_GET["view_body"] == "header")) {
+		$this->body = $_GET["view_body"];
+	}
 }
 
 // read/set lastcardsql
