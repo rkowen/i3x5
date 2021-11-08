@@ -9,27 +9,28 @@
 
 	if (isset($user)) {
 	print <<<PAGE
-<H2>``{$user->project}'' - results</H2>
+<h2>``{$user->project}'' - results</h2>
 This the ``{$user->project}'' results frame
-<P>
+<p>
 Click any of the links in the left frames and the subsequent
 actions will be shown in this frame.
-
-<P>
+</p>
 PAGE;
 	} else {
 	print <<<PAGE
-<H2>Please Login</H2>
-<P>
+<h2>Please Login</h2>
+<p>
 You are not currently logged in.
-<P>
+</p>
+<p>
 Please click
-<A HREF="login_user.php" TARGET="main">here to login</A>
+<a href="login_user.php" target="main">here to login</a>
 if you have an existing project.
-<P>
+</p>
+<p>
 Or click
-<A HREF="create_user.php" TARGET="main">here to create a new user</A>.
-<P>
+<a href="create_user.php" target="main">here to create a new user</A>.
+</p>
 
 PAGE;
 	}
