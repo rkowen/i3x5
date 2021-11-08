@@ -30,6 +30,7 @@
 	$relate_color	=	"#a0a0dd";	// light blue
 	$related_warn	=	"#cc5050";	// red
 
+	global $user;
 
 //
 // functions
@@ -44,6 +45,17 @@
 SCRIPT;
 	}
 	function card_head ($title="", $class="main", $center=1, $extra="") {
+		global $_SESSION;
+		global $_SERVER;
+		global $_GET;
+		global $user;
+	// can't redirect if already in login_user.php or giving helpful info
+		if ((!preg_match("/login_user.php/", $_SERVER["SCRIPT_NAME"])
+		&& (!preg_match("/indexH.php/", $_SERVER["SCRIPT_NAME"]))
+		&& (!isset($user, $user->uid)))) {
+				header("Location: login_user.php");
+		}
+
 		print "<html>\n";
 		script_head();
 		print <<<HEAD
@@ -79,8 +91,10 @@ END;
 	// INFO_ALL or INFO_VARIABLES
 	function showphpinfo ($opt = INFO_VARIABLES) {
 		global $phpinfo;
-		if ($phpinfo) {phpinfo($opt);}
-		// echo "<pre>".print_r($_SESSION)."</pre>\n";
+		if ($phpinfo) {
+			phpinfo($opt);
+			print "<pre>".print_r($_SESSION)."</pre><br/>\n";
+		}
 	}
 	function warn($q) {
 		return "<em class=\"warn\">$q</em>";

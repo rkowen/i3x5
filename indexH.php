@@ -19,12 +19,18 @@
 	$db = new i3x5_DB($schema);
 	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 
+	global $user;
 	if (isset($help)) {
 		print "<h4>Help</h4>\n";
 		print "<p class=\"help\">".help($db->helpmsg($help))."</p>\n";
-	} elseif (isset($bid)) {
+	} elseif (isset($bid) && isset($user, $user->uid)) {
 		print "<h4>Project Help</h4>\n";
 		print "<p class=\"help\">"
 			.help($db->helpdesc($bid,$property))."</p>\n";
+	} else {
+		print "<h4>Project Disconnected</h4>\n";
+		print ahref("login_user.php?login=Login+User",
+			"Login",
+			"target=\"main\"");
 	}
 ?>
