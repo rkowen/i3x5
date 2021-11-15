@@ -18,7 +18,7 @@ if (! isset($view) || ! $user->selected_count()) {
 }
 
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 	$check_all = false;
 
 //

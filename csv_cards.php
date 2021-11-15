@@ -7,7 +7,7 @@
 	include_once "3x5_db.inc";
 
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 
 if (! $view) {
 	$view = new View();
@@ -18,9 +18,11 @@ if ($user->selected_count() == 0) {
 print <<< PAGE
 
 <h2>No Selected Batches</h2>
-<P ALIGN="justified">Please select at least one batch from 
-<P>
-<A HREF="sel_batches.php">Click here</A> to make a selection
+<p align="justified">Please select at least one batch from 
+</p>
+<p>
+<a href="sel_batches.php">Click here</a> to make a selection
+</p>
 
 PAGE;
 	card_foot();

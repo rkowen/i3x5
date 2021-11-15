@@ -1,5 +1,5 @@
 <?php
-// DESC: starting ``results'' page
+// DESC: starting "results" page
 	include_once "user.inc";
 	session_start();
 	include_once "session.inc";
@@ -9,8 +9,8 @@
 
 	if (isset($user)) {
 	print <<<PAGE
-<h2>``{$user->project}'' - results</h2>
-This the ``{$user->project}'' results frame
+<h2>"{$user->project}" - results</h2>
+This the "{$user->project}" results frame
 <p>
 Click any of the links in the left frames and the subsequent
 actions will be shown in this frame.

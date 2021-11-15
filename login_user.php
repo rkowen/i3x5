@@ -84,7 +84,7 @@ showphpinfo();
 // if coming to reset login
 	if (! isset($_POST["username"])) {
 		not_logged_in(
-		"Please fill in fields to login into ``$project''");
+		"Please fill in fields to login into \"$project\"");
 		return;
 	}
 

@@ -6,7 +6,7 @@
 	include_once "3x5_db.inc";
 
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 
 	include "create_update_user.inc";
 	$cuu = new Create_Update_User("Create");
@@ -38,31 +38,32 @@ $_POST["response"]."')"
 	$cuu->show_form("Create User", "create user");
 
 print <<<NOT_CREATED
-</CENTER>
-<P>
-<P>
+</center>
+<p></p>
+<p>
 Please be sure to give a valid email address.  This is how the
-``<B>3x5</B>'' project
+"<b>3x5</b>" project
 will notify you if you forget your admin password, or if your project
 will be deleted for extended inactivity.
-<BR>
+<br/>
 Please remember the <EM>admin password</EM> ... this is the most important
 password you need, the other passwords are to grant varying levels
 of access to other members of your organization or project.
-<P>
+</p><p>
 As a courtesy, give a valid name too.  None of this information will be
 used or given out (except to law officers if directed by legal authorities).
-<P>
+</p><p>
 Your project may be deleted at any time if they are found to contain
 illegal or offensive material.  However, the
-``<B>3x5</B>'' project, is not responsible for the content therein
+"<b>3x5</b>" project, is not responsible for the content therein
 and can not guarentee the absolute confidentiality of the content either.
-<P>
+</p><p>
 In other words, do not put anything into the 
-``<B>3x5</B>'' project that is private, confidential,
+"<b>3x5</b>" project that is private, confidential,
 illegal, or sensitive.
-</BODY>
-</HTML>
+</p>
+</body>
+</html>
 NOT_CREATED;
 		showphpinfo();
 	}

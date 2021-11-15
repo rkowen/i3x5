@@ -13,7 +13,7 @@
 	$one_batch__ = $onebid->get_one_batch();
 
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 
 if (isset($_POST["delete"])) {
 	$delete = $_POST["delete"];
@@ -74,7 +74,7 @@ if (isset($one_batch__) && $one_batch__) {
 	"<!--{-->".table(row(head($hdel))
 		.row(head("<!--{-->".table(
 			row(head(warn(
-"All non-linked cards<BR>will be deleted with batch")))
+"All non-linked cards<br/>will be deleted with batch")))
 			.(isset($msg)?row(head(warn($msg))):"")
 			.row(head($hbatch))
 			.row(head(

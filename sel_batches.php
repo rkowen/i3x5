@@ -14,7 +14,7 @@
 		$errmsg = $_GET["errmsg"];
 	}
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 
 	$manybid = new ManyBatch();
 	$manybid->get_many_batch();
@@ -44,7 +44,7 @@ if (isset($_POST["submit"]) && ($_POST["submit"] == "Submit")) {
 			card_head("{$user->project} - Selected Batches");
 			print <<<PAGE
 <h2>
-Pick a ``Select Batches'' operation from left menu<br/>
+Pick a "Select Batches" operation from left menu<br/>
 </h2>
 </center>
 PAGE;

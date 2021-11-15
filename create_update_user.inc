@@ -249,7 +249,7 @@ EOT;
 
 	if ($this->invalid) {
 		print warn(
-"There were {$this->invalid} field(s) that need to be corrected")."<br>\n";
+"There were {$this->invalid} field(s) that need to be corrected")."<br/>\n";
 	}
 }
 

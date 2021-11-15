@@ -14,7 +14,7 @@
 	$one_batch__ = $onebid->get_one_batch();
 
 	$db = new i3x5_DB($schema);
-	if (! $db ) { print "initial:".$db->errmsg()."<BR>\n"; exit; }
+	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 
 	$url = "new_batch.php?batch_select";
 	if ( isset($_POST["submit"] )) {

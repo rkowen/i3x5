@@ -141,7 +141,7 @@ function dump() {
 	$a = get_object_vars($this);
 	reset($a);
 	while (list($k, $v) = each($a)) {
-		print "OneBatch->$k	= $v<BR>\n";
+		print "OneBatch->$k	= $v<br/>\n";
 	}
 }
 

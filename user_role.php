@@ -31,7 +31,7 @@ if (!$debug) {
 			card_head("{$user->project} - Select Access");
 			print <<<PAGE
 <h2>
-Pick a ``Select From Access'' operation in left menu<br/>
+Pick a "Select From Access" operation in left menu<br/>
 </h2>
 </center>
 PAGE;
