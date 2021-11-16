@@ -1,3 +1,11 @@
+BEGIN
+	CREATE EXTENSION pgcrypto;
+EXCEPTION
+	WHEN OTHERS THEN
+	-- do nothing --
+		RAISE NOTICE 'pgcrypto already installed';
+END:
+
 DROP TABLE i3x5_cards;
 DROP SEQUENCE i3x5_batch_bid_seq;
 DROP TABLE i3x5_batch;
@@ -11,14 +19,15 @@ CREATE TABLE i3x5_userpass (
 	uid		SERIAL,			-- internal userid
 	project		TEXT DEFAULT '3x5 Cards',-- project name
 	username	TEXT,			-- username
-	passwd_admin	TEXT,			-- admin password
-	passwd_w	TEXT,			-- full-write password
-	passwd_a	TEXT,			-- append-only password
-	passwd_r	TEXT,			-- read-only password
+	passwd_admin	BYTEA,			-- admin password
+	passwd_w	BYTEA,			-- full-write password
+	passwd_a	BYTEA,			-- append-only password
+	passwd_r	BYTEA,			-- read-only password
 	author		TEXT,			-- name
 	email		TEXT,			-- email for notification
 	challenge	TEXT,			-- secure reminder
 	response	TEXT,			-- secure authentication
+	crypthint	TEXT,			-- hint for data encryption
 	createdate	timestamp DEFAULT now(),
 	moddate		timestamp DEFAULT now(),
 	PRIMARY KEY(uid)

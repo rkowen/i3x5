@@ -18,7 +18,7 @@ determines what level of access you have to the project.
 INSERT INTO i3x5_help (key,help) VALUES ( 'logout','
 Logout as this user, then you can re-login as the same
 user with a different password (and access level)
-or login as a different user (and project)
+or login as a different user (and project).
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'unknown','
@@ -31,7 +31,8 @@ in the 3x5 card database.  Enter all of the project values.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'update user','
-Update all of the project values except for the username
+Update all of the project values except for the username.
+Passwords are encrypted and only viewable here.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'username','
@@ -40,7 +41,7 @@ Must be unique with respect to all other projects in the 3x5 card database.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'project','
-The project name is the descriptive title.
+The project name is the descriptive title for the project.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'passwd_root','
@@ -103,27 +104,27 @@ The administrator is all powerful with respect to the project.
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'Write','
 The write privilege allows the entering and editing of data directly in to
-the number, title, card fields, and allows inserting of cards.
+the number, title, card fields, and allows inserting of new cards.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'Append-Only','
 The append privilege allows only the appending of data to existing cards,
-and the inserting of cards.
+and the inserting of new cards.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'Read-Only','
-The read privilege allows only the reading the card data.
+The read privilege allows only the reading of existing card data.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'batch properties','
 Batch Properties refers to the labels given to the
-number, title, card fields.  Choose one to view, or create
+number, title, and card fields.  Choose one to view, or create
 a new batch.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'create batch','
 Must give a batch name that is unique to the project.
-Also give the batch properties for the number, title, card fields.
+Also give the batch properties for the number, title, and card fields.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'update batch','

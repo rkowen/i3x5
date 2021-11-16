@@ -14,6 +14,7 @@ class RKO_DB {
 	public $schema;
 	public $connect;
 	public $pass;
+	public $crypt;			// encrypt/decrypt string for passwords
 	public $query;
 	public $debug;
 	public $showerr;
@@ -32,7 +33,7 @@ class RKO_DB {
 // constructor
 //////////////////////////////////////////////////////////////////////////
 function __construct ($schema) {
-	global $db_connect, $db_pass;
+	global $db_connect, $db_pass, $db_crypt;
 	$this->debug = 0;
 	$this->showerr = 1;
 	$this->errno = 0;
@@ -43,6 +44,7 @@ function __construct ($schema) {
 	}
 	$this->connect = $db_connect;
 	$this->pass = $db_pass;
+	$this->crypt = $db_crypt;
 	$this->dbconn = pg_connect($this->connect);
 	if (!$this->dbconn) {
 		$this->errmsg

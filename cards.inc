@@ -4,7 +4,7 @@
 // values
 //
 	$schema		= "i3x5";
-	$version	= "0.7.1";
+	$version	= "0.8.0";
 	$phpinfo	= 0;	// set non-zero for phpinfo
 	$form_color	= "#D0D0D0";
 	$level_root	= 99;

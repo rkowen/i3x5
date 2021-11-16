@@ -7,4 +7,5 @@
 //////////////////////////////////////////////////////////////////////////
 $db_pass = "SomePassword";
 $db_connect = "user=www-data password=$db_pass dbname=i3x5 port=5432 host=localhost";
+$db_crypt = "SomeString";
 ?>

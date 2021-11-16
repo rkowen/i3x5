@@ -17,7 +17,13 @@
 	if (! isset($_POST["create_update_user"])
 	|| (! preg_match("/Done/", $_POST["create_update_user"]))) {
 		if (! $db->query(
-"SELECT * FROM i3x5_userpass WHERE uid=".$user->uid)){
+"SELECT username, project,
+	pgp_sym_decrypt(passwd_admin,'{$db->crypt}') AS passwd_admin,
+	pgp_sym_decrypt(passwd_w,'{$db->crypt}') AS passwd_w,
+	pgp_sym_decrypt(passwd_a,'{$db->crypt}') AS passwd_a,
+	pgp_sym_decrypt(passwd_r,'{$db->crypt}') AS passwd_r,
+	author, email, challenge, response
+FROM i3x5_userpass WHERE uid=".$user->uid)){
 			echo "update_user error1: ".$db->errmsg();
 		}
 		if (! $db->exec()) {
@@ -49,8 +55,13 @@
 		reset ($cuu->list);
 		while (list($k,$v) = each($cuu->list)) {
 			if ($k != "username") {
-				$query .= "$k='".
-					$db->quote($_POST[$k])."',";
+				if($v["crypt"]) {
+					$query .= "$k=".
+	"pgp_sym_encrypt('".$db->quote($_POST[$k])."','{$db->crypt}'),";
+				} else {
+					$query .= "$k='".
+						$db->quote($_POST[$k])."',";
+				}
 			}
 		}
 		// strip off last ,

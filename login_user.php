@@ -112,7 +112,8 @@ showphpinfo();
 	while (list($k,$v) = each($pswd)) {
 		if (1 == $db->sql(
 			"SELECT COUNT(1) FROM i3x5_userpass ".
-			"WHERE username='$username' AND $k='$passwd'")) {
+			"WHERE username='$username' ".
+			"AND pgp_sym_decrypt($k,'{$db->crypt}')='$passwd'")) {
 				$access_level=$v;
 		}
 	}
