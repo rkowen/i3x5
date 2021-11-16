@@ -559,6 +559,7 @@ function append_card ($id, $rid, $card_append, $card_formatted) {
 	$oldcard = $this->escape(preg_replace("/\n$/","",$oldcard));
 	// set the formatting
 	if (! $card_formatted) { $card_formatted = "false"; }
+	$card_append = $this->escape($card_append);
 	$this->sql(
 "UPDATE i3x5_cards SET card='$oldcard\n<<<'".
 "||to_char(CURRENT_TIMESTAMP,'YYYY/MM/DD HH24:MI:SS')||'>>>\n$card_append', ".

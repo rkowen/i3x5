@@ -461,7 +461,7 @@ $text .= row(cell(table(
 			,"class=\"h_card\" width=10% valign=\"top\"")
 		.cell(($v["formatted"]=="t"
 			? pre($v["card"],"t"):$this->br($v["card"]))
-		.textarea("c_card[$k]","","cols=80 rows=2")
+		."<br/>".textarea("c_card[$k]","","cols=80 rows=2")
 			,"class=\"b_card\" width=90% colspan=4"))
 	: "")
 .($this->dates != "hide" ?
