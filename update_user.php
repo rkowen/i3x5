@@ -17,13 +17,23 @@
 	if (! isset($_POST["create_update_user"])
 	|| (! preg_match("/Done/", $_POST["create_update_user"]))) {
 		if (! $db->query(
+($db->encode ?
 "SELECT username, project,
-	pgp_sym_decrypt(passwd_admin,'{$db->crypt}') AS passwd_admin,
-	pgp_sym_decrypt(passwd_w,'{$db->crypt}') AS passwd_w,
-	pgp_sym_decrypt(passwd_a,'{$db->crypt}') AS passwd_a,
-	pgp_sym_decrypt(passwd_r,'{$db->crypt}') AS passwd_r,
+	pgp_sym_decrypt(xpasswd_admin,'{$db->crypt}') AS passwd_admin,
+	pgp_sym_decrypt(xpasswd_w,'{$db->crypt}') AS passwd_w,
+	pgp_sym_decrypt(xpasswd_a,'{$db->crypt}') AS passwd_a,
+	pgp_sym_decrypt(xpasswd_r,'{$db->crypt}') AS passwd_r,
 	author, email, challenge, response
-FROM i3x5_userpass WHERE uid=".$user->uid)){
+FROM i3x5_userpass WHERE uid=".$user->uid
+:
+"SELECT username, project,
+	passwd_admin,
+	passwd_w,
+	passwd_a,
+	passwd_r,
+	author, email, challenge, response
+FROM i3x5_userpass WHERE uid=".$user->uid
+))){
 			echo "update_user error1: ".$db->errmsg();
 		}
 		if (! $db->exec()) {
@@ -56,8 +66,13 @@ FROM i3x5_userpass WHERE uid=".$user->uid)){
 		while (list($k,$v) = each($cuu->list)) {
 			if ($k != "username") {
 				if($v["crypt"]) {
+($db->encode ?
+					$query .= "x$k=".
+	"pgp_sym_encrypt('".$db->quote($_POST[$k])."','{$db->crypt}'),"
+:
 					$query .= "$k=".
-	"pgp_sym_encrypt('".$db->quote($_POST[$k])."','{$db->crypt}'),";
+	"'".$db->quote($_POST[$k])."',"
+);
 				} else {
 					$query .= "$k='".
 						$db->quote($_POST[$k])."',";

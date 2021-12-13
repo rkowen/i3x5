@@ -1,0 +1,3 @@
+3x5_up1.sql	- Alter the database adding columns for encrypted entries.
+3x5_utox.sql	- Change the database converting from unencrypted to encrypted
+3x5_xtou.sql	- Change the database converting from encrypted to unencrypted

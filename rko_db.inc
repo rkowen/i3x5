@@ -14,6 +14,7 @@ class RKO_DB {
 	public $schema;
 	public $connect;
 	public $pass;
+	public $encode;			// whether to use encryption or not
 	public $crypt;			// encrypt/decrypt string for passwords
 	public $query;
 	public $debug;
@@ -33,7 +34,7 @@ class RKO_DB {
 // constructor
 //////////////////////////////////////////////////////////////////////////
 function __construct ($schema) {
-	global $db_connect, $db_pass, $db_crypt;
+	global $db_connect, $db_pass, $db_encode, $db_crypt;
 	$this->debug = 0;
 	$this->showerr = 1;
 	$this->errno = 0;
@@ -44,6 +45,7 @@ function __construct ($schema) {
 	}
 	$this->connect = $db_connect;
 	$this->pass = $db_pass;
+	$this->encode = $db_encode;
 	$this->crypt = $db_crypt;
 	$this->dbconn = pg_connect($this->connect);
 	if (!$this->dbconn) {
@@ -157,7 +159,8 @@ function exec () {
 	}
 	$this->dbresult = pg_query($this->dbconn,$this->query);
 	if (!$this->dbresult) {
-		$this->errmsg.="failed exec of query($this->query)";
+		$this->errmsg.="failed exec of query("
+			.str_replace($this->crypt,"#######",$this->query).")";
 		$this->errno=-2;
 		return false;
 	}

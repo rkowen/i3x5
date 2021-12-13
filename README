@@ -105,6 +105,14 @@ Increase this time and a person can be "logged" in longer.
 Create a file named db_connect.inc with the following lines
 or edit db_connect.template, copy to db_connect.inc changing the
 password to whatever you have used.
+If your system has the pgcrypto extenstion then you can set
+$db_encode to true and define some encryption string with $db_crypt.
+Not all webhosting services provide this as part of their basic
+service (e.g. BlueHost).
+This encodes the user passwords for the many levels.  However, note
+that the password is still stored within the database, but just
+encrypted.  So a casual browser of the database won't be able to view
+these passwords unless they have the encryption key.
 ------------------------------------------------------------------------
 <?php
 //////////////////////////////////////////////////////////////////////////
@@ -115,6 +123,8 @@ password to whatever you have used.
 //////////////////////////////////////////////////////////////////////////
 $db_pass = "SomePassword";
 $db_connect = "user=www-data password=$db_pass dbname=i3x5 port=5432 host=localhost";
+$db_encode = false;
+$db_crypt = "SomeString";
 ?>
 ------------------------------------------------------------------------
 

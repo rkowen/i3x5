@@ -1,28 +1,32 @@
+DO $$
 BEGIN
 	CREATE EXTENSION pgcrypto;
 EXCEPTION
 	WHEN OTHERS THEN
 	-- do nothing --
 		RAISE NOTICE 'pgcrypto already installed';
-END:
+END $$;
 
 DROP TABLE i3x5_cards;
-DROP SEQUENCE i3x5_batch_bid_seq;
 DROP TABLE i3x5_batch;
+DROP SEQUENCE i3x5_batch_bid_seq;
 DROP SEQUENCE i3x5_cards_id_seq;
 DROP TABLE i3x5_userpass;
 DROP SEQUENCE i3x5_userpass_uid_seq;
-DROP TABLE i3x5_crypt;
 DROP TABLE i3x5_help;
 
 CREATE TABLE i3x5_userpass (
 	uid		SERIAL,			-- internal userid
 	project		TEXT DEFAULT '3x5 Cards',-- project name
 	username	TEXT,			-- username
-	passwd_admin	BYTEA,			-- admin password
-	passwd_w	BYTEA,			-- full-write password
-	passwd_a	BYTEA,			-- append-only password
-	passwd_r	BYTEA,			-- read-only password
+	passwd_admin	TEXT,			-- admin password
+	xpasswd_admin	BYTEA,			-- admin password encrypted
+	passwd_w	TEXT,			-- full-write password
+	xpasswd_w	BYTEA,			-- full-write password encrypted
+	passwd_a	TEXT,			-- append-only password
+	xpasswd_a	BYTEA,			-- append-only passwrd encrypted
+	passwd_r	TEXT,			-- read-only password
+	xpasswd_r	BYTEA,			-- read-only password encrypted
 	author		TEXT,			-- name
 	email		TEXT,			-- email for notification
 	challenge	TEXT,			-- secure reminder
@@ -52,6 +56,7 @@ CREATE TABLE i3x5_batch (
 	card_name	TEXT,		-- card field name
 	card_help	TEXT DEFAULT 'nothing helpful',	
 					-- card field helpful description
+	crypted		BOOLEAN	DEFAULT false,	-- encrypt entire card batch
 	createdate	timestamp DEFAULT now(),
 	moddate		timestamp DEFAULT now(),
 	PRIMARY KEY(bid),
@@ -65,8 +70,11 @@ CREATE TABLE i3x5_cards (
 					-- skips rest if not null
 	num		INT8,		-- user numbering of card
 	title		TEXT,		-- title of card
+	xtitle		BYTEA,		-- encrypted title of card
 	card		TEXT,		-- card contents
+	xcard		BYTEA,		-- encrypted card contents
 	formatted	BOOLEAN DEFAULT false,	-- use <PRE> formatting
+	crypted		BOOLEAN	DEFAULT false,	-- encrypt this card
 	createdate	timestamp DEFAULT now(),
 	moddate		timestamp DEFAULT now(),
 	PRIMARY KEY (id),

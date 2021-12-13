@@ -3,17 +3,30 @@
     3x5 card DB connection class
     handles most 3x5 DB interactions with explicitly formatted queries
 	include:	rko_db.inc
+			cards.inc
 	action:		(none)
 
 cards.inc
     common values, functions, and classes
 	include:	(none)
-	action:		(none)
+	action:		Location: login_user.php
+			indexH.php
 
 create_update_user.inc
     create_update_user class to handle user info processing
 	include:	cards.inc
-	action:		indexM.php
+	action:		(none)
+
+db_connect.inc
+    db_connect.inc
+    DB connection string
+	include:	(none)
+	action:		(none)
+
+javascript.inc
+    JavaScript values, functions, and classes
+	include:	(none)
+	action:		(none)
 
 many_batch.inc
     many batch selector class
@@ -25,12 +38,13 @@ one_batch.inc
     one batch selector class
 	include:	user.inc
 			cards.inc
+			javascript.inc
 	action:		(none)
 
 rko_db.inc
     RKO_DB simple DB connection class
     direct connection to DB with generalized operations
-	include:	(none)
+	include:	db_connect.inc
 	action:		(none)
 
 session.inc
@@ -65,6 +79,14 @@ batches.php
 			one_batch.inc
 	action:		(none)
 
+cardbatches.php
+    Show the given card's list of batches
+	include:	user.inc
+			session.inc
+			cards.inc
+			3x5_db.inc
+	action:		(none)
+
 create_user.php
     Create a new user and insert into DB
 	include:	cards.inc
@@ -72,46 +94,46 @@ create_user.php
 			create_update_user.inc
 	action:		Location: login_user.php
 
-csv_cards.php
-    output the selected batches as a CSV file
-	include:	user.inc
-			view.inc
-			cards.inc
-			3x5_db.inc
-	action:		sel_batches.php
-
 del_batch.php
     Delete a whole batch from the DB
 	include:	cards.inc
 			user.inc
 			session.inc
 			3x5_db.inc
+			one_batch.inc
 	action:		(none)
 
-indexB.php
-    options frame, shows access level and selection options,
-    displays the help information when clicked upon elsewhere
-	include:	user.inc
-			session.inc
-			cards.inc
-			3x5_db.inc
-	action:		update_user.php
-			batches.php
-			del_batch.php
-			list_batches.php
-			sel_batches.php
-			csv_cards.php
-
 index.php
-    sets up iframes title/options/main
+    sets up areas and iframes title/options/helptext/main
 	include:	cards.inc
+			user.inc
 	action:		indexM.php
 			login_user.php
 			indexT.php
 			indexB.php
 
+indexB.php
+    options frame, shows access level and selection options
+	include:	user.inc
+			session.inc
+			cards.inc
+	action:		batches.php
+			del_batch.php
+			list_batches.php
+			search_batches.php
+			sel_batches.php
+			csv_cards.php
+
+indexH.php
+    help frame with information when clicked upon elsewhere
+	include:	user.inc
+			session.inc
+			cards.inc
+			3x5_db.inc
+	action:		(none)
+
 indexM.php
-    starting ``results'' page
+    starting "results" page
 	include:	user.inc
 			session.inc
 			cards.inc
@@ -125,14 +147,17 @@ indexT.php
 			session.inc
 	action:		create_user.php
 			logout_user.php
+			user_role.php
+			update_user.php
 
 list_batches.php
     List batch properties as a table
 	include:	cards.inc
 			user.inc
+			view.inc
 			session.inc
 			3x5_db.inc
-	action:		indexM.php
+	action:		(none)
 
 login_user.php
     prompts for username and password
@@ -141,14 +166,14 @@ login_user.php
 			cards.inc
 			3x5_db.inc
 	action:		create_user.php
-			indexF.php
+			Location: index.php
 
 logout_user.php
     logs out the user and resets most values
 	include:	user.inc
 			session.inc
 			cards.inc
-	action:		Location: indexM.php
+	action:		Location: index.php
 			Location: indexM.php
 
 new_batch.php
@@ -160,7 +185,7 @@ new_batch.php
 			one_batch.inc
 	action:		new_batch.php
 
-sel_batches.php
+search_batches.php
     select which batch or set of batches for card handling
 	include:	user.inc
 			view.inc
@@ -169,6 +194,17 @@ sel_batches.php
 			many_batch.inc
 			3x5_db.inc
 	action:		Location: view_cards.php
+			Location: view_cards.php
+
+sel_batches.php
+    select which batch or set of batches for card handling
+	include:	user.inc
+			view.inc
+			session.inc
+			cards.inc
+			many_batch.inc
+			3x5_db.inc
+	action:		(none)
 
 update_user.php
 	include:	user.inc
@@ -178,6 +214,14 @@ update_user.php
 			create_update_user.inc
 	action:		(none)
 
+user_role.php
+    For the admin - change the current access level for test purposes
+	include:	user.inc
+			session.inc
+			cards.inc
+			3x5_db.inc
+	action:		Location: index.php
+
 view_cards.php
     view the individual cards as selected by the batch
 	include:	user.inc
@@ -185,4 +229,6 @@ view_cards.php
 			session.inc
 			cards.inc
 			3x5_db.inc
+			javascript.inc
 	action:		(none)
+
