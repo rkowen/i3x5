@@ -50,8 +50,7 @@ function js_one_array($arrayName = "selectOneArray", $selectd=false) {
 	$s = "var $arrayName = new Array(\n";
 
 	// list batches owned by user
-	reset($user->bids);
-	while (list($k,$v) = each ($user->bids)) {
+	foreach ($user->bids as $k => $v) {
 		if ((isset($selected) && ! $selected)
 		||   isset($v["selected"])) {
 			$s .= "new Option('{$v["batch"]}','$k'),";
@@ -79,8 +78,7 @@ function string_one_batch($selected = false) {
 		."<SELECT NAME=\"one_batch_{$this->id}\" SIZE=1>\n";
 
 	// list batches owned by user
-	reset($user->bids);
-	while (list($k,$v) = each ($user->bids)) {
+	foreach ($user->bids as $k => $v) {
 		if ((! $selected) || $v["selected"]) {
 			$s .= "<OPTION"
 			.($this->bid == $k ? " SELECTED " : " ")
@@ -139,8 +137,7 @@ function show_ops_batch() {
 function dump() {
 
 	$a = get_object_vars($this);
-	reset($a);
-	while (list($k, $v) = each($a)) {
+	foreach ($a as $k => $v) {
 		print "OneBatch->$k	= $v<br/>\n";
 	}
 }

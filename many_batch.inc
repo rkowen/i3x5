@@ -33,16 +33,14 @@ function get_many_batch() {
 	}
 	if (isset($_POST[$t]) && is_array($_POST[$t])) {
 		$tbids = $_POST[$t];
-		reset($tbids);
 		// create some local variables
 		$list = array();
-		reset($user->bids);
-		while (list($k,$v) = each($user->bids)) {
+		foreach ($user->bids as $k => $v) {
 			if ((! $selected) || $v["selected"]) {
 				$list[$k] = false;
 			}
 		}
-		while (list($k, $v) = each($tbids)) {
+		foreach ($tbids as $k => $v) {
 			$sel_ = "sel_".$v;
 			$$sel_ = true;
 			if ($v != "_NOT_" && $v != "_ALL_") {
@@ -51,8 +49,7 @@ function get_many_batch() {
 		}
 		// see if all is checked then set them all
 		if (isset($sel__ALL_)) {
-			reset($user->bids);
-			while (list($k,$v) = each($user->bids)) {
+			foreach ($user->bids as $k => $v) {
 				if ((! $selected) || $v["selected"]) {
 					$list[$k] = true;
 				}
@@ -60,8 +57,7 @@ function get_many_batch() {
 		}
 		// if not is checked then toggle them all
 		if (isset($sel__NOT_)) {
-			reset($user->bids);
-			while (list($k,$v) = each($user->bids)) {
+			foreach ($user->bids as $k => $v) {
 				if ((! $selected) || $v["selected"]) {
 					$list[$k] = ! $list[$k];
 				}
@@ -70,15 +66,13 @@ function get_many_batch() {
 		// finally put them into bids
 		unset($this->bids);
 		$this->bids = array();
-		reset($list);
-		while (list($k,$v) = each($list)) {
+		foreach ($list as $k => $v) {
 			if($v) { $this->bids[] = $k; }
 		}
 	} else { // first time in set the selected from $user
 		unset($this->bids);
 		$this->bids = array();
-		reset($user->bids);
-		while (list($k,$v) = each($user->bids)) {
+		foreach ($user->bids as $k => $v) {
 			if ($v["selected"]) {
 				$this->bids[] = $k;
 			}
@@ -90,13 +84,11 @@ function get_many_batch() {
 function set_user_selected() {
 	global $user;
 	// unset the current in $user
-	reset($user->bids);
-	while (list($k,$v) = each($user->bids)) {
+	foreach ($user->bids as $k => $v) {
 		$user->bids[$k]["selected"] = 0;
 	}
 	// set the selected ones
-	reset($this->bids);
-	while (list($k,$v) = each($this->bids)) {
+	foreach ($this->bids as $k => $v) {
 		$user->bids[$v]["selected"] = 1;
 	}
 }
@@ -110,8 +102,7 @@ function string_many_batch($selected = false) {
 	// This code snippet handles the many_batch_* SELECTED
 	$t = "many_batch_".$this->id;
 	if (is_array($this->bids)) {
-		reset($this->bids);
-		while(list($k,$v) = each($this->bids)) {
+		foreach ($this->bids as $k => $v) {
 			$sel_ = $t."_sel_".$v;
 			$$sel_ = "SELECTED";
 		}
@@ -131,8 +122,7 @@ function string_many_batch($selected = false) {
 
 PAGE;
 	// list batches owned by user
-	reset($user->bids);
-	while (list($k,$v) = each ($user->bids)) {
+	foreach ($user->bids as $k => $v) {
 		$sel_ = "many_batch_".$this->id."_sel_".$k;
 		if ((! $selected) || $v[selected]) {
 			$text .= "<option ".(isset($$sel_)?$$sel_:"")
@@ -166,12 +156,10 @@ function show_many_batch($selected = false) {
 
 function dump() {
 	$a = get_object_vars($this);
-	reset($a);
-	while (list($k, $v) = each($a)) {
+	foreach ($a as $k => $v) {
 		print "ManyBatch->$k	= $v<br/>\n";
 	}
-	reset($this->bids);
-	while (list($k, $v) = each($this->bids)) {
+	foreach ($this->bids as $k => $v) {
 		print "ManyBatch->bids[$k]	= $v<br/>\n";
 	}
 }

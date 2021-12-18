@@ -69,9 +69,8 @@ print <<<PAGE
 	<table class="form" border=1>
 PAGE;
 	print "<tr>\n";
-	reset($list);
 	$sp = "  ";
-	while(list($k,$v) = each($list)) {
+	foreach ($list as $k => $v) {
 		$hv = sendhelp($v,$help[$k]);
 		print $sp."<td class=\"h_form\">$hv</td>\n";
 		$sp .= "  ";
@@ -79,8 +78,7 @@ PAGE;
 	print "</tr>\n";
 
 // list batches owned by user
-reset($_SESSION['user']->bids);
-while (list($k,$v) = each($_SESSION['user']->bids)) {
+foreach ($_SESSION['user']->bids as $k => $v) {
 	$fn = $db->batch_fieldnames($k);
 print	row(cell(ahref("view_cards.php?view_edit=list&bid=$k",$k),
 	"class=\"h_form\" id=\"right\"")

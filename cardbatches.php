@@ -17,12 +17,11 @@ print <<<PAGE
 PAGE;
 
 $cb = $db->card_batches($user->uid,$cid);
-reset($cb);
 
 $maincard = "";
 $relcard  = "";
 
-while (list($k,$v) = each($cb)) {
+foreach ($cb as $k => $v) {
 	$x = cell($v["batch"]).cell("(".$v["bid"].")","style=\"text-align: right;\"");
 	if ($v["basecard"] == "t") {
 		$y = "style=\"bgcolor: $related_warn;\"";

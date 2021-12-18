@@ -176,8 +176,7 @@ function get_form() {
 
 	if (isset($_POST["clear"])) {
 		// clear the posted values
-		reset($this->list);
-		while(list($k,$v) = each($this->list)) {
+		foreach ($this->list as $k => $v) {
 			// clear all but username if update
 			if ($this->type != "Update" || $k != "username") {
 				$_POST[$k] = "";
@@ -186,8 +185,7 @@ function get_form() {
 		}
 	}
 	// clean-up values
-	reset($this->list);
-	while(list($k,$v) = each($this->list)) {
+	foreach ($this->list as $k => $v) {
 		if ($_POST[$k]) {
 			$$k = $this->dequote(
 				strip_tags(trim($_POST[$k])));
@@ -197,8 +195,7 @@ function get_form() {
 
 	// validate the input fields
 	$this->invalid = 0;
-	reset($this->list);
-	while(list($k,$v) = each($this->list)) {
+	foreach ($this->list as $k => $v) {
 		$check = $this->list[$k]["check"];
 		if (! $this->$check($$k, $this->list[$k]["msg"])) {
 			$this->invalid++;
@@ -224,8 +221,7 @@ function show_form($title, $helpkey) {
 	<table class="form">
 EOT;
 
-reset($this->list);
-while(list($k,$v) = each($this->list)) {
+foreach ($this->list as $k => $v) {
 	$label = sendhelp($this->list[$k]["label"],$k);
 	$msg = $this->list[$k]["msg"];
 	$ml = $this->list[$k]["maxlen"];

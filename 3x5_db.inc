@@ -213,10 +213,10 @@ function &xml_card($card_id, $indent = "") {
 	if (isset($r["id"])) {
 		$v = $r;
 	} else {
-		list($k,$v) = each($r);
+		foreach ($r as $k => $v) { break; }
 	}
 	ksort($v);
-	while (list($kk,$vv) = each($v)) {
+	foreach ($v as $kk => $vv) {
 		$buffer.=$indent."  <".$kk.">".xmlspecialchars($vv)
 		."</".$kk.">\n";
 		if ($kk == "title") {
@@ -253,7 +253,7 @@ function &xml_cards($select = "", $orderby = "", $indent = "") {
 		$r = $this->cards($select,$orderby);
 	}
 	$buffer .= $indent."  <count>".count($r)."</count>\n";
-	while (list($k,$v) = each($r)) {
+	foreach ($r as $k => $v) {
 		$buffer.=$this->xml_card($v,$indent."  ");
 	}
 	$buffer .= $indent."</xcards>\n";
@@ -292,10 +292,10 @@ function &xml_batch($batch_id, $indent = "",$card_batch = "") {
 	if (isset($r["bid"])) {
 		$v = $r;
 	} else {
-		list($k,$v) = each($r);
+		foreach ($r as $k => $v) { break; }
 	}
 	ksort($v);
-	while (list($kk,$vv) = each($v)) {
+	foreach ($v as $kk => $vv) {
 		$buffer.=$indent."  <".$kk.">".xmlspecialchars($vv)
 		."</".$kk.">\n";
 	}
@@ -321,7 +321,7 @@ function &xml_card_batch($batch_id, $indent = "",$orderby = "") {
 		$v = $r;
 		$bid = (int) $r["bid"];
 	} else {
-		list($k,$v) = each($r);
+		foreach ($r as $k => $v) { break; }
 		$bid = $k;
 	}
 	$buffer = $this->xml_batch($bid,$indent,
@@ -342,8 +342,7 @@ function &xml_card_batches(&$bids, $selected = true,
 	}
 	$buffer = "";
 	$cnt = 0;
-	reset($bids);
-	while (list($k,$v) = each($bids)) {
+	foreach ($bids as $k => $v) {
 		if ($selected && ! $v["selected"]) {
 			continue;
 		}
@@ -366,7 +365,7 @@ function &cards_ (&$bids, $selected = true) {
 	if ($selected) {
 		$list = "";
 		reset($bids);
-		while (list($k,$v) = each($bids)) {
+		foreach ($bids as $k => $v) {
 			if ($v["selected"]) { $list .= "$k,"; }
 		}
 		$list = preg_replace("/,$/","",$list);

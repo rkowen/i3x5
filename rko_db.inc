@@ -86,7 +86,7 @@ function dump () {
 function dumper ($obj, $level = 0) {
 	if (is_array($obj) || is_object($obj)) {
 		reset($obj);
-		while (list($key,$value) = each($obj)) {
+		foreach ($obj as $key => $value) {
 			for($i = 0; $i < $level; $i++) {
 				echo "  ";
 			}
@@ -233,7 +233,7 @@ function sql($q) {
 		exit;
 	}
 	if ($data = $this->fetch()) {
-		list($k,$v) = each($data);
+		foreach ($data as $k => $v) { break; }
 		return $v;
 	} else {
 		return;		// nothing (is the same as false)
@@ -299,7 +299,7 @@ function &two_col ($col1, $col2, $sql) {
 
 	$two_col = array();
 	while ($two_col_data = $this->fetch()) {
-		while (list($k,$v) = each($two_col_data)) { $$k = $v; }
+		foreach ($two_col_data as $k => $v) { $$k = $v; }
 		$two_col[$$col1] = $$col2;
 	}
 

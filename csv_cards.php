@@ -60,10 +60,9 @@ function csv_out($t) {
 	return $t;
 }
 
-reset($cards);
 $firsttime = 1;
 
-while (list($k,$v) = each($cards)) {
+foreach ($cards as $k => $v) {
 
 	if ($firsttime) {
 		// use first card batch for field names

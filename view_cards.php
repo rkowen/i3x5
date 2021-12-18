@@ -18,6 +18,7 @@ if (! isset($view)) {
 if ((! $user->selected_count()) 
 &&  (! isset($view->cards))
 &&  (! isset($_GET["bid"]))) {
+  $xx = $user->selected_count();
 	$_SESSION['view'] = new View();
 	$view =& $_SESSION['view'];
 	session_write_close();
@@ -45,8 +46,7 @@ if (isset($_POST["upd_all"])
 && $_POST["upd_all"]=="Update All Cards"
 && is_array($_POST["c_rid"])) {
 	if ($debug) { print("##### update all cards #####<br/>\n"); }
-	reset($_POST["c_rid"]);
-	while (list($k,$v) = each($_POST["c_rid"])) {
+	foreach ($_POST["c_rid"] as $k => $v) {
 		if (! $v) {
 			if ($user->level >= $level_write) {
 				$db->update_card($k,$v,
@@ -73,8 +73,7 @@ elseif (isset($_POST["upd_"])
 && is_array($_POST["upd_"])) {
 	if ($debug) { print("##### update one card #####<br/>\n"); }
 	// only one value
-	reset($_POST["upd_"]);
-	list($k,$v) = each($_POST["upd_"]);
+	foreach ($_POST["upd_"] as $k => $v) { break; }
 	if ($v == "Append") {
 		$db->append_card($k,
 			$_POST["c_rid"][$k],
@@ -112,9 +111,8 @@ elseif (isset($_POST["upd_"])
 elseif (isset($_POST["del_"])
 && is_array($_POST["del_"])) {
 	if ($debug) { print("##### delete one card #####<br/>\n"); }
-	reset($_POST["del_"]);
 	/* only one value */
-	list($k,$v) = each($_POST["del_"]);
+	foreach ($_POST["del_"] as $k => $v) { break; }
 	if ($v == "Delete" || $v == "Delete All") {
 		$db->delete_card($k);
 	}
@@ -143,8 +141,7 @@ elseif (isset($_POST["a_submit"])
 	$ops = $onebatch->get_ops_batch();
 	$bid = $onebatch->get_one_batch();
 	if ($debug) { print("##### ops=$ops bid=$bid  #####<br/>\n"); }
-	reset($_POST["c_check"]);
-	while (list($k,$v) = each($_POST["c_check"])) {
+	foreach ($_POST["c_check"] as $k => $v) {
 		$id = $k;
 		if ($ops == "DELETE") {
 			$db->delete_card($id);
@@ -178,19 +175,16 @@ if (isset($view->cards)) {
 	$cards = $view->cards;
 	// find all bids and sort them
 	$cbids = array();
-	reset($cards);
-	while(list($k,$v) = each($cards)) {
+	foreach ($cards as $k => $v) {
 		$i = $v['bid'];
 		$cbids[$i] = (isset($cbids[$i])?$cbids[$i] + 1 : 1);
 	}
 	ksort($cbids);
 	// reset the bids selected to those found in search
-	reset($user->bids);
-	foreach($user->bids as $k => $v) {
+	foreach ($user->bids as $k => $v) {
 		$user->bids[$k]["selected"] = 0;
 	}
-	reset($cbids);
-	foreach($cbids as $cbid => $cnt) {
+	foreach ($cbids as $cbid => $cnt) {
 		if ($cnt) {
 			$user->bids[$cbid]["selected"] = 1;
 		}
@@ -198,8 +192,7 @@ if (isset($view->cards)) {
 } else {
 // (Get the cards from all selected batches)
 	if ($debug) { print("##### selected batches  #####<br/>\n"); }
-	reset($user->bids);
-	while (list($k,$v) = each($user->bids)) {
+	foreach ($user->bids as $k => $v) {
 		if (isset($user->bid)) {
 			// only one batch selected from list
 			if ($user->bid == $k) {
@@ -224,8 +217,7 @@ $view->sort($cards);
 $hhead = sendhelp("{$user->project} - Card View","card view");
 
 $blist = "";
-reset($user->bids);
-while (list($k,$v) = each($user->bids)) {
+foreach ($user->bids as $k => $v) {
 	if ($v["selected"]) {
 		$blist .= " ".senddesc($v["batch"],$k,"batch")."\n";
 	}
