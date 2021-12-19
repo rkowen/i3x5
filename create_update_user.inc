@@ -137,7 +137,7 @@ function validate_username($q, &$msg) {
 	global $db;
 	// check if username is already in use
 	if ($db->sql(
-		"SELECT count(*) FROM i3x5_userpass WHERE username='".
+		"SELECT COUNT(1) FROM i3x5_userpass WHERE username='".
 		$_POST["username"]."'")) {
 		$msg = cell(warn(
 		"This user name already exists please choose another"));
@@ -151,7 +151,7 @@ function validate_weak($q, &$msg) {
 	if (! $this->validate_text($q, $msg, 6)) { return 0; }
 	if (count(preg_split("/[A-Z0-9]/",$q)) < 3) {
 		$msg = cell(warn(
-			"At least 2 capitol letters or numbers"));
+			"At least 2 capital letters or numbers"));
 		return 0;
 	}
 	return 1;
@@ -169,7 +169,6 @@ function validate_strong($q, &$msg) {
 	return 1;
 }
 
-
 //------------ active code --------------
 
 function get_form() {
@@ -185,6 +184,7 @@ function get_form() {
 		}
 	}
 	// clean-up values
+	reset($this->list);
 	foreach ($this->list as $k => $v) {
 		if ($_POST[$k]) {
 			$$k = $this->dequote(
@@ -195,6 +195,7 @@ function get_form() {
 
 	// validate the input fields
 	$this->invalid = 0;
+	reset($this->list);
 	foreach ($this->list as $k => $v) {
 		$check = $this->list[$k]["check"];
 		if (! $this->$check($$k, $this->list[$k]["msg"])) {
