@@ -253,8 +253,7 @@ if (isset($_GET["example"])) {
 //------------ clear fields (if asked) --------------
 	if (isset($_POST["clear"])) {
 		// clear the posted values
-		reset($list);
-		while(list($k,$v) = each($list)) {
+		foreach ($list as $k => $v) {
 			// clear all but name
 			if ($k != "name") {
 				$_POST[$k] = "";
@@ -264,8 +263,7 @@ if (isset($_GET["example"])) {
 		}
 	}
 //------------ clean-up and set local values --------------
-	reset($list);
-	while(list($k,$v) = each($list)) {
+	foreach ($list as $k => $v) {
 		if ($_POST[$k]) {
 			$$k = strip_tags(trim($_POST[$k]));
 			$_POST[$k] = $$k;
@@ -275,8 +273,7 @@ if (isset($_GET["example"])) {
 	// we must have at least one non-blank field
 	$non_blank = 0;
 	$invalid = 0;
-	reset($list);
-	while(list($k,$v) = each($list)) {
+	foreach ($list as $k => $v) {
 		$check = $list[$k]["check"];
 		if (isset($$k)
 		and isset($list[$k]["msg"])
@@ -381,8 +378,7 @@ print "</th>".row(
 	.cell($hlabel,"class=\"h_form\"")
 	.cell($hhelp,"class=\"h_form\""))."\n";
 
-reset($list);
-while(list($k,$v) = each($list)) {
+foreach ($list as $k => $v) {
 	$label = sendhelp($list[$k]["label"],"batch ".$k);
 	$msg = $list[$k]["msg"];
 	$ml = $list[$k]["maxlen"];

@@ -108,8 +108,7 @@ showphpinfo();
 		"passwd_w" => $level_write,
 		"passwd_a" => $level_append,
 		"passwd_r" => $level_read);
-	reset($pswd);
-	while (list($k,$v) = each($pswd)) {
+	foreach ($pswd as $k => $v) {
 		if (1 == $db->sql(
 ($db->encode ?
 			"SELECT COUNT(1) FROM i3x5_userpass ".

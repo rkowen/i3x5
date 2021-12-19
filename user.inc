@@ -29,8 +29,7 @@ class User {
 	}
 // reset array of bids
 	function update_bids (&$bids) {
-		reset($bids);
-		while (list($k,$v) = each($bids)) {
+		foreach ($bids as $k => $v) {
 			if (isset($this->bids[$k])
 			and $this->bids[$k]) {
 			  $bids[$k]["selected"] = $this->bids[$k]["selected"];
@@ -43,8 +42,7 @@ class User {
 	function selected_count() {
 		$count = 0;
 		if (isset($this->bids) && is_array($this->bids) ) {
-			reset($this->bids);
-			while (list($k,$v) = each($this->bids)) {
+			foreach ($this->bids as $k => $v) {
 				  if ($this->bids[$k]["selected"]) {$count++;}
 			}
 		}

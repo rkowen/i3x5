@@ -33,8 +33,7 @@ if (! isset($view) || ! $user->selected_count()) {
 if (isset($_POST["upd_all"])
 && $_POST["upd_all"]=="Update All Cards"
 && is_array($_POST["c_rid"])) {
-	reset($_POST["c_rid"]);
-	while (list($k,$v) = each($_POST["c_rid"])) {
+	foreach ($_POST["c_rid"] as $k => $v) {
 		if (! $v) {
 			if ($user->level >= $level_write) {
 				$db->update_card($k,$v,
@@ -59,8 +58,7 @@ if (isset($_POST["upd_all"])
 elseif (isset($_POST["upd_"])
 && is_array($_POST["upd_"])) {
 	// only one value
-	reset($_POST["upd_"]);
-	list($k,$v) = each($_POST["upd_"]);
+	foreach ($_POST["upd_"] as $k => $v) { break; };
 	if ($v == "Append") {
 		$db->append_card($k,
 			$_POST["c_rid"][$k],
@@ -96,9 +94,8 @@ elseif (isset($_POST["upd_"])
 // process a selective delete change
 elseif (isset($_POST["del_"])
 && is_array($_POST["del_"])) {
-	reset($_POST["del_"]);
 	/* only one value */
-	list($k,$v) = each($_POST["del_"]);
+	foreach ($_POST["del_"] as $k => $v) { break; };
 	if ($v == "Delete" || $v == "Delete All") {
 		$db->delete_card($k);
 	}
@@ -122,8 +119,7 @@ elseif (isset($_POST["a_submit"])
 	$onebatch = new OneBatch("a");
 	$ops = $onebatch->get_ops_batch();
 	$bid = $onebatch->get_one_batch();
-	reset($_POST["c_check"]);
-	while (list($k,$v) = each($_POST["c_check"])) {
+	foreach ($_POST["c_check"] as $k =>$v) {
 		$id = $k;
 		if ($ops == "DELETE") {
 			$db->delete_card($id);
@@ -154,8 +150,7 @@ $cards = $db->xml_card_batchs($user->bids);
 $hhead = sendhelp("{$user->project} - Card View","card view");
 
 $blist = "";
-reset($user->bids);
-while (list($k,$v) = each($user->bids)) {
+foreach ($user->bids as $k => $v) {
 	if ($v["selected"]) {
 		$blist .= " ".senddesc($v["batch"],$k,"batch")."\n";
 	}

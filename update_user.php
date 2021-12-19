@@ -45,8 +45,7 @@ FROM i3x5_userpass WHERE uid=".$user->uid
 			// echo "<pre>user = ".print_r($user)."</pre>\n";
 		}
 		// set values
-		reset($data);
-		while (list($k,$v) = each($data)) {
+		foreach ($data as $k => $v) {
 			$_POST[$k] = $db->dequote($v);
 		}
 	}
@@ -62,8 +61,7 @@ FROM i3x5_userpass WHERE uid=".$user->uid
 	&&  preg_match("/Done/", $_POST["create_update_user"])) {
 		// create query
 		$query = "UPDATE i3x5_userpass SET ";
-		reset ($cuu->list);
-		while (list($k,$v) = each($cuu->list)) {
+		foreach ($cuu->list as $k => $v) {
 			if ($k != "username") {
 				if($v["crypt"]) {
 ($db->encode ?

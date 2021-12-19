@@ -139,8 +139,7 @@ function get_buttons($n = "") {
 
 	// This code snippet handles retrieving the view_* buttons
 	// if the variables have been posted then read them in to the vars
-	reset($view_stuff);
-	while (list($k,$v) = each($view_stuff)) {
+	foreach ($view_stuff as $k => $v) {
 		$t = "view_".$v.$n;
 		if (isset($_POST[$t])) {
 			$this->$v = $_POST[$t];
@@ -261,9 +260,8 @@ if ($this->edit == "edit") {
 
 if ($this->edit == "edit") {
 //{ insert card
-	reset($user->bids);
 	// get first selected batch
-	while(list($k,$v) = each($user->bids)) {
+	foreach ($user->bids as $k => $v) {
 		if ($v["selected"]) { break; }
 	}
 	$fn = $db->batch_fieldnames($k);
@@ -293,7 +291,7 @@ if ($this->edit == "edit") {
 	,"class=\"cardview\"")))."\n";
 //}
 }
-	while (list($k,$v) = each($cards)) {
+	foreach ($cards as $k => $v) {
 		$c_nrid = $v["nrid"];
 		$c_rid = $v["rid"];
 		if ($v["rid"]) {
@@ -512,8 +510,7 @@ function session () {
 function dump() {
 
 	$a = get_object_vars($this);
-	reset($a);
-	while (list($k, $v) = each($a)) {
+	foreach ($a as $k => $v) {
 		print "\$view->$k	= $v<br/>\n";
 	}
 }
