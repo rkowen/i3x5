@@ -11,7 +11,7 @@ class Create_Update_User {
 	var $list;	// list of entries
 
 // constructor
-function Create_Update_User($type) {
+function __construct($type) {
 
 	$this->type = $type;
 	$this->invalid = 0;
