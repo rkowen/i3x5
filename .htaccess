@@ -3,7 +3,7 @@
 	DirectoryIndex index.php
 </IfModule>
 # enable this for secure communication (requires mod_ssl)
-SSLRequireSSL
+#SSLRequireSSL
 
 # Make all PHP code look like HTML
 AddType application/x-httpd-php .html
