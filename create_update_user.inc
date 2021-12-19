@@ -184,7 +184,6 @@ function get_form() {
 		}
 	}
 	// clean-up values
-	reset($this->list);
 	foreach ($this->list as $k => $v) {
 		if ($_POST[$k]) {
 			$$k = $this->dequote(
@@ -195,7 +194,6 @@ function get_form() {
 
 	// validate the input fields
 	$this->invalid = 0;
-	reset($this->list);
 	foreach ($this->list as $k => $v) {
 		$check = $this->list[$k]["check"];
 		if (! $this->$check($$k, $this->list[$k]["msg"])) {
