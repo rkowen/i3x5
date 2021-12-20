@@ -2,6 +2,14 @@
 <IfModule mod_dir.c>
 	DirectoryIndex index.php
 </IfModule>
+
+# set PostgreSQL connection URL
+# may need to have AllowOverride All in system configuration.
+<IfModule mod_env.c>
+#SetEnv	DB_CRYPT	SomeString
+#SetEnv	DATABASE_URL	postgresql://www-data:SomePassword@localhost:5432/i3x5
+</IfModule>
+
 # enable this for secure communication (requires mod_ssl)
 #SSLRequireSSL
 
@@ -12,6 +20,7 @@ AddType application/x-httpd-php .html
 #php_flag	session_gc_maxlifetime		864000
 #php_flag	session_cache_expire		14400
 
+# do not allow browsers to view these files.
 IndexIgnore *
 <Files .htacess >
 	Order allow,deny
