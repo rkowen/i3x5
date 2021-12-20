@@ -98,35 +98,13 @@ php
 php-common
 php-pgsql
 
+Which can be installed with
+	apt install php php-common php-pgsql
+
 You may want to increase the value for session.gc_maxlifetime
 in /etc/php/X.Y/apache2/php.ini .  The default time is 24 minutes.
 Increase this time and a person can be "logged" in longer.
-
-Create a file named db_connect.inc with the following lines
-or edit db_connect.template, copy to db_connect.inc changing the
-password to whatever you have used.
-If your system has the pgcrypto extenstion then you can set
-$db_encode to true and define some encryption string with $db_crypt.
-Not all webhosting services provide this as part of their basic
-service (e.g. BlueHost).
-This encodes the user passwords for the many levels.  However, note
-that the password is still stored within the database, but just
-encrypted.  So a casual browser of the database won't be able to view
-these passwords unless they have the encryption key.
-------------------------------------------------------------------------
-<?php
-//////////////////////////////////////////////////////////////////////////
-//
-// DESC: db_connect.inc
-// DESC: DB connection string
-//
-//////////////////////////////////////////////////////////////////////////
-$db_pass = "SomePassword";
-$db_connect = "user=www-data password=$db_pass dbname=i3x5 port=5432 host=localhost";
-$db_encode = false;
-$db_crypt = "SomeString";
-?>
-------------------------------------------------------------------------
+However, this can't be reliably changed if hosted elsewhere.
 
 ========================================================================
 Install the libjs-jquery-ui package and dependencies
@@ -135,6 +113,47 @@ apt install libjs-jquery-ui
 The interface now uses jQuery to dynamically set some heights and widths.
 Note that iframes default to 150x300 pixels, and no CSS appears to change
 this unless values are explicitly given.  I.e. it doesn't recognize 100%.
+
+========================================================================
+Database Connection
+
+The database connection string can be defined in a couple of ways.
+1) The .htaccess file can be used to define the DATABASE_URL and DB_CRYPT
+environment variables.  If DB_CRYPT is set then it's automatically assumed
+encryption is enabled. (This sets $db_encode .) 
+
+If you use Heroku there is no need to edit the .htaccess file and define
+the DATABASE_URL.  This is defined for you already when you created the
+PostgreSQL addon with something like:
+
+	heroku addons:create --app i3x5 heroku-postgresql:hobby-dev
+
+The DB_CRYPT environment variable is defined for your i3x5 app with
+something like this:
+
+	heroku config:set DB_CRYPT=SomeString
+
+If you're using environment variables, then there's no need to edit
+the given db_connect.inc file.
+
+2) If environment variables are not used then you will need to edit
+db_connect.inc and give the database password and connection values
+there.  The db_connect.inc has an example of the keyword type of
+connection string.  .htaccess has an example of the postgresql URL connection
+string.
+
+In either case if your system has the pgcrypto extenstion then you can set
+$db_encode to true and define some encryption string with $db_crypt.
+
+Not all webhosting services provide this as part of their basic
+service (e.g. BlueHost).
+This encodes the user passwords for the many levels.  However, note
+that passwords are still stored within the database, but just
+encrypted.  So a casual browser of the database won't be able to view
+these passwords unless they have the encryption key.
+
+The extra/ directory has convenient SQL scripts for converting from
+encoded to unencoded or back.
 
 ========================================================================
 

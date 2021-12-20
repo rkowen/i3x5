@@ -73,8 +73,8 @@ function __construct ($schema = "3x5") {
 	parent::__construct($schema);
 	$this->dbconn = pg_Connect($this->connect);
 	if (!$this->dbconn) {
-		$this->errmsg.="Can't connect as ".
-			"(".$this->connect.")";
+		// let the parent be specific
+		$this->errmsg.="--- Can't connect ---";
 		$this->errno=-1;
 		return false;
 	}

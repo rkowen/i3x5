@@ -221,14 +221,14 @@ function sql($q) {
 	}
 	if (! $this->query($q)) {
 		if ($this->showerr) {
-		print "RKO_DB::sql->query:".$this->errmsg()."<br/>\n"; 
+			print "RKO_DB::sql->query:".$this->errmsg()."<br/>\n"; 
 		} else { print "QUERY error 0<br/>\n"; }
 		exit;
 	}
 
 	if (! $this->exec()) {
 		if ($this->showerr) {
-		print "RKO_DB::sql->exec:".$this->errmsg()."<br/>\n";
+			print "RKO_DB::sql->exec:".$this->errmsg()."<br/>\n";
 		} else { print "EXEC error 0<br/>\n"; }
 		exit;
 	}
