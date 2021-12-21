@@ -19,6 +19,7 @@ CREATE TABLE i3x5_userpass (
 	uid		SERIAL,			-- internal userid
 	project		TEXT DEFAULT '3x5 Cards',-- project name
 	username	TEXT,			-- username
+	xusername	BYTEA,			-- project encrypted username
 	passwd_admin	TEXT,			-- admin password
 	xpasswd_admin	BYTEA,			-- admin password encrypted
 	passwd_w	TEXT,			-- full-write password
@@ -31,7 +32,7 @@ CREATE TABLE i3x5_userpass (
 	email		TEXT,			-- email for notification
 	challenge	TEXT,			-- secure reminder
 	response	TEXT,			-- secure authentication
-	crypthint	TEXT,			-- hint for data encryption
+	crypthint	TEXT,			-- hint for project encryption
 	createdate	timestamp DEFAULT now(),
 	moddate		timestamp DEFAULT now(),
 	PRIMARY KEY(uid)

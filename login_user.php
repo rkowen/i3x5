@@ -14,8 +14,10 @@
 	if (isset($_POST["clear"])) {
 		$_POST["username"] = "";
 		$_POST["passwd"] = "";
+		$_POST["projcrypt"] = "";
 		$username = "";
 		$passwd = "";
+		$projcrypt = "";
 		$login_user = 0;
 	}
 	if (isset($_POST["username"])) {
@@ -28,6 +30,11 @@
 	} else {
 		$passwd = "";
 	}
+	if (isset($_POST["projcrypt"])) {
+		$projcrypt = strip_tags(trim($_POST["projcrypt"]));
+	} else {
+		$projcrypt = "";
+	}
 	if (isset($_GET["access"])) {
 		$username = $user->uname;
 		$passwd = "";
@@ -37,13 +44,16 @@
 	}
 
 	function not_logged_in ($q) {
+		global $db;
 		global $username;
 		global $passwd;
+		global $projcrypt;
 		global $project;
 		global $version;
 		$hlogin = sendhelp("$project - Login","login");
 		$husername = sendhelp("Username","login username");
 		$hpassword = sendhelp("Password","login password");
+		$hprojcrypt = sendhelp("Crypt Key","login crypt");
 		$q = warn($q);
 
 		card_head("User Login");
@@ -56,9 +66,14 @@ NOT_LOGGED_IN;
 print table(row(head(
 	form($_SERVER['PHP_SELF'],
 	table(	row(cell($husername,"class=\"h_form\"")
-		.cell(input("text","username",$username,"size=25")))
+		.cell(input("text","username",$username,"size=35")))
 		.row(cell($hpassword,"class=\"h_form\"")
-		.cell(input("password","passwd",$passwd,"size=25")))
+		.cell(input("password","passwd",$passwd,"size=35")))
+		.
+($db->encode
+?		row(cell($hprojcrypt,"class=\"h_form\"")
+		.cell(input("password","projcrypt",$projcrypt,"size=35")))
+:		"")
 		.row(head(
 			input("submit","submit","Login")
 			.input("reset","reset","Reset")
@@ -81,16 +96,16 @@ showphpinfo();
 	card_foot();
 }
 
+// get DB object and service parameters
+	include_once "3x5_db.inc";
+	$db = new i3x5_DB($schema);
+
 // if coming to reset login
 	if (! isset($_POST["username"])) {
 		not_logged_in(
 		"Please fill in fields to login into \"$project\"");
 		return;
 	}
-
-// if valid user then go to frames
-	include_once "3x5_db.inc";
-	$db = new i3x5_DB($schema);
 
 // see if the username matches then proceed
 	$uid = $db->sql(
@@ -123,6 +138,17 @@ showphpinfo();
 		}
 	}
 
+// find whether projcrypt is valid
+if ($db->encode) {
+	$isprojcrypt = $db->sql(
+		"SELECT COUNT(1) FROM i3x5_userpass
+		WHERE uid = $uid
+		AND '$username' = pgp_sym_decrypt(xusername,'$projcrypt')"
+	);
+} else {
+	$isprojcrypt = 0;
+}
+
 	if ($access_level) {
 
 		$project = $db->sql(
@@ -130,6 +156,7 @@ showphpinfo();
 			"WHERE username='$username'");
 		$_SESSION['user']
 			= New User($uid, $username,$access_level,$project,
+				($isprojcrypt ? $projcrypt : ""),
 				$db->bids($uid));
 
 		header("Location: index.php");

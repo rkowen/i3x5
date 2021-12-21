@@ -15,6 +15,15 @@ The "password" given to you by the administrator
 determines what level of access you have to the project.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'login crypt','
+The "Crypt Key" is given to you by the administrator
+for encrypting/decrypting of those cards and batches which
+require encrypted confidentiality.
+This string is _not_ stored in the 3x5 database, but is only
+available to this session.
+You can skip the key here and input it later (with a hint).
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'logout','
 Logout as this user, then you can re-login as the same
 user with a different password (and access level)

@@ -7,7 +7,10 @@
 if (isset($user)) {
 	print "<b>".$user->project."</b><br/>\n"
 		."username: <b>{$user->uname}</b><br/>\n"
-		."access: <b>{$level_names[$user->level]}</b>\n";
+		."access: <b>{$level_names[$user->level]}</b><br/>\n"
+		."crypt key: <b>"
+		.(strlen($user->crypt)?"valid":"invalid")
+		."</b>\n";
 }
 
 print "<ul>\n";
