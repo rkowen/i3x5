@@ -10,9 +10,9 @@
 #SetEnv	DATABASE_URL	postgresql://www-data:SomePassword@localhost:5432/i3x5
 </IfModule>
 
-RewriteEngine	On
-RewriteCond	%{HTTPS} off
-RewriteRule	^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#RewriteEngine	On
+#RewriteCond	%{HTTPS} off
+#RewriteRule	^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # enable this for secure communication (requires mod_ssl)
 # not needed if RewriteEngine is on
