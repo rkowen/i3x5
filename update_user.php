@@ -85,7 +85,8 @@ FROM i3x5_userpass WHERE uid=".$user->uid
 		// print "query = $query<br/>\n";
 		// print "result = $result<br/>\n";
 
-		$cuu->show_form($user->project." - Update User", "update user");
+		$cuu->show_form($user->project." - Update User Project",
+			"update user");
 
 		if (isset($result)) {
 			print <<<EOT
@@ -108,7 +109,8 @@ Click on a menu item to the left to do something else.
 EOT;
 	} else {
 
-		$cuu->show_form($user->project." - Update User", "update user");
+		$cuu->show_form($user->project." - Update User Project",
+			"update user");
 		print <<<EOT
 
 </center>

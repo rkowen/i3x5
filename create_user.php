@@ -35,7 +35,7 @@ $_POST["response"]."')"
 		return;
 	} else {
 
-	$cuu->show_form("Create User", "create user");
+	$cuu->show_form("Create User Project", "create user");
 
 print <<<NOT_CREATED
 </center>
