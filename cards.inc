@@ -49,8 +49,10 @@ SCRIPT;
 		global $_SERVER;
 		global $_GET;
 		global $user;
-	// can't redirect if already in login_user.php or giving helpful info
+	// can't redirect if already in login_user.php/create_user.php
+	//  or giving helpful info
 		if ((!preg_match("/login_user.php/", $_SERVER["SCRIPT_NAME"])
+		&& (!preg_match("/create_user.php/", $_SERVER["SCRIPT_NAME"]))
 		&& (!preg_match("/indexH.php/", $_SERVER["SCRIPT_NAME"]))
 		&& (!isset($user, $user->uid)))) {
 				header("Location: login_user.php");

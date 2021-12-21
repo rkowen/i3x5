@@ -67,7 +67,7 @@ print table(row(head(
 		,"colspan=2"))
 	,"class=\"form\"")
 	.row(head(form("create_user.php",
-		input("submit","create_update_user","Create User")
+		input("submit","create_update_user","Create User Project")
 	)))
 ))),"class=\"tight\"");
 print <<<NOT_LOGGED_IN
