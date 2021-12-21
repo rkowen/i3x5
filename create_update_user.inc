@@ -29,6 +29,18 @@ function __construct($type) {
 		"maxlen"=> 100,
 		"crypt"	=> false,
 		"msg"	=> ""),
+	"projcrypt"	=> array(
+		"label"	=> "Project Crypt Key",
+		"check"	=> "validate_0",
+		"maxlen"=> 100,
+		"crypt"	=> false,
+		"msg"	=> "Not stored in 3x5 DB"),
+	"projcrypthint"	=> array(
+		"label"	=> "Project Crypt Key Hint",
+		"check"	=> "validate_0",
+		"maxlen"=> 100,
+		"crypt"	=> false,
+		"msg"	=> ""),
 	"passwd_admin"	=> array(
 		"label"	=> "Password - Admin",
 		"check"	=> "validate_strong",
@@ -111,6 +123,10 @@ function validate_length($q, &$msg, $num = 3) {
 		return 0;
 	}
 	return 1;
+}
+
+function validate_0($q, &$msg) {
+	return $this->validate_length($q, $msg, 0);
 }
 
 // no white space is allowed in the text
@@ -209,6 +225,7 @@ function get_form() {
 //------------ non-active code --------------
 
 function show_form($title, $helpkey) {
+	global $db;
 
 	$thelp = sendhelp($title,$helpkey);
 	card_head($title);
@@ -225,7 +242,11 @@ foreach ($this->list as $k => $v) {
 	$msg = $this->list[$k]["msg"];
 	$ml = $this->list[$k]["maxlen"];
 
-	if ($this->type=="Update" && $k == "username") {
+	if ((($k == "projcrypt" || $k == "projcrypthint"))
+	&& ($this->type == "Update" || !($db->encode))) {
+		continue;
+	}
+	if ($this->type == "Update" && $k == "username") {
 		print row(cell($label,"class=\"h_form\"")."\n	".
 		cell(input("hidden",$k,$_POST[$k]).$_POST[$k])
 			.$msg)."\n";
