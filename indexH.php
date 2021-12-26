@@ -13,6 +13,9 @@
 	if (isset($_GET["help"])) {
 		$help = $_GET["help"];
 	}
+	if (isset($_GET["hint"])) {
+		$hint = $_GET["hint"];
+	}
 	card_head("Help Frame","helptext",0);
 
 	include_once "3x5_db.inc";
@@ -27,6 +30,10 @@
 		print "<h4>Project Help</h4>\n";
 		print "<p class=\"help\">"
 			.help($db->helpdesc($bid,$property))."</p>\n";
+	} elseif (isset($hint) && isset($user, $user->uid)) {
+		print "<h4>Project $hint Hint</h4>\n";
+		print "<p class=\"help\">"
+			.help($db->helphint($user->uid,$hint))."</p>\n";
 	} else {
 		print "<h4>Project Disconnected</h4>\n";
 		print ahref("login_user.php?login=Login+User",

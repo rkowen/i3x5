@@ -7,16 +7,19 @@ class User {
 	public $uname;
 	public $level;
 	public $reallevel;
+	public $project;
+	public $crypt;
 	public $bids;	// hash array of hash arrays
 			// (bid1=>("bid"=> ,"batch"=> ,"selected"=> ), ...)
 
 // constructor
-	function __construct($uid, $uname, $level, $project, &$bids) {
+	function __construct($uid,$uname,$level,$project,$projcrypt, &$bids) {
 		$this->uid   = $uid;
 		$this->uname = $uname;
 		$this->level = $level;
 		$this->reallevel = $level;
 		$this->project = $project;
+		$this->crypt = $projcrypt;
 		$this->bids = $bids;
 	}
 

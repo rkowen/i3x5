@@ -4,11 +4,13 @@
 	session_start();
 	include_once "session.inc";
 	include_once "cards.inc";
+	include_once "3x5_db.inc";
 
 	card_head("Main Frame");
 
 	if (isset($user)) {
-	print <<<PAGE
+		$db = new i3x5_DB($schema);
+		print <<<PAGE
 <h2>"{$user->project}" - results</h2>
 This the "{$user->project}" results frame
 <p>
@@ -16,6 +18,14 @@ Click any of the links in the left frames and the subsequent
 actions will be shown in this frame.
 </p>
 PAGE;
+		if ($db->encode && !strlen($user->crypt)) {
+	$invalid = ahref("crypt_user.php","invalid","target=\"main\"");
+			print <<<NOCRYPT
+<p>
+The crypt key given is $invalid (click here to set).
+</p>
+NOCRYPT;
+		}
 	} else {
 	print <<<PAGE
 <h2>Please Login</h2>

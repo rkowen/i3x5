@@ -4,7 +4,7 @@
 // values
 //
 	$schema		= "i3x5";
-	$version	= "0.8.1";
+	$version	= "0.8.2";
 	$phpinfo	= 0;	// set non-zero for phpinfo
 	$form_color	= "#D0D0D0";
 	$level_root	= 99;
@@ -63,7 +63,7 @@ SCRIPT;
 		print <<<HEAD
 <head>
 HEAD;
-		if ($title != "") {
+		if (strlen($title)) {
 			print <<<TITLE
 <title>
 $title
@@ -186,6 +186,12 @@ END;
 	function senddesc($text, $bid, $property) {
 		return "<a class=\"help\" href=\"indexH.php"
 			."?bid=$bid&property=$property"
+			."\" target=\"helptext\">"
+			."$text</a>\n";
+	}
+	function sendhint($text, $hint) {
+		return "<a class=\"help\" href=\"indexH.php"
+			."?hint=$hint"
 			."\" target=\"helptext\">"
 			."$text</a>\n";
 	}

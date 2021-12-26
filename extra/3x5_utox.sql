@@ -17,10 +17,12 @@ BEGIN
 BEGIN
 	CREATE EXTENSION pgcrypto;
 EXCEPTION
-	WHEN OTHERS THEN
+	-- ERROR:  42710: extension "pgcrypto" already exists
+	WHEN duplicate_object THEN
 	-- do nothing --
 		RAISE NOTICE 'pgcrypto already installed';
 END;
+
 	UPDATE i3x5_userpass
 	SET	xpasswd_admin	= pgp_sym_encrypt(passwd_admin,cryptstr),
 		xpasswd_w	= pgp_sym_encrypt(passwd_w,cryptstr),
