@@ -128,7 +128,7 @@ showphpinfo();
 ($db->encode ?
 			"SELECT COUNT(1) FROM i3x5_userpass ".
 			"WHERE username='$username' ".
-			"AND pgp_sym_decrypt(x$k,'{$db->crypt}')='$passwd'"
+			"AND pgp_safe_decrypt(x$k,'{$db->crypt}')='$passwd'"
 :
 			"SELECT COUNT(1) FROM i3x5_userpass ".
 			"WHERE username='$username' ".
@@ -139,11 +139,11 @@ showphpinfo();
 	}
 
 // find whether projcrypt is valid
-if ($db->encode) {
+if ($db->encode && strlen($projcrypt)) {
 	$isprojcrypt = $db->sql(
 		"SELECT COUNT(1) FROM i3x5_userpass
 		WHERE uid = $uid
-		AND '$username' = pgp_sym_decrypt(xusername,'$projcrypt')"
+		AND '$username' = pgp_safe_decrypt(xusername,'$projcrypt')"
 	);
 } else {
 	$isprojcrypt = 0;

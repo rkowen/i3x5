@@ -5,11 +5,12 @@
 	include_once "session.inc";
 
 if (isset($user)) {
+	$invalid = ahref("crypt_user.php","invalid","target=\"main\"");
 	print "<b>".$user->project."</b><br/>\n"
 		."username: <b>{$user->uname}</b><br/>\n"
 		."access: <b>{$level_names[$user->level]}</b><br/>\n"
 		."crypt key: <b>"
-		.(strlen($user->crypt)?"valid":"invalid")
+		.(strlen($user->crypt)?"valid":$invalid)
 		."</b>\n";
 }
 

@@ -607,5 +607,11 @@ function helpdesc($bid,$property) {
 	return ($t ? $t : "No Description");
 }
 
+function helphint($uid, $property = "Crypt") {
+	$x = strtolower($property);
+	$t = $this->sql(
+"SELECT {$x}hint FROM i3x5_userpass WHERE uid=$uid");
+	return ($t ? $t : "No Hint");
+}
 }// end of 3x5_DB
 ?>

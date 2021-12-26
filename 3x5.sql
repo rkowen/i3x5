@@ -2,10 +2,35 @@ DO $$
 BEGIN
 	CREATE EXTENSION pgcrypto;
 EXCEPTION
-	WHEN OTHERS THEN
+	-- ERROR:  42710: extension "pgcrypto" already exists
+	WHEN duplicate_object THEN
 	-- do nothing --
 		RAISE NOTICE 'pgcrypto already installed';
 END $$;
+
+CREATE OR REPLACE
+FUNCTION pgp_safe_decrypt(data BYTEA, psw TEXT, opts TEXT DEFAULT '')
+RETURNS TEXT AS $$
+BEGIN
+	RETURN pgp_sym_decrypt(data, psw, opts);
+-- catch exception due to stackoverflow/Craig Ringer
+EXCEPTION
+WHEN external_routine_invocation_exception THEN
+	RAISE DEBUG USING
+		MESSAGE = format('Decryption failed: SQLSTATE %s, Msg: %s',
+			SQLSTATE,SQLERRM),
+		HINT = 'pgp_sym_encrypt(...) failed; check your key',
+		ERRCODE = 'external_routine_invocation_exception';
+	RETURN NULL;
+WHEN undefined_function THEN
+	RAISE DEBUG USING
+		MESSAGE = format('Decryption failed: SQLSTATE %s, Msg: %s',
+			SQLSTATE,SQLERRM),
+		HINT = 'pgp_sym_encrypt(...) does not exist',
+		ERRCODE = 'undefined_function';
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
 
 DROP TABLE i3x5_cards;
 DROP TABLE i3x5_batch;
