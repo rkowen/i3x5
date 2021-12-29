@@ -60,6 +60,21 @@ INSERT INTO i3x5_help (key,help) VALUES ( 'project','
 The project name is the descriptive title for the project.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'projcrypt','
+The "Project Crypt Key" is used by the 3x5 database application
+for encrypting/decrypting those cards and batches which
+require encrypted confidentiality.
+However this string is _not_ stored in the 3x5 database, but must
+be given by the user when logging in to a session.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'projcrypthint','
+This hint should relate to the "Project Crypt Key", but not
+give it out directly.  So it needs to be descriptive enough
+for your knowledgeable user to remember what it should be,
+but not easy enough for someone else to guess it.
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'passwd_root','
 The root password for the 3x5 database ...
 DO NOT FORGET THIS PASSWORD!
