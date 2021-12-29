@@ -16,6 +16,8 @@ function __construct($type) {
 	$this->type = $type;
 	$this->invalid = 0;
 
+	$db = new i3x5_DB($schema);
+
 	$this->list = array(
 	"username"	=> array(
 		"label"	=>"User Name",
@@ -26,18 +28,6 @@ function __construct($type) {
 	"project"	=> array(
 		"label"	=> "Project Name",
 		"check"	=> "validate_length",
-		"maxlen"=> 100,
-		"crypt"	=> false,
-		"msg"	=> ""),
-	"projcrypt"	=> array(
-		"label"	=> "Project Crypt Key",
-		"check"	=> "validate_0",
-		"maxlen"=> 100,
-		"crypt"	=> false,
-		"msg"	=> "Not stored in 3x5 DB"),
-	"projcrypthint"	=> array(
-		"label"	=> "Project Crypt Key Hint",
-		"check"	=> "validate_0",
 		"maxlen"=> 100,
 		"crypt"	=> false,
 		"msg"	=> ""),
@@ -89,6 +79,22 @@ function __construct($type) {
 		"crypt"	=> false,
 		"msg"	=> "")
 	);
+	if ($db->encode) {
+		$this->list["projcrypt"] = array(
+			"label"	=> "Project Crypt Key",
+			"check"	=> "validate_crypt",
+			"maxlen"=> 100,
+			"crypt"	=> false,
+			"msg"	=> ""
+		);
+		$this->list["projcrypthint"] = array(
+			"label"	=> "Project Crypt Key Hint",
+			"check"	=> "validate_hint",
+			"maxlen"=> 100,
+			"crypt"	=> false,
+			"msg"	=> ""
+		);
+	}
 }
 
 // methods
@@ -98,10 +104,13 @@ function dequote($q) {
 	return preg_replace("/\\\\'/","'",$q);
 }
 
-function validate_name($q, &$msg ) {
+function msg($q) {
+	return cell(warn($q),"style=\"text-align: left\"");
+}
 
+function validate_name($q, &$msg ) {
 	if (strlen($q) < 3) {
-		$msg = cell(warn("Please give your name"));
+		$msg = $this->msg("Please give your name");
 		return 0;
 	}
 	return 1;
@@ -109,7 +118,7 @@ function validate_name($q, &$msg ) {
 
 function validate_email($q, &$msg ) {
 	if (!preg_match("/[^@]{1,}@[^\.]{1,}\.[a-zA-Z0-9_-]{1,}/",$q)){
-		$msg = cell(warn("Please give your email address"));
+		$msg = $this->msg("Please give your email address");
 		return 0;
 	}
 	return 1;
@@ -117,23 +126,34 @@ function validate_email($q, &$msg ) {
 
 // Must be of some length
 function validate_length($q, &$msg, $num = 3) {
-
 	if (strlen($q) < $num) {
-		$msg = cell(warn("must be at least $num characters"));
+		$msg = $this->msg("must be at least $num characters");
 		return 0;
 	}
 	return 1;
 }
 
-function validate_0($q, &$msg) {
-	return $this->validate_length($q, $msg, 0);
+function validate_crypt($q, &$msg) {
+	if (strlen($q) < 3) {
+		$msg = $this->msg("longer is better for encryption");
+		return 0;
+	}
+	return 1;
+}
+
+function validate_hint($q, &$msg) {
+	if (strlen($q) < 3) {
+		$msg = $this->msg("a signicant encryption key hint");
+		return 0;
+	}
+	return 1;
 }
 
 // no white space is allowed in the text
 function validate_text($q, &$msg, $num = 3) {
 
 	if (count(preg_split("/\s/",$q)) > 1) {
-		$msg = cell(warn("No white space allowed"));
+		$msg = $this->msg("No white space allowed");
 		return 0;
 	}
 	if (! $this->validate_length($q, $msg, $num)) { return 0; }
@@ -145,7 +165,8 @@ function validate_username($q, &$msg) {
 
 	// can't change the username if doing an update
 	if ($this->type == "Update") {
-		$msg = cell(inform("Can't change username"));
+		$msg = cell(inform("Can't change username"),
+			"style[\"text-align: left\"");
 		return 1;
 	}
 	if (! $this->validate_text($q, $msg, 3)) { return 0; }
@@ -155,8 +176,8 @@ function validate_username($q, &$msg) {
 	if ($db->sql(
 		"SELECT COUNT(1) FROM i3x5_userpass WHERE username='".
 		$_POST["username"]."'")) {
-		$msg = cell(warn(
-		"This user name already exists please choose another"));
+		$msg = $this->msg(
+		"This user name already exists please choose another");
 		return 0;
 	}
 	return 1;
@@ -166,8 +187,8 @@ function validate_username($q, &$msg) {
 function validate_weak($q, &$msg) {
 	if (! $this->validate_text($q, $msg, 6)) { return 0; }
 	if (count(preg_split("/[A-Z0-9]/",$q)) < 3) {
-		$msg = cell(warn(
-			"At least 2 capital letters or numbers"));
+		$msg = $this->msg(
+			"At least 2 capital letters or numbers");
 		return 0;
 	}
 	return 1;
@@ -178,8 +199,8 @@ function validate_strong($q, &$msg) {
 	if (! $this->validate_weak($q, $msg)) { return 0; }
 	$q = preg_replace("/[^a-z]/",":",$q);
 	if (count(preg_split('/:/',$q)) < 4) {
-		$msg = cell(warn(
-		"Must have at least 3 non-lower case characters"));
+		$msg = $this->msg(
+		"Must have at least 3 non-lower case characters");
 		return 0;
 	}
 	return 1;

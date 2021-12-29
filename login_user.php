@@ -11,15 +11,6 @@
 	include_once "cards.inc";
 	$project = "3x5 Cards";
 
-	if (isset($_POST["clear"])) {
-		$_POST["username"] = "";
-		$_POST["passwd"] = "";
-		$_POST["projcrypt"] = "";
-		$username = "";
-		$passwd = "";
-		$projcrypt = "";
-		$login_user = 0;
-	}
 	if (isset($_POST["username"])) {
 		$username = strip_tags(trim($_POST["username"]));
 	} else {
@@ -43,20 +34,20 @@
 		$_GET["access"] = preg_replace("/\.access/","",$_GET["access"]);
 	}
 
-	function not_logged_in ($q) {
-		global $db;
-		global $username;
-		global $passwd;
-		global $projcrypt;
-		global $project;
-		global $version;
-		$hlogin = sendhelp("$project - Login","login");
-		$husername = sendhelp("Username","login username");
-		$hpassword = sendhelp("Password","login password");
-		$hprojcrypt = sendhelp("Crypt Key","login crypt");
-		$q = warn($q);
+function not_logged_in ($q) {
+	global $db;
+	global $username;
+	global $passwd;
+	global $projcrypt;
+	global $project;
+	global $version;
+	$hlogin = sendhelp("$project - Login","login");
+	$husername = sendhelp("Username","login username");
+	$hpassword = sendhelp("Password","login password");
+	$hprojcrypt = sendhelp("Crypt Key","login crypt");
+	$q = warn($q);
 
-		card_head("User Login");
+	card_head("User Login");
 print <<<NOT_LOGGED_IN
 $hlogin
 <br/>
@@ -72,26 +63,25 @@ print table(row(head(
 		.
 ($db->encode
 ?		row(cell($hprojcrypt,"class=\"h_form\"")
-		.cell(input("password","projcrypt",$projcrypt,"size=35")))
+		.cell(input("text","projcrypt",$projcrypt,"size=35")))
 :		"")
 		.row(head(
 			input("submit","submit","Login")
 			.input("reset","reset","Reset")
-			.input("submit","clear","Clear")
 			.input("hidden","login_user","1")
 		,"colspan=2"))
-	,"class=\"form\"")
+	,"class=\"form\""))
 	.row(head(form("create_user.php",
 		input("submit","create_update_user","Create User Project")
 	)))
-))),"class=\"tight\"");
+)),"class=\"tight\"");
 print <<<NOT_LOGGED_IN
 $q
 </center>
 <p>
 NOT_LOGGED_IN;
 
-showphpinfo();
+	showphpinfo();
 
 	card_foot();
 }

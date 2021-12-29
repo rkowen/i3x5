@@ -15,19 +15,61 @@
 
 	if (preg_match("/Done/", $_POST["create_update_user"])) {
 // it looks like have valid input ... now ship it off to the DB
+if ($db->encode) {
+		$x = $db->crypt;
+		$y = clean($_POST["projcrypt"]);
 		$db->sql(
-"INSERT INTO i3x5_userpass (username,passwd_admin,passwd_w,passwd_a,passwd_r,".
-"author,email,challenge,response) VALUES ('".
-$_POST["username"]."','".
-$_POST["passwd_admin"]."','".
-$_POST["passwd_w"]."','".
-$_POST["passwd_a"]."','".
-$_POST["passwd_r"]."','".
-$_POST["author"]."','".
-$_POST["email"]."','".
-$_POST["challenge"]."','".
-$_POST["response"]."')"
+"INSERT INTO i3x5_userpass (
+	username,
+	xusername,
+	xpasswd_admin,
+	xpasswd_w,
+	xpasswd_a,
+	xpasswd_r,
+	author,
+	email,
+	challenge,
+	response,
+	crypthint
+) VALUES (
+	'".$db->escape(clean($_POST["username"]))."',
+	pgp_sym_encrypt('".clean($_POST["username"])."','$y'),
+	pgp_sym_encrypt('".clean($_POST["passwd_admin"])."','$x'),
+	pgp_sym_encrypt('".clean($_POST["passwd_w"])."','$x'),
+	pgp_sym_encrypt('".clean($_POST["passwd_a"])."','$x'),
+	pgp_sym_encrypt('".clean($_POST["passwd_r"])."','$x'),
+	'".$db->escape(clean($_POST["author"]))."',
+	'".$db->escape(clean($_POST["email"]))."',
+	'".$db->escape(clean($_POST["challenge"]))."',
+	'".$db->escape(clean($_POST["response"]))."',
+	'".$db->escape(clean($_POST["projcrypthint"]))."'
+)"
 		);
+} else {
+		$db->sql(
+"INSERT INTO i3x5_userpass (
+	username,
+	passwd_admin,
+	passwd_w,
+	passwd_a,
+	passwd_r,
+	author,
+	email,
+	challenge,
+	response
+) VALUES (
+	'".$db->escape(clean($_POST["username"]))."',
+	'".$db->escape(clean($_POST["passwd_admin"]))."',
+	'".$db->escape(clean($_POST["passwd_w"]))."',
+	'".$db->escape(clean($_POST["passwd_a"]))."',
+	'".$db->escape(clean($_POST["passwd_r"]))."',
+	'".$db->escape(clean($_POST["author"]))."',
+	'".$db->escape(clean($_POST["email"]))."',
+	'".$db->escape(clean($_POST["challenge"]))."',
+	'".$db->escape(clean($_POST["response"]))."'
+)"
+		);
+}
 
 // have set-up a new user ... now roll over to login_user which will
 // validate and pass off to frames
