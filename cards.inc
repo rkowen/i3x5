@@ -4,7 +4,7 @@
 // values
 //
 	$schema		= "i3x5";
-	$version	= "0.8.2";
+	$version	= "0.8.2.1";
 	$phpinfo	= 0;	// set non-zero for phpinfo
 	$form_color	= "#D0D0D0";
 	$level_root	= 99;
@@ -51,10 +51,10 @@ SCRIPT;
 		global $user;
 	// can't redirect if already in login_user.php/create_user.php
 	//  or giving helpful info
-		if ((!preg_match("/login_user.php/", $_SERVER["SCRIPT_NAME"])
-		&& (!preg_match("/create_user.php/", $_SERVER["SCRIPT_NAME"]))
-		&& (!preg_match("/indexH.php/", $_SERVER["SCRIPT_NAME"]))
-		&& (!isset($user, $user->uid)))) {
+		if ((!preg_match("/login_user.php/", $_SERVER["SCRIPT_NAME"]))
+		&&  (!preg_match("/create_user.php/", $_SERVER["SCRIPT_NAME"]))
+		&&  (!preg_match("/indexH.php/", $_SERVER["SCRIPT_NAME"]))
+		&&  (!isset($user, $user->uid))) {
 				header("Location: login_user.php");
 		}
 
@@ -98,6 +98,12 @@ END;
 			print "<pre>".print_r($_SESSION)."</pre><br/>\n";
 		}
 	}
+	function clean($data) {
+		$data = trim($data);
+		$data = stripslashes($data);
+		$data = htmlspecialchars($data);
+		return $data;
+	}
 	function warn($q) {
 		return "<em class=\"warn\">$q</em>";
 	}
@@ -123,7 +129,8 @@ END;
 		return "<td $op>$q</td>\n";
 	}
 	function form($action, $q, $op="") {
-		return "<form action=\"$action\" method=\"POST\" $op>"
+		return "<form action=\"".htmlspecialchars($action)
+		."\" method=\"POST\" $op>"
 		."$q</form>\n";
 	}
 	function input($type, $name, $value, $op="") {

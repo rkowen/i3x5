@@ -16,6 +16,7 @@ class RKO_DB {
 	public $pass;
 	public $encode;			// whether to use encryption or not
 	public $crypt;			// encrypt/decrypt string for passwords
+	public $prepared;		// array of prepared query names
 	public $query;
 	public $debug;
 	public $showerr;
@@ -47,6 +48,7 @@ function __construct ($schema) {
 	$this->pass = $db_pass;
 	$this->encode = $db_encode;
 	$this->crypt = $db_crypt;
+	$this->prepared = array();
 	$this->dbconn = pg_connect($this->connect);
 	if (!$this->dbconn) {
 		$this->errmsg
@@ -152,6 +154,41 @@ function errmsg () {
 //////////////////////////////////////////////////////////////////////////
 // methods
 //////////////////////////////////////////////////////////////////////////
+// prepare a query
+function prepare ($query, $statement_name = "_none_") {
+	if ($this->debug > 0) {
+		echo "RKO_DB::prepare($query,$statement_name)<br/>\n";
+	}
+	$this->prepared[$statement_name] = $query;
+	return pg_prepare($this->dbonn, $query);
+}
+
+// execute the prepared query and return true or false
+// the input is an array of values (no need to clean values either)
+function execprep ($inarray, $statement_name = "_none_") {
+	if ($this->debug > 0) {
+		print_r($inarray,$instr);
+		echo "RKO_DB::execp($instr,$statement_name)<br/>\n";
+	}
+	$this->dbresult = pg_execute($this->dbconn, $statement_name, $inarray);
+	if (!$this->dbresult) {
+		$this->errmsg.="failed exec of execute("
+			.str_replace($this->crypt,"#######",$this->query).")";
+		$this->errno=-2;
+		return false;
+	}
+	$this->dbrow = 0;
+	// can't rely on all RDBS to give num of rows
+	$this->dbfnum = pg_num_fields($this->dbresult);
+	$this->dbrnum = pg_num_rows($this->dbresult);
+	$this->dbfields = array();
+	for ($col = 0; $col < $this->dbfnum; $col++) {
+		$this->dbfields[$col] = pg_field_name($this->dbresult,$col);
+	}
+	$this->dbfset = false;
+	return true;
+}
+
 // execute the query and return true or false
 function exec () {
 	if ($this->debug > 0) {
