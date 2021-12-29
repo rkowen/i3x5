@@ -99,11 +99,12 @@ result = $result<br/>
 EOT;
 		}
 			print <<<EOT
-</center>
 <p>
 Your '{$user->project}' user profile has been updated.<br/>
 Project changes will not be evident until next login.<br/>
 Click on a menu item to the left to do something else.
+</p>
+</center>
 </body>
 </html>
 EOT;
@@ -113,9 +114,10 @@ EOT;
 			"update user");
 		print <<<EOT
 
-</center>
 <p>
 Click on a menu item to the left to do something else.
+</p>
+</center>
 </body>
 </html>
 EOT;

@@ -5,18 +5,21 @@
 
 include_once "cards.inc";
 
+$db = new i3x5_DB($schema);
+
 class Create_Update_User {
-	var $type;	// Create or Update
-	var $invalid;	// number of invalid entries
-	var $list;	// list of entries
+	var $type;		// Create or Update
+	var $invalid;		// number of invalid entries
+	var $invalid_list;	// list of invalid entries
+	var $list;		// list of entries
 
 // constructor
 function __construct($type) {
+	global $db;
 
 	$this->type = $type;
 	$this->invalid = 0;
-
-	$db = new i3x5_DB($schema);
+	$this->invalid_list = "";
 
 	$this->list = array(
 	"username"	=> array(
@@ -79,7 +82,7 @@ function __construct($type) {
 		"crypt"	=> false,
 		"msg"	=> "")
 	);
-	if ($db->encode) {
+	if ($db->encode && $type == "Create") {
 		$this->list["projcrypt"] = array(
 			"label"	=> "Project Crypt Key",
 			"check"	=> "validate_crypt",
@@ -235,6 +238,7 @@ function get_form() {
 		$check = $this->list[$k]["check"];
 		if (! $this->$check($$k, $this->list[$k]["msg"])) {
 			$this->invalid++;
+			$this->invalid_list .= " ".$k;
 		}
 	}
 	
@@ -296,6 +300,8 @@ EOT;
 	if ($this->invalid) {
 		print warn(
 "There were {$this->invalid} field(s) that need to be corrected")."<br/>\n";
+		print warn(
+"The affected items: ".$this->invalid_list)."<br/>\n";
 	}
 }
 
