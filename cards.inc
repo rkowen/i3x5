@@ -1,24 +1,9 @@
 <?php
-// DESC: common values, functions, and classes
+// DESC: common card related values, functions, and classes
 //
 // values
 //
-	$schema		= "i3x5";
-	$version	= "0.8.2.2";
-	$phpinfo	= 0;	// set non-zero for phpinfo
 	$form_color	= "#D0D0D0";
-	$level_root	= 99;
-	$level_admin	= 4;
-	$level_write	= 3;
-	$level_append	= 2;
-	$level_read	= 1;
-	$level_names	= array (
-		$level_root	=> "Root",
-		$level_admin	=> "Admin",
-		$level_write	=> "Write",
-		$level_append	=> "Append-Only",
-		$level_read	=> "Read-Only",
-		0		=> "Invalid");
 	$xhidden	=
 	"<span style=\"font-size: larger\">&blacktriangleright;</span>";
 	$xshown		=
