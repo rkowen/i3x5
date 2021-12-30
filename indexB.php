@@ -1,6 +1,7 @@
 <?php
 // DESC: options frame, shows access level and selection options
 	include_once "user.inc";
+	include_once "common.inc";
 	include_once "session.inc";
 	include_once "cards.inc";
 if (isset($user)) {
