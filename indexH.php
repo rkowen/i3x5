@@ -42,4 +42,5 @@
 			"Login",
 			"target=\"main\"");
 	}
+	card_foot(0);
 ?>
