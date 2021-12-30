@@ -2,7 +2,19 @@
 // DESC: sets up areas and iframes title/options/helptext/main
 	include_once "cards.inc";
 	include_once "user.inc";
+	include_once "common.inc";
+	include_once "3x5_db.inc";
 	session_start();
+	include_once "session.inc";
+
+// get common for session
+	$common = new Common();
+// get DB connection for session
+	$db = new i3x5_DB($common->schema);
+
+// relate certain attributes
+	$common->encode = $db->encode;
+	$common->schema = $db->schema;
 
 	if (isset($_SESSION["user"])) {
 		$what = "indexM.php";

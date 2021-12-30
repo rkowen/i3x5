@@ -1,14 +1,15 @@
 <?php
 // DESC: prompts for username and password
 	include_once "user.inc";
-	global $user;
-
+	include_once "common.inc";
 	session_start();
 	include_once "session.inc";
+	include_once "cards.inc";
+
 	$_SESSION['user'] = $user;
 	//session_register("user");
+	global $user;
 
-	include_once "cards.inc";
 	$project = "3x5 Cards";
 
 	if (isset($_POST["username"])) {
@@ -35,7 +36,7 @@
 	}
 
 function not_logged_in ($q) {
-	global $db;
+	global $common;
 	global $username;
 	global $passwd;
 	global $projcrypt;
@@ -61,7 +62,7 @@ print table(row(head(
 		.row(cell($hpassword,"class=\"h_form\"")
 		.cell(input("password","passwd",$passwd,"size=35")))
 		.
-($db->encode
+($common->encode
 ?		row(cell($hprojcrypt,"class=\"h_form\"")
 		.cell(input("text","projcrypt",$projcrypt,"size=35")))
 :		"")
@@ -89,6 +90,7 @@ NOT_LOGGED_IN;
 // get DB object and service parameters
 	include_once "3x5_db.inc";
 	$db = new i3x5_DB($schema);
+	$common->encode = $db->encode;
 
 // if coming to reset login
 	if (! isset($_POST["username"])) {
@@ -115,7 +117,7 @@ NOT_LOGGED_IN;
 		"passwd_r" => $level_read);
 	foreach ($pswd as $k => $v) {
 		if (1 == $db->sql(
-($db->encode ?
+($common->encode ?
 			"SELECT COUNT(1) FROM i3x5_userpass ".
 			"WHERE username='$username' ".
 			"AND pgp_safe_decrypt(x$k,'{$db->crypt}')='$passwd'"
@@ -129,7 +131,7 @@ NOT_LOGGED_IN;
 	}
 
 // find whether projcrypt is valid
-if ($db->encode && strlen($projcrypt)) {
+if ($common->encode && strlen($projcrypt)) {
 	$isprojcrypt = $db->sql(
 		"SELECT COUNT(1) FROM i3x5_userpass
 		WHERE uid = $uid

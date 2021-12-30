@@ -1,9 +1,12 @@
 <?php
 // DESC: help frame with information when clicked upon elsewhere
 	include_once "user.inc";
+	include_once "common.inc";
 	session_start();
 	include_once "session.inc";
 	include_once "cards.inc";
+	include_once "3x5_db.inc";
+
 	if (isset($_GET["bid"])) {
 		$bid = $_GET["bid"];
 	}
@@ -18,8 +21,7 @@
 	}
 	card_head("Help Frame","helptext",0);
 
-	include_once "3x5_db.inc";
-	$db = new i3x5_DB($schema);
+	$db = new i3x5_DB($common->schema);
 	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 
 	global $user;

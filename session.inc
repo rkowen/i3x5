@@ -5,15 +5,16 @@
 // DESC: Session registered variables:
 // DESC: 	user
 // DESC: 	view
+// DESC: 	common
 //
-	global $user, $view, $db;
+	global $user, $view, $common, $db;
 	if (isset($_SESSION["user"])) {
 		$user =& $_SESSION["user"];
 	}
 	if (isset($_SESSION["view"])) {
 		$view =& $_SESSION["view"];
 	}
-	if (isset($_SESSION["db"])) {
-		$db =& $_SESSION["db"];
+	if (isset($_SESSION["common"])) {
+		$common =& $_SESSION["common"];
 	}
 ?>

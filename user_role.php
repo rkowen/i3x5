@@ -1,6 +1,7 @@
 <?php
 // DESC: For the admin - change the current access level for test purposes
 	include_once "user.inc";
+	include_once "common.inc";
 	session_start();
 	include_once "session.inc";
 	include_once "cards.inc";
