@@ -19,6 +19,7 @@ class User {
 		$this->level = $level;
 		$this->reallevel = $level;
 		$this->project = $project;
+		$this->encode = (strlen($projcrypt)>0);
 		$this->crypt = $projcrypt;
 		$this->bids = $bids;
 	}

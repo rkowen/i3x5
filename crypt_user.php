@@ -10,7 +10,8 @@
 	// can't get to this page unless $db->encode, but still assert
 	if ($db->encode
 	&&  isset($_POST["submit"])
-	&&  strlen($_POST["crypt"])) {
+	&&  strlen(clean($_POST["crypt"]))) {
+		$_POST["crypt"] = clean($_POST["crypt"]);
 // check if still active
 		if (!isset($user,$user->uid)) {
 			header("Location: login_user.php");
@@ -26,11 +27,13 @@ AND	username = pgp_safe_decrypt(xusername, '{$_POST["crypt"]}')"
 		$result = "";
 		if ($isprojcrypt) {
 			$user->crypt = $_POST["crypt"];
+			$user->encode = true;
 			header("Location: index.php");
 		} else {
 			$result =
 "Crypt key does not give valid encryption for user project.<br/>
 Try again, or select action from left menus.";
+			$user->encode = false;
 		}
 	}
 
