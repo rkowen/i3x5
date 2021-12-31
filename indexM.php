@@ -18,7 +18,7 @@ Click any of the links in the left frames and the subsequent
 actions will be shown in this frame.
 </p>
 PAGE;
-		if ($db->encode && !strlen($user->crypt)) {
+		if ($db->encode && !$user->encode) {
 	$invalid = ahref("crypt_user.php","invalid","target=\"main\"");
 			print <<<NOCRYPT
 <p>
@@ -35,11 +35,11 @@ You are not currently logged in.
 <p>
 Please click
 <a href="login_user.php" target="main">here to login</a>
-if you have an existing project.
+if you have an existing user project.
 </p>
 <p>
 Or click
-<a href="create_user.php" target="main">here to create a new user</A>.
+<a href="create_user.php" target="main">here to create a new user project</a>.
 </p>
 
 PAGE;

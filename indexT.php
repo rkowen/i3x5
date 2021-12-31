@@ -11,7 +11,7 @@ if (isset($user)) {
 	if ($common->encode) {
 		$invalid = ahref("crypt_user.php","invalid","target=\"main\"");
 		print "crypt key: <b>"
-		.(strlen($user->crypt)?"valid":$invalid)
+		.($user->encode?"valid":$invalid)
 		."</b>\n";
 	}
 }
