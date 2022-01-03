@@ -7,7 +7,7 @@
 // values
 //
 	$schema		= "i3x5";
-	$version	= "0.8.2.2";
+	$version	= "0.8.3";
 	$phpinfo	= 0;	// set non-zero for phpinfo
 	$level_root	= 99;
 	$level_admin	= 4;

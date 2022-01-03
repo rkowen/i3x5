@@ -2,6 +2,7 @@
 // DESC: view the individual cards as selected by the batch
 	include_once "user.inc";
 	include_once "view.inc";
+	include_once "common.inc";
 	session_start();
 	include_once "session.inc";
 	include_once "cards.inc";
@@ -56,13 +57,18 @@ if (isset($_POST["upd_all"])
 				"card"=>$_POST["c_card"][$k],
 				"formatted"=>
 					(isset($_POST["c_formatted"][$k])
-					?$_POST["c_formatted"][$k]:false)
+					?$_POST["c_formatted"][$k]:false),
+				"encrypted"=>
+					(isset($_POST["c_encrypted"][$k])
+					?$_POST["c_encrypted"][$k]:false)
 				));
 			} else { 	// append only
 				$db->append_card($k, $v,
 					$_POST["c_card"][$k],
 					(isset($_POST["c_formatted"][$k])
-					?$_POST["c_formatted"][$k]:false));
+					?$_POST["c_formatted"][$k]:false),
+					(isset($_POST["c_encrypted"][$k])
+					?$_POST["c_encrypted"][$k]:false));
 			}
 		}
 	}
@@ -79,7 +85,9 @@ elseif (isset($_POST["upd_"])
 			$_POST["c_rid"][$k],
 			$_POST["c_card"][$k],
 			(isset($_POST["c_formatted"][$k])
-			?$_POST["c_formatted"][$k]:false));
+			?$_POST["c_formatted"][$k]:false),
+			(isset($_POST["c_encrypted"][$k])
+			?$_POST["c_encrypted"][$k]:false));
 	} else {
 		// get one_batch info
 		$onebatch = new OneBatch("[$k]");
@@ -95,12 +103,15 @@ elseif (isset($_POST["upd_"])
 				"card"=>$_POST["c_card"][$k],
 				"formatted"=>
 					(isset($_POST["c_formatted"][$k])
-					?$_POST["c_formatted"][$k]:false)
+					?$_POST["c_formatted"][$k]:false),
+				"encrypted"=>
+					(isset($_POST["c_encrypted"][$k])
+					?$_POST["c_encrypted"][$k]:false)
 				));
 		} elseif ($ops == "COPY") {
 			$db->copy_card($id,$bid);
 		} elseif ($ops == "RELATE") {
-			$db->insert_card($bid, $id);
+			$db->insert_card($bid, $id, $user->crypt);
 		} elseif ($ops == "MOVE") {
 			$db->move_card($k,$bid);
 		}
@@ -128,8 +139,12 @@ elseif (isset($_POST["ins__"])
 			"card"=>$_POST["i_card"],
 			"formatted"=>
 				(isset($_POST["i_formatted"])
-				?$_POST["i_formatted"]:false)
+				?$_POST["i_formatted"]:false),
+			"encrypted"=>
+				(isset($_POST["i_encrypted"])
+				?$_POST["i_encrypted"]:false)
 		),
+		$user->crypt,
 		($user->level >= $level_write ? false : "append"));
 	$cardsrerun = 1;
 }
@@ -148,7 +163,7 @@ elseif (isset($_POST["a_submit"])
 		} elseif ($ops == "COPY") {
 			$db->copy_card($id,$bid);
 		} elseif ($ops == "RELATE") {
-			$db->insert_card($bid, $id);
+			$db->insert_card($bid, $id, $user->crypt);
 		} elseif ($ops == "MOVE") {
 			$db->move_card($k,$bid);
 		}

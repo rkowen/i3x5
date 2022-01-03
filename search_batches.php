@@ -170,13 +170,25 @@ titleend:
 	}
 // Card
 	if (isset($_POST["comp3"]) && (strpos($_POST["comp3"],"NULL") > 0)) {
-		$sqlc .= "( card ".$_POST["comp3"].") ";
+		$sqlc .=
+($db->encode && $user->encode
+?		"(( card ".$_POST["comp3"]." AND encrypted IS FALSE)"
+		." OR (xcard ".$_POST["comp3"]." AND encrypted IS TRUE)) "
+:		"( card ".$_POST["comp3"]." AND encrypted IS FALSE) ");
 		goto cardend;
 	}
 	if (isOK("card1")) {
 		// search
-		$sqlc .= "( card ".$_POST["comp3"]."'"
-			.pg_escape_string($_POST["card1"])."') ";
+		$sqlc .=
+($db->encode && $user->encode
+?		"(( card ".$_POST["comp3"]
+			." '".pg_escape_string($_POST["card1"])."'"
+			." AND n.encrypted IS FALSE)"
+		." OR (pgp_safe_decrypt(xcard,'{$user->crypt}') "
+		.$_POST["comp3"]." '".pg_escape_string($_POST["card1"])."'"
+			." AND n.encrypted IS TRUE)) "
+:		"( card ".$_POST["comp3"]."'"
+			.pg_escape_string($_POST["card1"])."') ");
 	}
 cardend:
 	if (strlen($sqlc)) {

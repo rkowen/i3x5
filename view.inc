@@ -282,8 +282,11 @@ if ($this->edit == "edit") {
 			.cell(input("text","i_title","","size=80 maxlength=80")
 				,"class=\"b_title\" width=70% colspan=3")
 			.cell(input("checkbox","i_formatted","true")
-				.sendhelp("Formatted","formatted")."\n"
-				,"class=\"b_title\" width=20% colspan=1"))
+				.sendhelp("Formatted","formatted")."<br/>\n".
+($user->encode ?		input("checkbox","i_encrypted","true")
+				.sendhelp("Encrypted","encrypted")
+:				warn("Can not encrypt"))."\n"
+			,"class=\"b_title small\" width=20% colspan=1"))
 		.row(	cell(senddesc($fn["card"],$k,"card")
 			,"class=\"h_card\" width=10% valign=\"top\"")
 			.cell(textarea("i_card","","cols=80 rows=$lines")
@@ -405,16 +408,23 @@ $text .= row(cell(table(
 		.cell(	input("text","c_title[$k]",$v["title"],
 				"size=80 maxlength=80")
 			,"class=\"b_title\" width=70% colspan=3")
-		.cell("\n".input("checkbox","c_formatted[$k]","true",
+		.cell(	"\n".input("checkbox","c_formatted[$k]","true",
 			($v["formatted"]=="t" ? "CHECKED" : ""))
-			.sendhelp("Formatted","formatted")."\n"
-			,"class=\"b_title\" width=20% colspan=1"))
+			.sendhelp("Formatted","formatted")."<br/>"
+			."\n".input("checkbox","c_encrypted[$k]","true",
+			($v["encrypted"]=="t" ? "CHECKED" : ""))
+			.sendhelp("Encrypted","encrypted")."\n"
+			,"class=\"b_title small\" width=20% colspan=1"))
 	: "")
 	.row(	cell(senddesc($user->bids[$v["bid"]]["card"]
 			,$v["bid"],"card")
 			,"class=\"h_card\" width=10% valign=\"TOP\"")
-		.cell(textarea("c_card[$k]",$v["card"],
-			"cols=80 rows=$lines")
+		.cell(
+		(preg_match("/^__Not_Decrypted__$/",$v["card"])
+		?	$v["formatted"]=="t"
+				? pre($v["card"],"t") : $this->br($v["card"])
+		:	textarea("c_card[$k]",$v["card"],
+			"cols=80 rows=$lines"))
 			,"class=\"b_card\" width=90% colspan=4"),
 	"id=\"card_$k\" class=\"togcard "
 	.((($this->body == "full")
@@ -449,17 +459,24 @@ $text .= row(cell(table(
 		.cell($v["title"],"class=\"b_title\" width=60% colspan=3")
 		.cell("\n".input("checkbox","c_formatted[$k]","true",
 			($v["formatted"]=="t" ? "CHECKED" : ""))
-			.sendhelp("Formatted","formatted")."\n"
-			,"class=\"b_title\" width=20% colspan=1"))
+			.sendhelp("Formatted","formatted")."<br/>"
+			."\n".input("checkbox","c_encrypted[$k]","true",
+			($v["encrypted"]=="t" ? "CHECKED" : ""))
+			.sendhelp("Encrypted","encrypted")."\n"
+			,"class=\"b_title small\" width=20% colspan=1"))
 	: "" )
 .((($this->body == "full")
 	&& ! preg_match("/^$/",$user->bids[$v["bid"]]["card"]))
 	? row(	cell(senddesc($user->bids[$v["bid"]]["card"]
 			,$v["bid"],"card")
 			,"class=\"h_card\" width=10% valign=\"top\"")
-		.cell(($v["formatted"]=="t"
+		.cell(
+		(preg_match("/^__Not_Decrypted__$/",$v["card"])
+		?	($v["formatted"]=="t"
+				? pre($v["card"],"t") : $this->br($v["card"]))
+		:	($v["formatted"]=="t"
 			? pre($v["card"],"t"):$this->br($v["card"]))
-		."<br/>".textarea("c_card[$k]","","cols=80 rows=2")
+		."<br/>".textarea("c_card[$k]","","cols=80 rows=2"))
 			,"class=\"b_card\" width=90% colspan=4"))
 	: "")
 .($this->dates != "hide" ?
