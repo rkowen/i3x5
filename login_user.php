@@ -90,6 +90,7 @@ NOT_LOGGED_IN;
 // get DB object and service parameters
 	include_once "3x5_db.inc";
 	$db = new i3x5_DB($schema);
+	$common = new Common();
 	$common->encode = $db->encode;
 
 // if coming to reset login
