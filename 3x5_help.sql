@@ -16,7 +16,7 @@ determines what level of access you have to the project.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'login crypt','
-The "Crypt Key" is given to you by the administrator
+The "Encrypt Key" is given to you by the administrator
 for encrypting/decrypting those cards and batches which
 require encrypted confidentiality.
 This string is _not_ stored in the 3x5 database, but is only
@@ -61,7 +61,7 @@ The project name is the descriptive title for the project.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'projcrypt','
-The "Project Crypt Key" is used by the 3x5 database application
+The "Project Encrypt Key" is used by the 3x5 database application
 for encrypting/decrypting those cards and batches which
 require encrypted confidentiality.
 However this string is _not_ stored in the 3x5 database, but must
@@ -69,7 +69,7 @@ be given by the user when logging in to a session.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'projcrypthint','
-This hint should relate to the "Project Crypt Key", but not
+This hint should relate to the "Project Encrypt Key", but not
 give it out directly.  So it needs to be descriptive enough
 for your knowledgeable user to remember what it should be,
 but not easy enough for someone else to guess it.
@@ -380,6 +380,11 @@ Values which contain embedded newlines are reduced to the (\\n) characters,
 and it is up to the importing program to handle them correctly.<br/>
 The first line usually has the field names, which will be defined
 by the first card''s batch field names.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'encrypted','
+The given card will need to be encrypted using the user project
+encryption key.
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'formatted','

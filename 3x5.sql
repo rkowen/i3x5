@@ -32,6 +32,33 @@ WHEN undefined_function THEN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE
+FUNCTION pgp_select(field TEXT, xfield BYTEA, crypt TEXT, encoded BOOL)
+RETURNS TEXT AS $$
+BEGIN
+	IF NOT encoded THEN
+		RETURN	field;
+	ELSE
+		RETURN pgp_sym_decrypt(xfield, crypt);
+	END IF;
+EXCEPTION
+WHEN external_routine_invocation_exception THEN
+	RAISE DEBUG USING
+		MESSAGE = format('Decryption failed: SQLSTATE %s, Msg: %s',
+			SQLSTATE,SQLERRM),
+		HINT = 'pgp_sym_encrypt(...) failed; check your key',
+		ERRCODE = 'external_routine_invocation_exception';
+	RETURN '__Not_Decrypted__';
+WHEN undefined_function THEN
+	RAISE DEBUG USING
+		MESSAGE = format('Decryption failed: SQLSTATE %s, Msg: %s',
+			SQLSTATE,SQLERRM),
+		HINT = 'pgp_sym_encrypt(...) does not exist',
+		ERRCODE = 'undefined_function';
+	RETURN field;
+END;
+$$ LANGUAGE plpgsql;
+
 DROP TABLE i3x5_cards;
 DROP TABLE i3x5_batch;
 DROP SEQUENCE i3x5_batch_bid_seq;
@@ -82,7 +109,7 @@ CREATE TABLE i3x5_batch (
 	card_name	TEXT,		-- card field name
 	card_help	TEXT DEFAULT 'nothing helpful',	
 					-- card field helpful description
-	crypted		BOOLEAN	DEFAULT false,	-- encrypt entire card batch
+	encrypted	BOOLEAN	DEFAULT false,	-- encrypt entire card batch
 	createdate	timestamp DEFAULT now(),
 	moddate		timestamp DEFAULT now(),
 	PRIMARY KEY(bid),
@@ -96,11 +123,10 @@ CREATE TABLE i3x5_cards (
 					-- skips rest if not null
 	num		INT8,		-- user numbering of card
 	title		TEXT,		-- title of card
-	xtitle		BYTEA,		-- encrypted title of card
 	card		TEXT,		-- card contents
 	xcard		BYTEA,		-- encrypted card contents
 	formatted	BOOLEAN DEFAULT false,	-- use <PRE> formatting
-	crypted		BOOLEAN	DEFAULT false,	-- encrypt this card
+	encrypted	BOOLEAN	DEFAULT false,	-- encrypt this card
 	createdate	timestamp DEFAULT now(),
 	moddate		timestamp DEFAULT now(),
 	PRIMARY KEY (id),

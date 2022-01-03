@@ -12,41 +12,50 @@ class i3x5_DB extends RKO_DB {
 //////////////////////////////////////////////////////////////////////////
 // constants
 //////////////////////////////////////////////////////////////////////////
-	protected $selectcards = "SELECT nn.*,b.batch FROM (
- SELECT id,bid,rid,num,title,card,
- (SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
- createdate,TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
- moddate,TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
- formatted
-FROM i3x5_cards n
+	protected $selectcards =
+"SELECT	nn.*,b.batch
+FROM (
+	SELECT id,bid,rid,num,title,
+	pgp_select(card,xcard,'usercryptxxx',encrypted) AS card,
+	(SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
+	createdate,TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+	moddate,TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
+	formatted, encrypted
+FROM i3x5_cards	n
 WHERE n.rid IS NULL wherexxx
 UNION
-SELECT n.id AS id, n.bid AS bid, n.rid AS rid,
-r.num AS num,r.title AS title,
-r.card AS card,0 AS nrid,
-r.createdate,TO_CHAR(r.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
-r.moddate,TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
-r.formatted AS formatted
+SELECT	n.id AS id, n.bid AS bid, n.rid AS rid,
+	r.num AS num,r.title AS title,
+	pgp_select(r.card,r.xcard,'usercryptxxx',r.encrypted) AS card,
+	0 AS nrid,
+	r.createdate,TO_CHAR(r.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+	r.moddate,TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
+	r.formatted AS formatted,
+	r.encrypted AS encrypted
 FROM	i3x5_cards n
 JOIN	i3x5_cards r
 ON	r.id=n.rid
-WHERE	n.rid IS NOT NULL wherexxx)	nn
+WHERE	n.rid IS NOT NULL wherexxx
+)	nn
 JOIN	i3x5_batch					b
 ON	(nn.bid = b.bid)
 orderbyxxx";
-	protected $selectbatch = "(SELECT bid, batch, rid, 0 AS selected,
-num_name AS num, title_name AS title, card_name AS card,
-num_help, title_help, card_help,
-createdate,TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
-moddate,TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate
+	protected $selectbatch =
+"(SELECT bid, batch, rid, 0 AS selected,
+	num_name AS num, title_name AS title,
+	card_name AS card,
+	num_help, title_help, card_help,
+	createdate,TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+	moddate,TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate
 FROM	i3x5_batch	n
 WHERE	rid IS NULL wherexxx
 UNION
-SELECT n.bid, n.batch, n.rid, 0 AS selected,
-r.num_name AS num, r.title_name AS title, r.card_name AS card,
-r.num_help, r.title_help, r.card_help,
-r.createdate,TO_CHAR(r.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
-r.moddate,TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate
+SELECT	n.bid, n.batch, n.rid, 0 AS selected,
+	r.num_name AS num, r.title_name AS title,
+	r.card_name AS card,
+	r.num_help, r.title_help, r.card_help,
+	r.createdate,TO_CHAR(r.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+	r.moddate,TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate
 FROM	i3x5_batch	n
 JOIN	i3x5_batch	r
 ON	r.bid=n.rid
@@ -166,6 +175,7 @@ WHERE	uid = $uid
 // --{--
 // return a hash array for one card
 function &card ($card_id) {
+	global $user;
 	if ($this->debug > 0) {
 		echo "3x5_DB::card($card_id)<br/>\n";
 	}
@@ -175,13 +185,16 @@ function &card ($card_id) {
 		$this->errno=-1;
 		return false;
 	} 
-	$query = str_replace("wherexxx","AND n.id=$card_id",$this->selectcards);
-	$query = str_replace("orderbyxxx","",$query);
+	$query = str_replace(
+		array("wherexxx","usercryptxxx","orderbyxxx"),
+		array("AND n.id=$card_id",$user->crypt,""),
+		$this->selectcards);
 	return $this->multi_col("id",$query);
 }
 
 // return all related cards given the base card_id
 function &related_cards ($card_id) {
+	global $user;
 	if ($this->debug > 0) {
 		echo "3x5_DB::card_related($card_id)<br/>\n";
 	}
@@ -191,9 +204,11 @@ function &related_cards ($card_id) {
 		$this->errno=-1;
 		return NULL;
 	}
-	$query = str_replace("wherexxx",
-		"AND (n.id=$card_id OR n.rid = $card_id)",$this->selectcards);
-	$query = str_replace("orderbyxxx","ORDER BY nrid DESC, id ASC",$query);
+	$query = str_replace(
+		array("wherexxx","usercryptxxx","orderbyxxx"),
+		array("AND (n.id=$card_id OR n.rid = $card_id)",
+			"XXX".$user->crypt,"ORDER BY nrid DESC, id ASC"),
+		$this->selectcards);
 	return $this->multi_col("id",$query);
 }
 
@@ -230,12 +245,15 @@ function &xml_card($card_id, $indent = "") {
 }
 
 function &cards ($select,$orderby="") {
+	global $user;
 	if ($this->debug > 0) {
 		echo "3x5_DB::cards($select)<br/>\n";
 	}
 
-	$query = str_replace("wherexxx",$select,$this->selectcards);
-	$query = str_replace("orderbyxxx",$orderby,$query);
+	$query = str_replace(
+		array("wherexxx","usercryptxxx","orderbyxxx"),
+		array($select,$user->crypt,$orderby),
+		$this->selectcards);
 	return $this->multi_col("id",$query);
 }
 
@@ -276,88 +294,13 @@ function &batch ($batch_id) {
 	$query = str_replace("orderbyxxx","",$query);
 	return $this->multi_col("bid",$query);
 }
-//
-// return XML for one batch
-//	$batch_id = id, query multi_col, or batch hash
-function &xml_batch($batch_id, $indent = "",$card_batch = "") {
-	if ($this->debug > 0) {
-		echo "3x5_DB::xml_batch($batch_id,$indent,...)<br/>\n";
-	}
-	$buffer = $indent."<xbatch>\n";
-	if (is_array($batch_id)) {
-		$r = $batch_id;
-	} else {
-		$r = $this->batch($batch_id);
-	}
-	if (isset($r["bid"])) {
-		$v = $r;
-	} else {
-		foreach ($r as $k => $v) { break; }
-	}
-	ksort($v);
-	foreach ($v as $kk => $vv) {
-		$buffer.=$indent."  <".$kk.">".xmlspecialchars($vv)
-		."</".$kk.">\n";
-	}
-	$buffer .= $card_batch;
-	$buffer .= $indent."</xbatch>\n";
-	return $buffer;
-}
-//
-// return XML for one batch
-//	$batch_id = bid, query multi_col, or batch hash
-//	$orderby for the card batch
-function &xml_card_batch($batch_id, $indent = "",$orderby = "") {
-	if ($this->debug > 0) {
-	  echo "3x5_DB::xml_card_batch($batch_id,$indent,$orderby)<br/>\n";
-	}
-	if (is_array($batch_id)) {
-		$r = $batch_id;
-		$bid = $batch_id;
-	} else {
-		$r = $this->batch($batch_id);
-	}
-	if (isset($r["bid"])) {
-		$v = $r;
-		$bid = (int) $r["bid"];
-	} else {
-		foreach ($r as $k => $v) { break; }
-		$bid = $k;
-	}
-	$buffer = $this->xml_batch($bid,$indent,
-		$this->xml_cards("AND n.bid=$bid",$orderby,$indent."  "));
-	return $buffer;
-}
-//
-// return XML for multiple batches
-//	$bids = hash from &bids()
-//	set $selected to false to get all cards for the user
-//	$orderby for the card batch
-function &xml_card_batches(&$bids, $selected = true,
-		$indent = "",$borderby = "", $orderby = "") {
-
-	if ($this->debug > 0) {
-		echo "3x5_DB::xml_card_batchs($batch_id,$selected,"
-		."$indent,$borderby,$orderby)<br/>\n";
-	}
-	$buffer = "";
-	$cnt = 0;
-	foreach ($bids as $k => $v) {
-		if ($selected && ! $v["selected"]) {
-			continue;
-		}
-		$buffer .= $this->xml_card_batch($k,$indent."  ");
-		$cnt++;
-	}
-	$buffer .= $indent."</xbatches>\n";
-	return $indent."<xbatches>\n".$indent."  <count>$cnt</count>\n".$buffer;
-}
 // --}--
 
 //
 // return a hash array of cards for the given $bids
 // set $selected to false to get all cards for the user
 function &cards_ (&$bids, $selected = true) {
+	global $user;
 	if ($this->debug > 0) {
 		echo "3x5_DB::cards_($bids,$selected)<br/>\n";
 	}
@@ -373,21 +316,24 @@ function &cards_ (&$bids, $selected = true) {
 		$list = join(",",array_keys($bids));
 	}
 	$this->lastcardsql = 
-"SELECT id,bid,rid,num,title,card,\n".
-" (SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,\n".
-" TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,\n".
-" TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,\n".
-" formatted\n".
-"FROM i3x5_cards n WHERE bid in ($list) AND rid IS NULL\n".
-"UNION\n".
-"SELECT n.id AS id, n.bid AS bid, n.rid AS rid,\n".
-"r.num AS num,r.title AS title,\n".
-"r.card AS card,0 AS nrid,\n".
-"TO_CHAR(r.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,\n".
-"TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,\n".
-"r.formatted AS formatted\n".
-"FROM i3x5_cards n, i3x5_cards r\n".
-"WHERE n.bid in ($list) AND r.id=n.rid AND n.rid IS NOT NULL\n";
+"SELECT	id,bid,rid,num,title,
+	pgp_select(card,xcard,'{$user->crypt}',encrypted) AS card,
+	(SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
+	TO_CHAR(createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+	TO_CHAR(moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
+	formatted, encrypted
+FROM i3x5_cards n WHERE bid in ($list) AND rid IS NULL
+UNION
+SELECT	n.id AS id, n.bid AS bid, n.rid AS rid,
+	r.num AS num,r.title AS title,
+	pgp_select(r.card,r.xcard,'{$user->crypt}',r.encrypted) AS card,
+	0 AS nrid,
+	TO_CHAR(r.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
+	TO_CHAR(r.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
+	r.formatted AS formatted,
+	r.encrypted AS encrypted
+FROM i3x5_cards n, i3x5_cards r
+WHERE n.bid in ($list) AND r.id=n.rid AND n.rid IS NOT NULL\n";
 
 	return $this->multi_col("id",$this->lastcardsql);
 }
@@ -396,6 +342,7 @@ function &cards_ (&$bids, $selected = true) {
 // return a hash array of cards from a simple search
 // set $case to true for a case sensitive search
 function &cards_simple ($uid, $keyword, $case = false) {
+	global $user;
 	if ($this->debug > 0) {
 		echo "3x5_DB::cards_simple($keyword,$case)<br/>\n";
 	}
@@ -407,17 +354,23 @@ function &cards_simple ($uid, $keyword, $case = false) {
 	}
 
 	$this->lastcardsql = 
-"SELECT id,bid,n.rid,num,title,card,
+"SELECT id,bid,n.rid,num,title,
+ COALESCE(card,pgp_safe_decrypt(xcard,'{$user->crypt}')) AS card,
  (SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
  TO_CHAR(n.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
  TO_CHAR(n.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
- formatted
+ n.formatted, n.encrypted
 FROM i3x5_cards n
 JOIN i3x5_batch b
 USING (bid)
 WHERE uid = $uid
-AND (title $like '$safekey' OR card $like '$safekey')
-AND n.rid IS NULL";
+AND (title $like '$safekey'
+	OR (card $like '$safekey' AND n.encrypted IS FALSE)\n"
+.($this->encode && $user->encode
+?"	OR (pgp_safe_decrypt(xcard,'{$user->crypt}') $like '$safekey'
+		AND n.encrypted IS TRUE)\n"
+:	"")
+.") AND n.rid IS NULL";
 
 	return $this->multi_col("id",$this->lastcardsql);
 }
@@ -427,15 +380,17 @@ AND n.rid IS NULL";
 // $sql needs to be sanitized before call.
 // set $norel = false to allow related cards in search
 function &cards_advance ($uid, $sql, $norel = true) {
+	global $user;
 	if ($this->debug > 0) {
 		echo "3x5_DB::cards_advance($sql)<br/>\n";
 	}
 	$this->lastcardsql = 
-"SELECT id,bid,n.rid,num,title,card,
+"SELECT id,bid,n.rid,num,title,
+ COALESCE(card,pgp_safe_decrypt(xcard,'{$user->crypt}')) AS card,
  (SELECT COUNT(rid) FROM i3x5_cards WHERE rid=n.id) AS nrid,
  TO_CHAR(n.createdate,'DD Mon YYYY HH24:MI:SS') AS cdate,
  TO_CHAR(n.moddate,'DD Mon YYYY HH24:MI:SS') AS mdate,
- formatted
+ formatted, n.encrypted
 FROM i3x5_cards n
 JOIN i3x5_batch b
 USING (bid)
@@ -470,14 +425,14 @@ function lastcardsql($sql = "") {
 }
 
 // insert a card, return the id
-// $object = array(num=>, title=>, card=>, formatted=> )  or rid
+// $object = array(num=>, title=>, card=>, formatted=>, encrypted=> )  or rid
 // returns false if bad input
-function insert_card ($bid, $object, $append = false) {
+function insert_card ($bid, $object, $cryptkey = "", $append = false) {
 	if ($this->debug > 0) {
 		echo "3x5_DB::insert_card($bid,$object,$append)<br/>\n";
 	}
 	if (is_array($object)) {	// array of things
-		if (! ($object["num"] || $object["title"] || $object["card"])) {
+		if (! ($object["num"] || $object["title"] ||$object["card"])) {
 			return false;
 		}
 		if (! $object["num"]) { $object["num"] = "NULL"; }
@@ -493,12 +448,21 @@ function insert_card ($bid, $object, $append = false) {
 			= "'".$this->escape($object["card"])."'";}
 		if (! $object["formatted"])
 			{ $object["formatted"] = "false"; }
+		if (! $object["encrypted"])
+			{ $object["encrypted"] = "false"; }
 
 		$id = $this->sql("SELECT nextval('i3x5_cards_id_seq')");
 		$this->sql(
-"INSERT INTO i3x5_cards (id,bid,num,title,card,formatted) ".
-"VALUES ($id, $bid, {$object['num']}, {$object['title']}, {$object['card']},".
-" {$object['formatted']})" );
+"INSERT INTO i3x5_cards (
+	id,bid,num,title,
+	card, xcard,
+	formatted,encrypted
+) VALUES (
+	$id, $bid, {$object['num']}, {$object['title']},".
+($object["encrypted"] && strlen($cryptkey)
+?	"NULL,pgp_sym_encrypt({$object["card"]},'$cryptkey'),"
+:	"{$object["card"]},NULL,")
+."	{$object['formatted']}, {$object['encrypted']})" );
 		return $id;
 	} elseif((is_numeric($object) ? intval($object)==$object : false)) {
 		// is_int($object) doesn't work as advertized
@@ -511,11 +475,15 @@ function insert_card ($bid, $object, $append = false) {
 }
 
 // update a card, return the id
-// $object = array(num=>, title=>, card=>, formatted=> )
+// $object = array(num=>, title=>, card=>, formatted=>, encrypted=> )
 // returns false if bad input
 function update_card ($id, $rid, $object) {
+	global $user;
 	if ($this->debug > 0) {
 		echo "3x5_DB::update_card($object)<br/>\n";
+		echo "3x5_DB::encode={$this->encode})<br/>\n";
+		echo "3x5_DB::user->encode={$user->encode})<br/>\n";
+		echo "3x5_DB::encrypted={$object["encrypted"]})<br/>\n";
 	}
 	if (! ($object["num"] || $object["title"] || $object["card"]
 	|| $object["formatted"])) {
@@ -528,8 +496,17 @@ function update_card ($id, $rid, $object) {
 	if ($object["num"]) { $q.="num={$object["num"]},"; }
 	if ($object["title"]) { $q.="title='"
 			.$this->escape($object["title"])."',";}
-	if ($object["card"]) { $q.="card='"
-			.$this->escape($object["card"])."',";}
+	if ($object["card"]) {
+		// handle card and encrypted fields
+		if (($this->encode>0) && ($user->encode>0)
+		&& $object["encrypted"]) {
+			$q.="card=NULL,xcard=pgp_sym_encrypt('"
+			.$this->escape($object["card"])
+			."','{$user->crypt}'),encrypted=true,";
+		} else {
+			$q.="xcard=NULL,card='"
+			.$this->escape($object["card"])."',encrypted=false,";}
+		}
 	if ($object["formatted"]) { $q.="formatted=".$object["formatted"].",";}
 	else { $q.="formatted=false,";}
 	// strip final ,
@@ -538,32 +515,40 @@ function update_card ($id, $rid, $object) {
 	return $this->sql("UPDATE i3x5_cards SET $q WHERE id=$id");
 }
 
-// append to a card, given the card id,rid,card_append
+// append to a card, given the card id,rid,append
 // returns false if bad input else id or card appended to
-function append_card ($id, $rid, $card_append, $card_formatted) {
+function append_card ($id,$rid,$append,$formatted,$encrypted) {
+	global $user;
 	if ($this->debug > 0) {
-	  echo "3x5_DB::append_card($rid,$card_append,$card_formatted)<br/>\n";
+	  echo "3x5_DB::append_card($rid,$append,$formatted,$encrypted)<br/>\n";
 	}
-	if (! ($id || $card_append)) {
+	if (! ($id || $append)) {
 		return false;
 	}
 	// do nothing if NULL input
-	if (! $card_append) { return false; }
+	if (! $append) { return false; }
 
 	// append to related card if given
 	if ($rid) {$id = $rid;}
 	// get previous card value
-	$oldcard = $this->sql("SELECT card FROM i3x5_cards WHERE id=$id");
+	$oldcard = $this->sql(
+"SELECT pgp_select(card,xcard,'{$user->crypt}',encrypted) AS card
+FROM i3x5_cards WHERE id=$id");
 	// strip off trailing newline
 	$oldcard = $this->escape(preg_replace("/\n$/","",$oldcard));
 	// set the formatting
-	if (! $card_formatted) { $card_formatted = "false"; }
-	$card_append = $this->escape($card_append);
+	if (! $formatted) { $formatted = "false"; }
+	$append = $this->escape($append);
+	$x ="$oldcard\n"
+		."<<<'||TO_CHAR(CURRENT_TIMESTAMP,'YYYY/MM/DD HH24:MI:SS')||"
+		."'>>>\n$append";
 	$this->sql(
-"UPDATE i3x5_cards SET card='$oldcard\n<<<'".
-"||to_char(CURRENT_TIMESTAMP,'YYYY/MM/DD HH24:MI:SS')||'>>>\n$card_append', ".
-"formatted=$card_formatted ".
-"WHERE id=$id");
+"UPDATE i3x5_cards SET ".
+($this->encode && $user->encode && $encrypted
+?	"xcard=pgp_sym_encrypt('$x','{$user->crypt}'),"
+:	"card='$x',")
+	."formatted=$formatted 
+WHERE id=$id");
 	return $id;
 }
 
@@ -582,8 +567,11 @@ function move_card($id,$newbid) {
 // copy a card to another batch
 function copy_card($id,$newbid) {
 	return $this->sql(
-"INSERT INTO i3x5_cards (bid,num,title,card,formatted)\n".
-"SELECT $newbid,num,title,card,formatted FROM i3x5_cards WHERE id=$id");
+"INSERT INTO i3x5_cards (
+	bid,num,title,card,xcard,formatted,encrypted
+) SELECT $newbid,num,title,card,xcard,formatted,encrypted
+FROM i3x5_cards
+WHERE id=$id");
 }
 
 function helpmsg($key = "unknown") {
