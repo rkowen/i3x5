@@ -7,6 +7,7 @@
 //////////////////////////////////////////////////////////////////////////
 include_once "rko_db.inc";
 include_once "cards.inc";
+include_once "common.inc";
 
 class i3x5_DB extends RKO_DB {
 //////////////////////////////////////////////////////////////////////////
@@ -70,7 +71,11 @@ WHERE	n.bid IS NOT NULL wherexxx
 // constructor
 //////////////////////////////////////////////////////////////////////////
 function __construct ($schema = "3x5") {
+	global $debugdb;
 	$this->debug = 0;
+	if ($debugdb > 0) {
+		$this->debug = $debugdb;
+	}
 	$this->showerr = 1;
 	$this->errno = 0;
 	$this->errmsg = "i3x5_DB: ";
@@ -99,19 +104,54 @@ function &bids ($uid) {
 		echo "3x5_DB::bids($uid)<br/>\n";
 	}
 	return $this->multi_col("bid",
-"(SELECT bid, batch, rid, 0 AS selected,\n".
-"num_name AS num, title_name AS title, card_name AS card,\n".
-"num_help, title_help, card_help,\n".
-"moddate AS date\n".
-"FROM i3x5_batch WHERE uid=$uid AND rid IS NULL\n".
-"UNION\n".
-"SELECT n.bid, n.batch, n.rid, 0 AS selected,\n".
-"r.num_name AS num, r.title_name AS title, r.card_name AS card,\n".
-"r.num_help, r.title_help, r.card_help,\n".
-"r.moddate AS date\n".
-"FROM i3x5_batch n, i3x5_batch r\n".
-"WHERE n.uid=$uid AND r.bid=n.rid AND n.bid IS NOT NULL\n".
-") ORDER BY batch");
+"(
+SELECT	bid, batch, rid, 0 AS selected,
+	num_name AS num, title_name AS title, card_name AS card,
+	num_help, title_help, card_help,
+	moddate AS date
+FROM	i3x5_batch
+WHERE	uid=$uid
+AND	rid IS NULL
+UNION
+SELECT	n.bid, n.batch, n.rid, 0 AS selected,
+	r.num_name AS num, r.title_name AS title, r.card_name AS card,
+	r.num_help, r.title_help, r.card_help,
+	r.moddate AS date
+FROM	i3x5_batch	n,
+	i3x5_batch	r
+WHERE	n.uid=$uid
+AND	r.bid=n.rid
+AND	n.bid IS NOT NULL
+) ORDER BY batch");
+}
+
+function &bids_num ($uid) {
+	if ($this->debug > 0) {
+		echo "3x5_DB::bids_num($uid)<br/>\n";
+	}
+	return $this->multi_col("bid",
+"SELECT	-1 AS bid, COUNT(id) AS num, COUNT(rid) AS numrid,
+	COUNT(NULLIF(encrypted,false)) AS numcryp
+FROM	(
+SELECT	n.id, n.rid, n.encrypted
+FROM	i3x5_cards	n
+JOIN	i3x5_batch	b
+USING	(bid)
+WHERE	b.uid = $uid
+)	x
+GROUP BY bid
+UNION
+SELECT	bid, COUNT(id) AS num, COUNT(rid) AS numrid,
+	COUNT(NULLIF(encrypted,false)) AS numcryp
+FROM	(
+SELECT	bid, n.id, n.rid, n.encrypted
+FROM	i3x5_cards	n
+JOIN	i3x5_batch	b
+USING	(bid)
+WHERE	b.uid = $uid
+)	x
+GROUP BY bid
+ORDER BY bid");
 }
 
 //
@@ -572,6 +612,33 @@ function copy_card($id,$newbid) {
 ) SELECT $newbid,num,title,card,xcard,formatted,encrypted
 FROM i3x5_cards
 WHERE id=$id");
+}
+
+// Count the number of encrypted cards
+function count_xcards($uid) {
+	return $this->sql(
+"SELECT	COUNT(1)
+FROM	i3x5_cards	n
+JOIN	i3x5_batch	b
+USING	(bid)
+WHERE	uid = $uid
+AND	xcard IS NOT NULL
+AND	n.encrypted");
+}
+
+// Convert the encrypted cards to another key
+function convert_xcards($uid, $oldcrypt, $newcrypt) {
+	$oldcrypt = $this->escape(clean($oldcrypt));
+	$newcrypt = $this->escape(clean($newcrypt));
+	return $this->sql(
+"SELECT	n.xcard =
+	pgp_sym_encrypt(pgp_safe_decrypt(n.xcard,'$oldcrypt'),'$newcrypt')
+FROM	i3x5_cards	n
+JOIN	i3x5_batch	b
+USING	(bid)
+WHERE	uid = $uid
+AND	n.xcard IS NOT NULL
+AND	n.encrypted");
 }
 
 function helpmsg($key = "unknown") {

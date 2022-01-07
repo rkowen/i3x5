@@ -202,6 +202,12 @@ td.b_number,td.b_title,td.b_card,td.b_form {
 	text-align: left;
 	padding-left: .5em;
 }
+td.b_form2 {
+	background: #e0e0e0;
+	border: none 0;
+	text-align: left;
+	padding-left: .5em;
+}
 td.b_title {
 	background: #e0e0e0;
 }
@@ -375,7 +381,7 @@ td.h_number,td.h_title,td.h_card,td.h_batch,td.h_form {
 	text-align:	left;
 	padding-left:	.5em;
 }
-td.b_number,td.b_title,td.b_card,td.b_form {
+td.b_number,td.b_title,td.b_card,td.b_form,td.b_form2 {
 	background:	#ffffff;
 	border:		2px solid #d0d0d0;
 	text-align:	left;

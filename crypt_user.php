@@ -11,11 +11,11 @@
 	if ($db->encode
 	&&  isset($_POST["submit"])
 	&&  strlen(clean($_POST["crypt"]))) {
-		$_POST["crypt"] = clean($_POST["crypt"]);
 // check if still active
 		if (!isset($user,$user->uid)) {
 			header("Location: login_user.php");
 		}
+		$_POST["crypt"] = clean($_POST["crypt"]);
 // get DB object and service parameters
 		$isprojcrypt = $db->sql(
 "SELECT COUNT(1)

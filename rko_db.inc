@@ -6,6 +6,7 @@
 //
 //////////////////////////////////////////////////////////////////////////
 include_once "db_connect.inc";
+include_once "common.inc";
 
 class RKO_DB {
 //////////////////////////////////////////////////////////////////////////
@@ -35,8 +36,11 @@ class RKO_DB {
 // constructor
 //////////////////////////////////////////////////////////////////////////
 function __construct ($schema) {
-	global $db_connect, $db_pass, $db_encode, $db_crypt;
+	global $db_connect, $db_pass, $db_encode, $db_crypt, $debugdb;
 	$this->debug = 0;
+	if ($debugdb > 0) {
+		$this->debug = $debugdb;
+	}
 	$this->showerr = 1;
 	$this->errno = 0;
 	$this->errmsg = "RKO_DB: ";

@@ -186,6 +186,19 @@ INSERT INTO i3x5_help (key,help) VALUES ( 'batch count','
 The number of cards in this batch.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'batch related','
+The number of cards in this batch that are related to other cards.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'batch crypted','
+The number of cards in this batch that are encrypted.
+');
+
+INSERT INTO i3x5_help (key,help) VALUES ( 'batch totals','
+The total number of cards for this project user
+- all cards, related cards, and encrypted cards.
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'update all cards','
 All the card contents (except for the relation cards) can be updated
 collectively by, first changing the card contents for all those desired,

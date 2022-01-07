@@ -3,6 +3,8 @@
 //
 // values
 //
+	include_once	"common.inc";
+
 	$form_color	= "#D0D0D0";
 	$xhidden	=
 	"<span style=\"font-size: larger\">&blacktriangleright;</span>";

@@ -7,8 +7,10 @@
 // values
 //
 	$schema		= "i3x5";
-	$version	= "0.8.3";
+	$version	= "0.8.4";
 	$phpinfo	= 0;	// set non-zero for phpinfo
+	$debug		= 0;	// html debug
+	$debugdb	= 0;	// DB debug
 	$level_root	= 99;
 	$level_admin	= 4;
 	$level_write	= 3;
@@ -31,9 +33,11 @@ class Common {
 // constructor
 	function __construct() {
 		global $common;
+		global $phpinfo;
 		if (isset($_SESSION["common"])) {
 			$common = $_SESSION["common"];
 		}
+		$this->showphpinfo = $phpinfo;
 	}
 	function show() {
 		print <<<SHOW
