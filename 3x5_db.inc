@@ -631,14 +631,41 @@ function convert_xcards($uid, $oldcrypt, $newcrypt) {
 	$oldcrypt = $this->escape(clean($oldcrypt));
 	$newcrypt = $this->escape(clean($newcrypt));
 	return $this->sql(
-"SELECT	n.xcard =
-	pgp_sym_encrypt(pgp_safe_decrypt(n.xcard,'$oldcrypt'),'$newcrypt')
-FROM	i3x5_cards	n
-JOIN	i3x5_batch	b
-USING	(bid)
-WHERE	uid = $uid
-AND	n.xcard IS NOT NULL
-AND	n.encrypted");
+"UPDATE	i3x5_cards
+SET	xcard = pgp_sym_encrypt(pgp_safe_decrypt(xcard,'$oldcrypt'),'$newcrypt')
+WHERE	bid IN (
+	SELECT	bid
+	FROM	i3x5_batch
+	WHERE	uid = $uid
+)
+AND	xcard IS NOT NULL
+AND	encrypted");
+}
+
+// encrypt unencrypted cards in a batch
+function encrypt_batch($bid, $crypt) {
+	$crypt = $this->escape(clean($crypt));
+	return $this->sql(
+"UPDATE	i3x5_cards
+SET	xcard = pgp_sym_encrypt(card,'$crypt'),
+	encrypted = TRUE,
+	card = NULL
+WHERE	bid = $bid
+AND	card IS NOT NULL
+AND	NOT encrypted");
+}
+
+// decrypt encrypted cards in a batch
+function decrypt_batch($bid, $crypt) {
+	$crypt = $this->escape(clean($crypt));
+	return $this->sql(
+"UPDATE	i3x5_cards
+SET	card = pgp_safe_decrypt(xcard,'$crypt'),
+	encrypted = FALSE,
+	xcard = NULL
+WHERE	bid = $bid
+AND	xcard IS NOT NULL
+AND	encrypted");
 }
 
 function helpmsg($key = "unknown") {

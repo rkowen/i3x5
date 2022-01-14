@@ -27,7 +27,7 @@ if (isset($_GET["msg"])) {
 // check if batch properties are linked to
 if (isset($one_batch__) && $one_batch__) {
 	$rid = $db->sql(
-	"SELECT count(*) FROM i3x5_batch WHERE rid=$one_batch__");
+	"SELECT COUNT(1) FROM i3x5_batch WHERE rid=$one_batch__");
 	if ($rid) {
 		$msg = "Batch {$user->bids[$one_batch__]["batch"]} is "
 		."linked to from $rid other batch".($rid==1?"":"es");
@@ -48,7 +48,7 @@ if (isset($do_delete) && $delete=="Delete") {
 "WHERE bid != $do_delete AND rid IS NOT NULL)");
 
 // for now this only deletes the batch entry ... not the cards
-	$c = $db->sql("SELECT COUNT(*) FROM i3x5_cards WHERE bid=$do_delete");
+	$c = $db->sql("SELECT COUNT(1) FROM i3x5_cards WHERE bid=$do_delete");
 	if ($c == 0) {
 		$db->sql("DELETE FROM i3x5_batch WHERE bid=$do_delete");
 		$url = "del_batch.php?msg="

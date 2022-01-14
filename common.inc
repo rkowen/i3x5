@@ -7,7 +7,7 @@
 // values
 //
 	$schema		= "i3x5";
-	$version	= "0.8.4";
+	$version	= "0.9.0";
 	$phpinfo	= 0;	// set non-zero for phpinfo
 	$debug		= 0;	// html debug
 	$debugdb	= 0;	// DB debug

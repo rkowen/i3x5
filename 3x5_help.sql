@@ -280,6 +280,13 @@ from other batches.  If there are linked cards then you will
 need to dispose of the cards individually.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'crypt batch','
+Encrypt/Decrypt a whole batch, except for those cards that are related to
+other batches.  This will also set or unset the encrypt bit for the batch
+which serves only an advisory role.  Related cards will need to be
+handled individually.
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'batch id','
 The batch id is an internal identifier for the batch
 and is never used directly by the user,

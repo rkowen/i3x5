@@ -38,7 +38,13 @@ PAGE;
 <li> View/Update:
   <ul>
   <li> <a href="update_user.php" target="main">User Project Info</a><br/></li>
+EOT;
+		if ($common->encode) {
+			print <<< EOT
   <li> <a href="crypt_admin.php" target="main">Crypt Key Admin</a></li>
+EOT;
+		}
+		print <<< EOT
   </ul>
 EOT;
 	}

@@ -4,6 +4,7 @@
 	include_once "common.inc";
 	include_once "session.inc";
 	include_once "cards.inc";
+	global $common;
 if (isset($user)) {
 	print sendhelp($level_names[$user->level],
 		$level_names[$user->level])
@@ -22,6 +23,13 @@ EOT;
 	if ($user->level >= $level_admin) {
 		print <<< EOT
   <li> <a href="del_batch.php" target="main">Delete</a></li>
+EOT;
+		if ($common->encode && $user->encode) {
+			print <<< EOT
+  <li> <a href="crypt_batch.php" target="main">Encrypt</a></li>
+EOT;
+		}
+		print <<< EOT
   </ul>
 EOT;
 	}

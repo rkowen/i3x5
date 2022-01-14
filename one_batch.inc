@@ -14,7 +14,7 @@ class OneBatch {
 	public $ops;	// last operation requested
 
 // constructor
-function __construct(	$id	= "_", $bid = false) {
+function __construct(	$id = "_", $bid = false) {
 
 	$this->id	= $id;
 	$this->bid	= $bid;
@@ -75,17 +75,17 @@ function string_one_batch($selected = false) {
 	global $user;
 
 	$s = "<!--one_batch-->\n"
-		."<SELECT NAME=\"one_batch_{$this->id}\" SIZE=1>\n";
+		."<select name=\"one_batch_{$this->id}\" size=1>\n";
 
 	// list batches owned by user
 	foreach ($user->bids as $k => $v) {
 		if ((! $selected) || $v["selected"]) {
-			$s .= "<OPTION"
-			.($this->bid == $k ? " SELECTED " : " ")
-			."VALUE=\"".$k."\">".$v["batch"]."</OPTION>\n";
+			$s .= "<option"
+			.($this->bid == $k ? " selected " : " ")
+			."value=\"".$k."\">".$v["batch"]."</option>\n";
 		}
 	}
-	$s .= "</SELECT>\n";
+	$s .= "</select>\n";
 	return $s;
 }
 
