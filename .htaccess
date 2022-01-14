@@ -6,8 +6,8 @@
 # set PostgreSQL connection URL
 # may need to have AllowOverride All in system configuration.
 <IfModule mod_env.c>
-#SetEnv	DB_CRYPT	SomeString
-#SetEnv	DATABASE_URL	postgresql://www-data:SomePassword@localhost:5432/i3x5
+SetEnv	DB_CRYPT	RKOwenPhD
+SetEnv	DATABASE_URL	postgresql://www-data:What4This@localhost:5432/i3x5
 </IfModule>
 
 #RewriteEngine	On
