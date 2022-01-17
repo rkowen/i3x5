@@ -499,7 +499,7 @@ function insert_card ($bid, $object, $cryptkey = "", $append = false) {
 	formatted,encrypted
 ) VALUES (
 	$id, $bid, {$object['num']}, {$object['title']},".
-($object["encrypted"] && strlen($cryptkey)
+(($object["encrypted"] == "true") && strlen($cryptkey)
 ?	"NULL,pgp_sym_encrypt({$object["card"]},'$cryptkey'),"
 :	"{$object["card"]},NULL,")
 ."	{$object['formatted']}, {$object['encrypted']})" );
@@ -539,7 +539,7 @@ function update_card ($id, $rid, $object) {
 	if ($object["card"]) {
 		// handle card and encrypted fields
 		if (($this->encode>0) && ($user->encode>0)
-		&& $object["encrypted"]) {
+		&& ($object["encrypted"] == "true")) {
 			$q.="card=NULL,xcard=pgp_sym_encrypt('"
 			.$this->escape($object["card"])
 			."','{$user->crypt}'),encrypted=true,";
@@ -584,7 +584,7 @@ FROM i3x5_cards WHERE id=$id");
 		."'>>>\n$append";
 	$this->sql(
 "UPDATE i3x5_cards SET ".
-($this->encode && $user->encode && $encrypted
+($this->encode && $user->encode && ($encrypted == "true")
 ?	"xcard=pgp_sym_encrypt('$x','{$user->crypt}'),"
 :	"card='$x',")
 	."formatted=$formatted 
