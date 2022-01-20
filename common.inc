@@ -7,7 +7,7 @@
 // values
 //
 	$schema		= "i3x5";
-	$version	= "0.9.0";
+	$version	= "0.9.1";
 	$phpinfo	= 0;	// set non-zero for phpinfo
 	$debug		= 0;	// html debug
 	$debugdb	= 0;	// DB debug
@@ -27,6 +27,7 @@
 class Common {
 	public	$schema = "i3x5";	// database schema
 	public	$encode = 0;		// whether to use encryption or not
+	public	$no_new = 0;		// whether to allow new users
 	public	$debug = 0;		// global debug value
 	public	$showphpinfo = 0;	// show phpinfo
 
@@ -42,10 +43,11 @@ class Common {
 	function show() {
 		print <<<SHOW
 <pre>
-schema		= $schema
-encode		= $encode
-debug		= $debug
-showphpinfo	= $showphpinfo
+schema		= $this->schema
+encode		= $this->encode
+no_new		= $this->no_new
+debug		= $this->debug
+showphpinfo	= $this->showphpinfo
 </pre></br>
 SHOW;
 	}

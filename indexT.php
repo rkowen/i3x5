@@ -18,11 +18,16 @@ if (isset($user)) {
 
 print "<ul>\n";
 if (!isset($user)) {
-print <<<PAGE
+	print <<<PAGE
 <li><a href="login_user.php?login=Login+User" target="main">
 	Login New User</a></li>
+PAGE;
+	$NO_MORE_NEW = getenv("NO_MORE_NEW");
+	if (!$NO_MORE_NEW) {
+		print <<<PAGE
 <li><a href="create_user.php" target="main">Create New User</a></li>
 PAGE;
+	}
 } else {
 	print <<<PAGE
 <li><a href="logout_user.php" target="main">Logout User</a></li>

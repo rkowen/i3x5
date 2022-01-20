@@ -8,6 +8,7 @@
 <IfModule mod_env.c>
 #SetEnv	DB_CRYPT	SomeString
 #SetEnv	DATABASE_URL	postgresql://www-data:SomePassword@localhost:5432/i3x5
+#SetEnv	NO_MORE_NEW	1
 </IfModule>
 
 #RewriteEngine	On

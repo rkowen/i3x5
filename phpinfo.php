@@ -19,5 +19,5 @@ if (array_key_exists("DB_CRYPT",$_SERVER)) {
 } else {
 	print "DB_CRYPT does not exists!</br>\n";
 }
-	phpinfo(); 
+	phpinfo(INFO_VARIABLES); 
 ?>

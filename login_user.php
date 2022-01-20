@@ -35,13 +35,11 @@
 		$_GET["access"] = preg_replace("/\.access/","",$_GET["access"]);
 	}
 
+	$NO_MORE_NEW=getenv("NO_MORE_NEW");
+
 function not_logged_in ($q) {
-	global $common;
-	global $username;
-	global $passwd;
-	global $projcrypt;
-	global $project;
-	global $version;
+	global $common, $NO_MORE_NEW;
+	global $username, $passwd, $projcrypt, $project, $version;
 	$hlogin = sendhelp("$project - Login","login");
 	$husername = sendhelp("Username","login username");
 	$hpassword = sendhelp("Password","login password");
@@ -71,10 +69,12 @@ print table(row(head(
 			.input("reset","reset","Reset")
 			.input("hidden","login_user","1")
 		,"colspan=2"))
-	,"class=\"form\""))
-	.row(head(form("create_user.php",
+	,"class=\"form\"")).
+($NO_MORE_NEW ? ""
+:	row(head(form("create_user.php",
 		input("submit","create_update_user","Create User Project")
 	)))
+)
 )),"class=\"tight\"");
 print <<<NOT_LOGGED_IN
 $q

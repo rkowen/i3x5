@@ -24,4 +24,10 @@ if (!$DB_CRYPT) {
 	$db_encode = true;
 	$db_crypt = $DB_CRYPT;
 }
+$NO_MORE_NEW=getenv("NO_MORE_NEW");
+if (!$NO_MORE_NEW) {
+	$db_no_new = false;
+} else {
+	$db_no_new = true;
+}
 ?>

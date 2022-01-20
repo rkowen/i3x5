@@ -17,6 +17,7 @@ class RKO_DB {
 	public $pass;
 	public $encode;			// whether to use encryption or not
 	public $crypt;			// encrypt/decrypt string for passwords
+	public $no_new;			// whether to allow new users
 	public $prepared;		// array of prepared query names
 	public $query;
 	public $debug;
@@ -36,7 +37,8 @@ class RKO_DB {
 // constructor
 //////////////////////////////////////////////////////////////////////////
 function __construct ($schema) {
-	global $db_connect, $db_pass, $db_encode, $db_crypt, $debugdb;
+	global	$db_connect, $db_pass, $db_encode, $db_crypt, $db_no_new,
+		$debugdb;
 	$this->debug = 0;
 	if ($debugdb > 0) {
 		$this->debug = $debugdb;
@@ -52,6 +54,7 @@ function __construct ($schema) {
 	$this->pass = $db_pass;
 	$this->encode = $db_encode;
 	$this->crypt = $db_crypt;
+	$this->no_new = $db_no_new;
 	$this->prepared = array();
 	$this->dbconn = pg_connect($this->connect);
 	if (!$this->dbconn) {
