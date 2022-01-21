@@ -40,12 +40,14 @@
 function not_logged_in ($q) {
 	global $common, $NO_MORE_NEW;
 	global $username, $passwd, $projcrypt, $project, $version;
+	global $openeye, $openclose;
 	$hlogin = sendhelp("$project - Login","login");
 	$husername = sendhelp("Username","login username");
 	$hpassword = sendhelp("Password","login password");
 	$hprojcrypt = sendhelp("Crypt Key","login crypt");
 	$q = warn($q);
 
+	script_head();
 	card_head("User Login");
 print <<<NOT_LOGGED_IN
 $hlogin
@@ -58,17 +60,21 @@ print table(row(head(
 	table(	row(cell($husername,"class=\"h_form\"")
 		.cell(input("text","username",$username,"size=35")))
 		.row(cell($hpassword,"class=\"h_form\"")
-		.cell(input("password","passwd",$passwd,"size=35")))
+		.cell(input("password","passwd",$passwd,
+			"size=35 class=\"password\"")))
 		.
 ($common->encode
 ?		row(cell($hprojcrypt,"class=\"h_form\"")
-		.cell(input("text","projcrypt",$projcrypt,"size=35")))
+		.cell(input("password","projcrypt",$projcrypt,
+			"size=35 class=\"password\"")))
 :		"")
-		.row(head(
+		.row(
+			head($openeye)
+			.head(
 			input("submit","submit","Login")
 			.input("reset","reset","Reset")
 			.input("hidden","login_user","1")
-		,"colspan=2"))
+		,"colspan=1"))
 	,"class=\"form\"")).
 ($NO_MORE_NEW ? ""
 :	row(head(form("create_user.php",

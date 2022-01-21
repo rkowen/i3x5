@@ -47,12 +47,13 @@ print table(row(head(
 		"login crypt")
 	.form($_SERVER['PHP_SELF'],
 	table(	row(cell($hprojcrypt, "class=\"h_form\"")
-		.cell(input("text","crypt","","size=35"))
+		.cell(input("password","crypt","","size=35 class=\"password\""))
 		.cell("[".$hhintcrypt."]"))
-		.row(head(
+		.row( 	head($openeye)
+			.head(
 			input("submit","submit","Submit")."\n"
 			.input("reset","reset","Reset")."\n"
-		,"colspan=3"))
+		,"colspan=2"))
 	,"class=\"form\"")
 ))),"class=\"tight\"");
 

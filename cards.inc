@@ -16,6 +16,12 @@
 	"<span style=\"font-size: larger\">&blacksquare;</span>";
 	$relate_color	=	"#a0a0dd";	// light blue
 	$related_warn	=	"#cc5050";	// red
+	$xopeneye	= "<span style=\"font-size: larger\">&gtdot;</span>";
+	$xcloseeye	= "<span style=\"font-size: larger\">&ngt;</span>";
+	$openeye	=
+"<a href=# id=\"passeye\" data-state=\"open\" onclick=\"viewpass()\">$xopeneye</a>";
+	$closeeye	=
+"<a href=# id=\"passeye\" data-state=\"open\" onclick=\"viewpass()\">$xcloseeye</a>";
 
 	global $user;
 

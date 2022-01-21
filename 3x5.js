@@ -1,10 +1,12 @@
 /*
  * 3x5 javascript
  */
-var downarrow = "<span style=\"font-size: larger\">&blacktriangledown;</span>";
+var downarrow  = "<span style=\"font-size: larger\">&blacktriangledown;</span>";
 var rightarrow ="<span style=\"font-size: larger\">&blacktriangleright;</span>";
-var xshowmore = "<span style=\"font-size: larger\">&diams;</span>";
-var xshowless = "<span style=\"font-size: larger\">&blacksquare;</span>";
+var xshowmore	= "<span style=\"font-size: larger\">&diams;</span>";
+var xshowless	= "<span style=\"font-size: larger\">&blacksquare;</span>";
+var xopeneye	= "<span style=\"font-size: larger\">&gtdot;</span>";
+var xcloseeye	= "<span style=\"font-size: larger\">&ngt;</span>";
 
 function printpage() {
 	window.print();
@@ -101,4 +103,23 @@ function showmore(cid) {
 		}
 	});
 	return;
+}
+
+function viewpass() {
+	var plist = $("input.password");
+	var peye = $("#passeye");
+	var state = peye.data('state');
+	if (state === 'open') {
+		$.each(plist, function(){
+			$(this).attr('type','text');
+		});
+		peye.html(xcloseeye)
+		peye.data("state","close")
+	} else if (state === 'close') {
+		$.each(plist, function(){
+			$(this).attr('type','password');
+		});
+		peye.html(xopeneye)
+		peye.data("state","open")
+	}
 }
