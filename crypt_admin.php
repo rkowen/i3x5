@@ -11,8 +11,7 @@
 	$db = new i3x5_DB($schema);
 	// can't get to this page unless $db->encode, but still assert
 	if ($db->encode
-	&&  isset($_POST["submit"])
-	&&  strlen(clean($_POST["newcrypt"]))) {
+	&&  isset($_POST["submit"])) {
 // check if still active
 		if (!isset($user,$user->uid)) {
 			header("Location: login_user.php");
@@ -26,7 +25,11 @@
 // set xusername
 		$setxumsg = $db->sql(
 "UPDATE	i3x5_userpass
-SET	xusername = pgp_sym_encrypt(username,'{$_POST["newcrypt"]}')
+SET	crypthint = '{$_POST["hint"]}'".
+(strlen($_POST["newcrypt"])
+?	",xusername = pgp_sym_encrypt(username,'{$_POST["newcrypt"]}')"
+:	"")
+."
 WHERE	uid = {$user->uid}");
 
 // reencrypt any cards
@@ -36,8 +39,10 @@ WHERE	uid = {$user->uid}");
 				$_POST["oldcrypt"],$_POST["newcrypt"]);
 		}
 // reload project
-		$user->crypt = $_POST["newcrypt"];
-		$user->encode = true;
+		if (strlen($_POST["newcrypt"])) {
+			$user->crypt = $_POST["newcrypt"];
+			$user->encode = true;
+		}
 		header("Location: index.php");
 	}
 

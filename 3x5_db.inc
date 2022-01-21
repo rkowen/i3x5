@@ -630,6 +630,9 @@ AND	n.encrypted");
 function convert_xcards($uid, $oldcrypt, $newcrypt) {
 	$oldcrypt = $this->escape(clean($oldcrypt));
 	$newcrypt = $this->escape(clean($newcrypt));
+	if ((!strlen($oldcrypt)) || (!strlen($newcrypt))) {
+		return NULL;
+	}
 	return $this->sql(
 "UPDATE	i3x5_cards
 SET	xcard = pgp_sym_encrypt(pgp_safe_decrypt(xcard,'$oldcrypt'),'$newcrypt')
