@@ -16,6 +16,10 @@ if (! isset($view)) {
 	$_SESSION['view'] = new View();
 	$view =& $_SESSION['view'];
 }
+if (! isset($user, $user->uid)) {
+	header("Location: login_user.php");
+}
+
 if ((! $user->selected_count()) 
 &&  (! isset($view->cards))
 &&  (! isset($_GET["bid"]))) {
