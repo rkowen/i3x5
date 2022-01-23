@@ -648,7 +648,10 @@ AND	encrypted");
 // encrypt unencrypted cards in a batch
 function encrypt_batch($bid, $crypt) {
 	$crypt = $this->escape(clean($crypt));
-	return $this->sql(
+
+	$this->sql("SELECT alter_cards_trigs(FALSE)");
+
+	$retmsg = $this->sql(
 "UPDATE	i3x5_cards
 SET	xcard = pgp_sym_encrypt(card,'$crypt'),
 	encrypted = TRUE,
@@ -656,12 +659,19 @@ SET	xcard = pgp_sym_encrypt(card,'$crypt'),
 WHERE	bid = $bid
 AND	card IS NOT NULL
 AND	NOT encrypted");
+
+	$this->sql("SELECT alter_cards_trigs(TRUE)");
+
+	return $retmsg;
 }
 
 // decrypt encrypted cards in a batch
 function decrypt_batch($bid, $crypt) {
 	$crypt = $this->escape(clean($crypt));
-	return $this->sql(
+
+	$this->sql("SELECT alter_cards_trigs(FALSE)");
+
+	$retmsg = $this->sql(
 "UPDATE	i3x5_cards
 SET	card = pgp_safe_decrypt(xcard,'$crypt'),
 	encrypted = FALSE,
@@ -669,6 +679,10 @@ SET	card = pgp_safe_decrypt(xcard,'$crypt'),
 WHERE	bid = $bid
 AND	xcard IS NOT NULL
 AND	encrypted");
+
+	$this->sql("SELECT alter_cards_trigs(TRUE)");
+
+	return $retmsg;
 }
 
 function helpmsg($key = "unknown") {

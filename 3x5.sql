@@ -151,7 +151,7 @@ DROP FUNCTION uf_batch();
 DROP TRIGGER ut_cards ON i3x5_cards;
 DROP FUNCTION uf_cards();
 
-CREATE FUNCTION uf_userpass()
+CREATE OR REPLACE FUNCTION uf_userpass()
 RETURNS TRIGGER AS '
 BEGIN
 	NEW.moddate:=now();
@@ -163,7 +163,7 @@ CREATE TRIGGER ut_userpass BEFORE UPDATE
 	ON i3x5_userpass FOR EACH ROW
 	EXECUTE PROCEDURE uf_userpass();
 
-CREATE FUNCTION uf_batch()
+CREATE OR REPLACE FUNCTION uf_batch()
 RETURNS TRIGGER AS '
 BEGIN
 	NEW.moddate:=now();
@@ -175,11 +175,14 @@ CREATE TRIGGER ut_batch BEFORE UPDATE
 	ON i3x5_batch FOR EACH ROW
 	EXECUTE PROCEDURE uf_batch();
 
-CREATE FUNCTION uf_cards()
+CREATE OR REPLACE FUNCTION uf_cards()
 RETURNS TRIGGER AS '
 BEGIN
-	IF NEW.num <> OLD.num OR NEW.title <> OLD.title
-	OR NEW.card <> OLD.card THEN
+	IF NEW.num <> OLD.num
+	OR NEW.title <> OLD.title
+	OR NEW.card <> OLD.card
+	OR NEW.xcard <> OLD.xcard
+	THEN
 		NEW.moddate:=now();
 	END IF;
 	RETURN NEW;
@@ -189,6 +192,21 @@ END;
 CREATE TRIGGER ut_cards BEFORE UPDATE
 	ON i3x5_cards FOR EACH ROW
 	EXECUTE PROCEDURE uf_cards();
+
+CREATE OR REPLACE FUNCTION alter_cards_trigs(enable BOOLEAN)
+RETURNS	BOOLEAN AS '
+BEGIN
+	IF enable THEN
+		ALTER TABLE i3x5_cards
+		ENABLE TRIGGER ut_cards;
+	ELSE
+		ALTER TABLE i3x5_cards
+		DISABLE TRIGGER ut_cards;
+	END IF;
+	RETURN enable;
+END;
+' LANGUAGE 'plpgsql'
+SECURITY DEFINER;
 
 --
 --CREATE USER "www-data"
