@@ -6,7 +6,7 @@
 	include_once "cards.inc";
 	include_once "3x5_db.inc";
 
-$db = new i3x5_DB($scheme);
+$db = new i3x5_DB($schema);
 
 if (isset($_POST["clear"])) {
 	$_POST["keywords"] = "";

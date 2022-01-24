@@ -726,6 +726,7 @@ function helpsearch($keywords) {
 	// strip out everything but characters and whitespace
 	$keywords = preg_replace('/[^\s\p{L}\p{N}]/','',$keywords);
 	$y = preg_split("/\s\s*/",$keywords);
+	$z = "";
 	foreach ($y as $k) {
 		$z .= "AND	(key ~* '$k' OR help ~* '$k')\n";
 	}
