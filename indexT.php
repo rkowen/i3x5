@@ -51,6 +51,7 @@ EOT;
 		}
 		print <<< EOT
   </ul>
+<li><a href="search_help.php" target="main">Search Help</a></li>
 EOT;
 	}
 }

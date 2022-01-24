@@ -491,5 +491,11 @@ The modification date and timestamp when a card was last modified
 will have the same value as the creation date.
 ');
 
+INSERT INTO i3x5_help (key,help) VALUES ( 'search help','
+Search the 3x5 project helpful entries by giving a set of keywords,
+separated by whitespace.  All the keywords must be present in
+the entry to be found.
+');
+
 INSERT INTO i3x5_help (key,help) VALUES ( 'xxx','
 ');

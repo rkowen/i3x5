@@ -712,5 +712,29 @@ function helphint($uid, $property = "Crypt") {
 "SELECT {$x}hint FROM i3x5_userpass WHERE uid=$uid");
 	return ($t ? $t : "No Hint");
 }
+
+// search the 3x5 project help info
+// $keywords = string of keywords
+function helpsearch($keywords) {
+	if ($this->debug > 0) {
+		echo "3x5_DB::helpsearch($keywords)<br/>\n";
+	}
+	$keywords = $this->escape(clean($keywords));
+	if (!strlen($keywords)) {
+		return;
+	}
+	// strip out everything but characters and whitespace
+	$keywords = preg_replace('/[^\s\p{L}\p{N}]/','',$keywords);
+	$y = preg_split("/\s\s*/",$keywords);
+	foreach ($y as $k) {
+		$z .= "AND	(key ~* '$k' OR help ~* '$k')\n";
+	}
+	$z = preg_replace("/^AND/","WHERE",$z);
+	return $this->multi_col("key",
+"SELECT	key, help
+FROM	i3x5_help
+$z");
+}
+
 }// end of 3x5_DB
 ?>
