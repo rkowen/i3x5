@@ -43,4 +43,12 @@
 			"target=\"main\"");
 	}
 	card_foot(0);
+print <<<END
+<script type="text/javascript">
+// .ready
+$(function() {
+	openhelp();
+});
+</script>
+END;
 ?>

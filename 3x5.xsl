@@ -7,6 +7,7 @@
 -->
 <!-- /i3x5 root node -->
 <xsl:template match="/i3x5">
+<!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="3x5.css"/>

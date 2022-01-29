@@ -20,9 +20,10 @@ actions will be shown in this frame.
 PAGE;
 		if ($db->encode && !$user->encode) {
 	$invalid = ahref("crypt_user.php","invalid","target=\"main\"");
+	$crypthelp = sendhelp("encryption key","login crypt");
 			print <<<NOCRYPT
 <p>
-The crypt key given is $invalid (click here to set).
+The $crypthelp given is $invalid (click here to set).
 </p>
 NOCRYPT;
 		}

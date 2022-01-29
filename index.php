@@ -21,6 +21,7 @@
 	} else {
 		$what = "login_user.php";
 	}
+	print "<!DOCTYPE html>\n";
 	print "<html>\n";
 	script_head();
 	print <<<PAGE
@@ -44,35 +45,16 @@ PAGE;
 	print <<<PAGE
       </div>
     </div>
-	<iframe name="helptext" id="helptext">Load Failed</iframe>
+	<iframe name="helptext" id="helptext" width="100%" height="100%">Load Failed</iframe>
   </div>
   <div id="bodyright">
-	<iframe name="main" id="main" src="$what"></iframe>
+    $closeeye
+	<iframe name="main" id="main" width="100%" height="100%" src="$what"></iframe>
 </div>
 </div>
 <script type="text/javascript">
-function FrameSize() {
-	var wid = window.innerWidth - 32;
-	var hit = window.innerHeight;
-/*
-	var wid = $("body").width();
-	var hit = $("body").height();
-*/
-/* set some iframe widths (else default 150x300 */
-	$("#page").height(hit);
-	if ($("#bodyleft").css("display") == "none") {
-		// probably in print mode
-		$("#bodyleft").height(hit).width(0);
-	} else {
-		$("#bodyleft").height(hit).width(Math.min(250,wid*.25));
-	}
-	$("#menu").height(hit*.6).width($("#bodyleft").width());
-	$("#bodyright").height(hit).width(wid -4 - $("#bodyleft").width());
-	$("#main").width($("#bodyright").width()).height(hit);
-	$("#helptext").width($("#bodyleft").width()).height(hit*.4);
-}
-
-$(document).ready(function() {
+// .ready
+$(function() {
 	var url = window.location.href;
 	var refer = document.referrer;
 

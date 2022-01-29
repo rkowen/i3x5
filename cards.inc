@@ -16,12 +16,14 @@
 	"<span style=\"font-size: larger\">&blacksquare;</span>";
 	$relate_color	=	"#a0a0dd";	// light blue
 	$related_warn	=	"#cc5050";	// red
-	$xopeneye	= "<span style=\"font-size: larger\">&gtdot;</span>";
-	$xcloseeye	= "<span style=\"font-size: larger\">&ngt;</span>";
+	$xopeneye	=
+		"<span style=\"font-size: larger\">&gtdot;</span>";
+	$xcloseeye	=
+		"<span style=\"font-size: larger\">&NotSucceeds;</span>";
 	$openeye	=
 "<a href=# id=\"passeye\" data-state=\"open\" onclick=\"viewpass()\">$xopeneye</a>";
 	$closeeye	=
-"<a href=# id=\"passeye\" data-state=\"open\" onclick=\"viewpass()\">$xcloseeye</a>";
+"<a href=# id=\"menueye\" data-state=\"close\" onclick=\"viewmenu()\">$xcloseeye</a>";
 
 	global $user;
 
@@ -51,6 +53,7 @@ SCRIPT;
 				header("Location: login_user.php");
 		}
 
+		print "<!DOCTYPE html>\n";
 		print "<html>\n";
 		script_head();
 		print <<<HEAD

@@ -465,7 +465,8 @@ row(head(sendhelp("Advanced Search","advanced search")
 	showphpinfo();
 	print <<<PAGE
 <script type="text/javascript">
-$(document).ready(function() {
+// .ready
+$(function() {
         $("#smenu").accordion({
                 collapsible:    true,
                 active:         0,

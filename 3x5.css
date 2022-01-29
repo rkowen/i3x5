@@ -103,6 +103,7 @@ a.relcard:link,a.relcard:active,a.relcard:visited {
 	width:		"20%";
 }
 #bodyright {
+	background:	#efefef;
 	float:		right;
 	height:		"100%";
 	width:		"80%";
@@ -277,6 +278,16 @@ pre {
 }
 pre br {
 	line-height: 0;
+}
+
+#menueye {
+	font-size:	large;
+	background:	#efefef;
+	position:	relative;	
+	float:		left;
+	top:		0;
+	left:		0;
+	z-index:	99;
 }
 
 /* PRINT-ONLY styles */
