@@ -296,5 +296,20 @@ if ($debug) {
 //	print_r($user->bids);
 	print "</pre>\n";
 }
+// .ready
+	print javascript(
+'$(function() {
+	$(".datepicker").datepicker({
+		dateFormat:	"yymmdd",
+		yearRange:	"c-20:c+20",
+		showOn:		"button",
+		changeMonth:	true,
+		changeYear:	true,
+		buttonImage:	"office-calendar-icon.png",
+		buttonImageOnly: true,
+		buttonText:	"Select Date"
+	});
+});
+');
 	card_foot();
 ?>

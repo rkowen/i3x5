@@ -265,13 +265,19 @@ if ($this->edit == "edit") {
 		if ($v["selected"]) { break; }
 	}
 	$fn = $db->batch_fieldnames($k);
+	if (preg_match("/^date($|[^_])/i",$fn["num"])) {
+		$date = "class=\"datepicker\"";
+	} else {
+		$date = "";
+	}
 
 	$ibatch = new OneBatch("i",$k);
 	$text .= row(cell(table(
 		row(	cell(senddesc($fn["num"],$k,"num")
 				,"class=\"h_number\" width=10% ")
 			.cell(
-			  input("text","i_num","","size=16 maxlength=20")."\n"
+			  input("text","i_num","","size=16 maxlength=20 $date")
+				."\n"
 				,"class=\"b_number\" width=35% colspan=2")
 			.head($ibatch->string_one_batch(true)
 				,"width=35%")
@@ -380,12 +386,17 @@ if ($this->edit == "list") {					/* list */
 	$cbatch[$k] = new OneBatch("[$k]",$v["bid"]);
 	$lines = max(count(preg_split("/\n/", $v["card"])),
 			strlen($v["card"])/75) + 1;
+	if (preg_match("/^date($|[^_])/i", $user->bids[$v["bid"]]["num"])) {
+		$date = "class=\"datepicker\"";
+	} else {
+		$date = "";
+	}
 $text .= row(cell(table(
 	row(	(! preg_match("/^$/",$user->bids[$v["bid"]]["num"])
 		?cell(senddesc($user->bids[$v["bid"]]["num"],$v["bid"],
 			"num"),"class=\"h_number\" width=10%")
 		.cell(input("text","c_num[$k]",$v["num"],
-			"size=16 maxlength=20")
+			"size=16 maxlength=20 $date")
 			,"class=\"$tcolor\" width=20%")
 		: cell("&nbsp;","class=\"$tcolor\" colspan=2 width=30%") )
 		.cell(input("checkbox","c_check[$k]","true",

@@ -232,6 +232,10 @@ INSERT INTO i3x5_help (key,help) VALUES ( 'batch number','
 The label for the batch card number.
 If blank, this field will not be shown.
 Sorting can be performed on either the number or the title.
+If the label begins with "date" (case ignored) then a calendar
+icon, when clicked, will cause a calendar widget to appear
+to help enter a value of YYYYMMDD.
+This can be disabled by adding an underscore (e.g. "date_").
 ');
 
 INSERT INTO i3x5_help (key,help) VALUES ( 'batch title','
