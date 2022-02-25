@@ -391,6 +391,11 @@ if ($this->edit == "list") {					/* list */
 	} else {
 		$date = "";
 	}
+	if ($v["encrypted"]=="t") {
+		$cardx = "b_card_x";
+	} else {
+		$cardx = "b_card";
+	}
 $text .= row(cell(table(
 	row(	(! preg_match("/^$/",$user->bids[$v["bid"]]["num"])
 		?cell(senddesc($user->bids[$v["bid"]]["num"],$v["bid"],
@@ -436,7 +441,7 @@ $text .= row(cell(table(
 				? pre($v["card"],"t") : $this->br($v["card"])
 		:	textarea("c_card[$k]",$v["card"],
 			"cols=80 rows=$lines"))
-			,"class=\"b_card\" width=90% colspan=4"),
+			,"class=\"$cardx\" width=90% colspan=4"),
 	"id=\"card_$k\" class=\"togcard "
 	.((($this->body == "full")
 	&& ! preg_match("/^$/",$user->bids[$v["bid"]]["card"]))

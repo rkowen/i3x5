@@ -198,10 +198,17 @@ td.h_number,td.h_title,td.h_card,td.h_batch,td.h_form {
 	padding-left: .5em;
 }
 td.b_number,td.b_title,td.b_card,td.b_form {
-	background: #d0d0d0;
-	border: none 0;
-	text-align: left;
-	padding-left: .5em;
+	background:	#d0d0d0;
+	border:		none 0;
+	text-align:	left;
+	padding-left:	.5em;
+}
+td.b_card_x {
+	background:	#d0d0d0;
+	border:		solid 2px;
+	border-color:	#ff4040;
+	text-align:	left;
+	padding-left:	.5em;
 }
 td.b_form2 {
 	background: #e0e0e0;

@@ -4,13 +4,19 @@
     handles most 3x5 DB interactions with explicitly formatted queries
 	include:	rko_db.inc
 			cards.inc
+			common.inc
 	action:		(none)
 
 cards.inc
-    common values, functions, and classes
-	include:	(none)
+    common card related values, functions, and classes
+	include:	common.inc
 	action:		Location: login_user.php
 			indexH.php
+
+common.inc
+    class object with common values to be used and shared.
+	include:	(none)
+	action:		(none)
 
 create_update_user.inc
     create_update_user class to handle user info processing
@@ -20,6 +26,7 @@ create_update_user.inc
 db_connect.inc
     db_connect.inc
     DB connection string
+    uses env.vars for passing some of the values
 	include:	(none)
 	action:		(none)
 
@@ -45,6 +52,7 @@ rko_db.inc
     RKO_DB simple DB connection class
     direct connection to DB with generalized operations
 	include:	db_connect.inc
+			common.inc
 	action:		(none)
 
 session.inc
@@ -54,6 +62,7 @@ session.inc
     Session registered variables:
     user
     view
+    common
 	include:	(none)
 	action:		(none)
 
@@ -94,6 +103,34 @@ create_user.php
 			create_update_user.inc
 	action:		Location: login_user.php
 
+crypt_admin.php
+    prompts to set the project/user encryption key
+	include:	user.inc
+			common.inc
+			session.inc
+			cards.inc
+			3x5_db.inc
+	action:		Location: login_user.php
+			Location: index.php
+
+crypt_batch.php
+    Encrypt/Decrypt a whole batch from the DB
+	include:	cards.inc
+			user.inc
+			session.inc
+			3x5_db.inc
+			one_batch.inc
+	action:		Location: login_user.php
+
+crypt_user.php
+    prompts to set the project/user encryption key
+	include:	user.inc
+			session.inc
+			cards.inc
+			3x5_db.inc
+	action:		Location: login_user.php
+			Location: index.php
+
 del_batch.php
     Delete a whole batch from the DB
 	include:	cards.inc
@@ -107,6 +144,9 @@ index.php
     sets up areas and iframes title/options/helptext/main
 	include:	cards.inc
 			user.inc
+			common.inc
+			3x5_db.inc
+			session.inc
 	action:		indexM.php
 			login_user.php
 			indexT.php
@@ -115,10 +155,12 @@ index.php
 indexB.php
     options frame, shows access level and selection options
 	include:	user.inc
+			common.inc
 			session.inc
 			cards.inc
 	action:		batches.php
 			del_batch.php
+			crypt_batch.php
 			list_batches.php
 			search_batches.php
 			sel_batches.php
@@ -127,6 +169,7 @@ indexB.php
 indexH.php
     help frame with information when clicked upon elsewhere
 	include:	user.inc
+			common.inc
 			session.inc
 			cards.inc
 			3x5_db.inc
@@ -137,18 +180,23 @@ indexM.php
 	include:	user.inc
 			session.inc
 			cards.inc
-	action:		login_user.php
+			3x5_db.inc
+	action:		crypt_user.php
+			login_user.php
 			create_user.php
 
 indexT.php
     title frame, shows username
 	include:	user.inc
-			cards.inc
+			common.inc
 			session.inc
-	action:		create_user.php
+	action:		crypt_user.php
+			create_user.php
 			logout_user.php
 			user_role.php
 			update_user.php
+			crypt_admin.php
+			search_help.php
 
 list_batches.php
     List batch properties as a table
@@ -162,6 +210,7 @@ list_batches.php
 login_user.php
     prompts for username and password
 	include:	user.inc
+			common.inc
 			session.inc
 			cards.inc
 			3x5_db.inc
@@ -185,6 +234,10 @@ new_batch.php
 			one_batch.inc
 	action:		new_batch.php
 
+phpinfo.php
+	include:	(none)
+	action:		(none)
+
 search_batches.php
     select which batch or set of batches for card handling
 	include:	user.inc
@@ -194,7 +247,14 @@ search_batches.php
 			many_batch.inc
 			3x5_db.inc
 	action:		Location: view_cards.php
-			Location: view_cards.php
+
+search_help.php
+    search the project help for keywords and show the entries.
+	include:	user.inc
+			session.inc
+			cards.inc
+			3x5_db.inc
+	action:		(none)
 
 sel_batches.php
     select which batch or set of batches for card handling
@@ -217,6 +277,7 @@ update_user.php
 user_role.php
     For the admin - change the current access level for test purposes
 	include:	user.inc
+			common.inc
 			session.inc
 			cards.inc
 			3x5_db.inc
@@ -226,9 +287,10 @@ view_cards.php
     view the individual cards as selected by the batch
 	include:	user.inc
 			view.inc
+			common.inc
 			session.inc
 			cards.inc
 			3x5_db.inc
 			javascript.inc
-	action:		(none)
+	action:		Location: login_user.php
 
