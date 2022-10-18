@@ -245,7 +245,7 @@ createdateend:
 		// BETWEEN
 		if (!isOK("moddate1")) {
 			$errmsg .=
-		"Modication Date: must give a range of values for BETWEEN.  ";
+		"Modification Date: must give a range of values for BETWEEN.  ";
 			goto moddateend;
 		}
 		$sqlmd .= "(n.moddate BETWEEN ";
@@ -442,7 +442,7 @@ row(head(sendhelp("Advanced Search","advanced search")
 	"style=\"font-size:60%;\"")))
 .row(cell(sqlandor("5"),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
-.cell(label("moddate",sendhelp("Modication Date","moddate")),
+.cell(label("moddate",sendhelp("Modification Date","moddate")),
 	"style=\"text-align:center; vertical-align: top;\" rowspan=\"2\"")
 .cell(sqlcomp("5","date")).cell(input("datetime-local","moddate1","",
 	"style=\"font-size:60%;\"")))
@@ -454,7 +454,7 @@ row(head(sendhelp("Advanced Search","advanced search")
 .cell(label("createdatex",sendhelp("Creation Date","createdate")),
 	"style=\"text-align:center; vertical-align: top;\"")
 .cell(sqlcomp("6","datex"))
-.cell(label("moddatex",sendhelp("Modication Date","moddate")),
+.cell(label("moddatex",sendhelp("Modification Date","moddate")),
 	"style=\"text-align:center; vertical-align: top;\""))
 .row(head($view->string_buttons("2"),"colspan=\"4\""))
 .row(head(
