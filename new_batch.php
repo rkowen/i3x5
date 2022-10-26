@@ -61,16 +61,16 @@
 		// warn the user if it is ... they may want to overwrite it
 		$bid = $db->sql(
 		"SELECT bid FROM i3x5_batch WHERE uid={$user->uid} AND batch='".
-			$_POST["name"]."'");
+			$db->escape($_POST["name"])."'");
 		if ($bid) {
 			if ("Update" == $batch_select) {
 				$msg = cell(warn(
-		"may update a pre-existing batch name, if still unique"));
+		"May update an existing batch name, if still unique"));
 				$insert = false;
 				return 1;	// it's OK anyways
 			} else {
 				$msg = cell(warn(
-			"pre-existing batch name ... needs to be unique"));
+			"Existing batch name ... needs to be unique"));
 				$insert = false;
 				return 0;	// not OK
 			}
@@ -191,6 +191,8 @@ if (isset($_GET["example"])) {
 			$_POST["card_help"] = $fn["card_help"];
 			$_GET["example"] = "none";
 		}
+	} else if (isset($_POST["bid"])) {
+		$bid = $_POST["bid"];
 	}
 
 	// get field names (from related batch if need to)
@@ -311,6 +313,17 @@ $db->escape($_POST["card_help"])."')";
 		$sqlmsg = "Batch was added";
 	}
 } elseif ("Update" == $_POST["create_batch"]) {
+	// may update batch name so use bid
+	$bid = $db->escape($_REQUEST["bid"]);
+	// check if "new" name matches this batch, deny if matches another
+	$otherbid = $db->sql(
+		"SELECT bid FROM i3x5_batch WHERE uid={$user->uid} AND batch='".
+		$db->escape($_POST["name"])."'");
+	if ($bid != $otherbid) {
+		$sqlmsg = warn("Batch name conflicts");
+		goto exit_out;
+	}
+
 	if ($one_batch__ && isset($copy_relate) && $copy_relate == "Relate") {
 		$sql = 
 "UPDATE i3x5_batch SET ".
@@ -339,13 +352,15 @@ $db->escape($_POST["card_help"])."')";
 }
 	if (! $invalid ) {
 		$db->sql($sql);
+	//	print("<br/>SQL=$sql<br/>\n");
 		// need to update list of bids
 		$user->update_bids($db->bids($user->uid));
 	} else {
-		$sqlmsg = warn("Please fix the invalid entries before retrying");
+		$sqlmsg = warn("Please fix invalid entries before retrying");
 	}
 }
 //}
+exit_out:
 
 card_head($header);
 
