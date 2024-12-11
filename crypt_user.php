@@ -57,7 +57,7 @@ print table(row(head(
 	,"class=\"form\"")
 ))),"class=\"tight\"");
 
-if (strlen($result)) {
+if (isset($result) && !empty($result)) {
 	print "<em class=\"warn\">$result</em>\n";
 }
 
