@@ -223,7 +223,7 @@ function show_buttons($n = "") {
 
 // takes the $cards hash and sort it according to the view parameters
 function sort(&$cards) {
-	uasort($cards, "card_cmp");
+	uasort($cards, 'card_cmp');
 }
 
 // span and link for related cards
@@ -554,7 +554,7 @@ function dump() {
 // (id=>(id=>,bid=>,rid=>,num=>, title=>, card=>, cdate=>, mdate=> ),...)
 // returns -1,0,1
 // must be a stand-alone function (not a method)
-function card_cmp(&$a, &$b) {
+function card_cmp($a, $b) {
 	global $view;
 	global $user;
 
