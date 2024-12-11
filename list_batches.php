@@ -77,13 +77,15 @@ PAGE;
 // get batch card counts
 	$bn = $db->bids_num($user->uid);
 // put in totals
-	$bk = $bn["-1"];
+	$bk = count($bn) - 1;
+	if ($bk >= 0) {
 print	row(cell(sendhelp("TOTALS","batch totals"),
 	"class=\"h_form\" id=\"right\" colspan=6")
 	."\n   ".cell($bk["num"],"class=\"b_form\" id=\"right\"")
 	."\n     ".cell($bk["numrid"],"class=\"b_form\" id=\"right\"")
 	."\n       ".cell($bk["numcryp"],"class=\"b_form\" id=\"right\"")
 	);
+	}
 // list batches owned by user
 $oddeven = 0;
 foreach ($_SESSION['user']->bids as $k => $v) {
