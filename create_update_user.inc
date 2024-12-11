@@ -225,7 +225,7 @@ function get_form() {
 	}
 	// clean-up values
 	foreach ($this->list as $k => $v) {
-		if ($_POST[$k]) {
+		if (in_array($k,$_POST)) {
 			$$k = $this->dequote(
 				strip_tags(trim($_POST[$k])));
 			$_POST[$k] = $$k;
@@ -236,7 +236,7 @@ function get_form() {
 	$this->invalid = 0;
 	foreach ($this->list as $k => $v) {
 		$check = $this->list[$k]["check"];
-		if (! $this->$check($$k, $this->list[$k]["msg"])) {
+		if (isset($$k) && ! $this->$check($$k, $this->list[$k]["msg"])) {
 			$this->invalid++;
 			$this->invalid_list .= " ".$k;
 		}
@@ -276,8 +276,12 @@ foreach ($this->list as $k => $v) {
 		cell(input("hidden",$k,$_POST[$k]).$_POST[$k])
 			.$msg)."\n";
 	} else {
+		$kk = "";
+		if (in_array($k,$_POST)) {
+			$kk = $_POST[$k];
+		}
 		print row(cell($label,"class=\"h_form\"")."\n	".
-		cell(input("text",$k,$_POST[$k],"size=25 maxlength=$ml"))
+		cell(input("text",$k,$kk,"size=25 maxlength=$ml"))
 			.$msg)."\n";
 	}
 }
