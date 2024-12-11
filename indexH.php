@@ -21,7 +21,7 @@
 	}
 	card_head("Help Frame","helptext",0);
 
-	$db = new i3x5_DB($common->schema);
+	$db = new i3x5_DB();
 	if (! $db ) { print "initial:".$db->errmsg()."<br/>\n"; exit; }
 
 	global $user;
