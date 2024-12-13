@@ -258,7 +258,7 @@ if ($this->edit == "edit") {
 
 	$bheader = "";
 
-if ($this->edit == "edit") {
+if ($this->edit == "edit" && count(array_keys($user->bids))) {
 //{ insert card
 	// get first selected batch
 	foreach ($user->bids as $k => $v) {

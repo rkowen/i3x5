@@ -26,9 +26,10 @@ if (isset($view)) {
 	$view =& $_SESSION['view'];
 }
 // process batches if given view go-ahead
-if (isset($_POST["submit"]) && ($_POST["submit"] == "Submit")) {
-	if ( (! is_array($_POST["many_batch__"]))
-	|| (count($_POST["many_batch__"]) == 0)) {
+if ( isset($_POST["submit"]) &&
+	($_POST["submit"] == "Submit")) {
+	if ((array_key_exists("many_batch__",$_POST))
+		&& (count($_POST["many_batch__"]) == 0)) {
 		$errmsg = "Nothing to view! Select some batches.";
 	} else {
 		if (isset($view->cards)) {
