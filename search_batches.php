@@ -56,8 +56,9 @@ if (isset($_POST["simple"]) && ($_POST["simple"] == "Search")) {
 	} else {
 		$errmsg = "Must give a string to search for.";
 	}
-	return;
 } else if (isset($_POST["advanced"]) && ($_POST["advanced"] == "Search")) {
+	$sqla = "";
+	$sqlo = "";
 	$sqli = "";
 	$sqln = "";
 	$sqlt = "";

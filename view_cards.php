@@ -279,10 +279,20 @@ span(span((($view->body == "full") ? "Hide" : "Show"),"id=\"togcard\"")
 	.$bselect_bot
 ,"class=\"outer\"")."<!--}-->";
 
-if ($view->is_edit()) {
-	print form($_SERVER['PHP_SELF'],$x);
+if ($user->selected_count()) {
+	if ($view->is_edit()) {
+		print form($_SERVER['PHP_SELF'],$x);
+	} else {
+		print $x."\n";
+	}
 } else {
-	print $x."\n";
+	print
+	"<!--{-->".table(
+	row(head($hhead))
+	.(isset($errmsg)?row(head(warn($errmsg))):"")
+	.row(head(sendhelp("Help","batch ops"))."\n"
+	.row(cell(warn("No Cards Found")))
+,"class=\"outer\""))."<!--}-->\n";
 }
 	showphpinfo();
 if ($debug) {
