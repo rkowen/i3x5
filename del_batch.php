@@ -25,7 +25,7 @@ if (isset($_GET["msg"])) {
 	$msg = $_GET["msg"];
 }
 // check if batch properties are linked to
-if (isset($one_batch__) && $one_batch__) {
+if (isset($one_batch__) && (! empty($one_batch__))) {
 	$rid = $db->sql(
 	"SELECT COUNT(1) FROM i3x5_batch WHERE rid=$one_batch__");
 	if ($rid) {
