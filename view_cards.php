@@ -286,13 +286,9 @@ if ($user->selected_count()) {
 		print $x."\n";
 	}
 } else {
-	print
-	"<!--{-->".table(
-	row(head($hhead))
-	.(isset($errmsg)?row(head(warn($errmsg))):"")
-	.row(head(sendhelp("Help","batch ops"))."\n"
-	.row(cell(warn("No Cards Found")))
-,"class=\"outer\""))."<!--}-->\n";
+	header("Location: search_batches.php?errmsg="
+		.urlencode("No Cards Found! Try again."));
+	return;
 }
 	showphpinfo();
 if ($debug) {
