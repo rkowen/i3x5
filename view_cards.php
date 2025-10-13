@@ -238,9 +238,11 @@ $hhead = sendhelp("{$user->project} - Card View","card view");
 $blist = "";
 foreach ($user->bids as $k => $v) {
 	if ($v["selected"]) {
-		$blist .= " ".senddesc($v["batch"],$k,"batch")."\n";
+		$blist	.= " ".senddesc($v["batch"],$k,"batch")
+			.ahref("#bid_".$v["bid"],$xshown)."\n";
 	}
 }
+
 $bselect_top = "";
 $bselect_bot = "";
 if ($view->is_edit()
@@ -273,7 +275,8 @@ span("","id=\"togcard_def\" class=".(($view->body == "full")
 span(span((($view->body == "full") ? "Hide" : "Show"),"id=\"togcard\"")
 	." All ","class=\"noprint\""),
 "class=\"nonprint\" onclick=\"javascript:hidecardall('togcard')\"")
-."Batches: $blist","class=\"h_batch\""))
+.aname("bid__","Batches: ")
+.$blist,"class=\"h_batch\""))
 	.$bselect_top
 	.row(cell($view->string_cards($cards,$check_all)))
 	.$bselect_bot

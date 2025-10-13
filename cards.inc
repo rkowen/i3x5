@@ -6,6 +6,8 @@
 	include_once	"common.inc";
 
 	$form_color	= "#D0D0D0";
+	$xtop		=
+	"<span style=\"font-size: larger\">&blacktriangle;</span>";
 	$xhidden	=
 	"<span style=\"font-size: larger\">&blacktriangleright;</span>";
 	$xshown		=
@@ -171,6 +173,9 @@ END;
 	}
 	function ahref($href, $q, $op="") {
 		return "<a href=\"$href\" $op>$q</a>\n";
+	}
+	function aname($name, $q) {
+		return span($q, "id=\"".$name."\"");
 	}
 	function pre($q, $op="") {
 		if ($op == "t") {

@@ -241,6 +241,7 @@ function string_cards(&$cards, $check_all = false) {
 	global $user;
 	global $level_write;
 	global $db;
+	global $xtop;
 
 //	$entrytableopt = "border=1 width=100% cellpadding=4";
 	$entrytableopt = "class=\"cardview\"";
@@ -330,8 +331,11 @@ if ($this->edit == "edit" && count(array_keys($user->bids))) {
 		|| $bheader != $user->bids[$v["bid"]]["batch"])) {
 			$bheader = $user->bids[$v["bid"]]["batch"];
 			$text .= row(cell(
-			table( row( cell( senddesc($bheader,$v["bid"],"batch"),
-			"class=\"h_batch\" id=\"left\" colspan=5"))
+			table( row( cell(
+				aname("bid_".$v["bid"],
+				senddesc($bheader,$v["bid"],"batch")
+				.ahref("#bid__",$xtop)),
+				"class=\"h_batch\" id=\"left\" colspan=5"))
 				,$entrytableopt)))."\n";
 		}
 if ($this->edit == "list") {					/* list */
@@ -566,10 +570,10 @@ function card_cmp($a, $b) {
 	if ($view->group == "batch") {	// sort by batch name
 		if (	$user->bids[$a["bid"]]["batch"] >
 			$user->bids[$b["bid"]]["batch"]) {
-			return $less;
+			return $more;
 		}elseif($user->bids[$a["bid"]]["batch"] <
 			$user->bids[$b["bid"]]["batch"]) {
-			return $more;
+			return $less;
 		}
 	}
 	if ($view->key == "num") {		// sort by number
