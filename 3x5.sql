@@ -85,8 +85,8 @@ CREATE TABLE i3x5_userpass (
 	challenge	TEXT,			-- secure reminder
 	response	TEXT,			-- secure authentication
 	crypthint	TEXT,			-- hint for project encryption
-	createdate	timestamp DEFAULT now(),
-	moddate		timestamp DEFAULT now(),
+	createdate	timestamp DEFAULT NOW(),
+	moddate		timestamp DEFAULT NOW(),
 	PRIMARY KEY(uid)
 );
 
@@ -110,8 +110,8 @@ CREATE TABLE i3x5_batch (
 	card_help	TEXT DEFAULT 'nothing helpful',	
 					-- card field helpful description
 	encrypted	BOOLEAN	DEFAULT false,	-- encrypt entire card batch
-	createdate	timestamp DEFAULT now(),
-	moddate		timestamp DEFAULT now(),
+	createdate	timestamp DEFAULT NOW(),
+	moddate		timestamp DEFAULT NOW(),
 	PRIMARY KEY(bid),
 	FOREIGN KEY(uid) REFERENCES i3x5_userpass(uid)
 );
@@ -127,8 +127,8 @@ CREATE TABLE i3x5_cards (
 	xcard		BYTEA,		-- encrypted card contents
 	formatted	BOOLEAN DEFAULT false,	-- use <PRE> formatting
 	encrypted	BOOLEAN	DEFAULT false,	-- encrypt this card
-	createdate	timestamp DEFAULT now(),
-	moddate		timestamp DEFAULT now(),
+	createdate	timestamp DEFAULT NOW(),
+	moddate		timestamp DEFAULT NOW(),
 	PRIMARY KEY (id),
 	FOREIGN KEY(bid) REFERENCES i3x5_batch(bid)
 );
@@ -154,7 +154,7 @@ DROP FUNCTION uf_cards();
 CREATE OR REPLACE FUNCTION uf_userpass()
 RETURNS TRIGGER AS '
 BEGIN
-	NEW.moddate:=now();
+	NEW.moddate:=NOW();
 	RETURN NEW;
 END;
 ' LANGUAGE 'plpgsql';
@@ -166,7 +166,7 @@ CREATE TRIGGER ut_userpass BEFORE UPDATE
 CREATE OR REPLACE FUNCTION uf_batch()
 RETURNS TRIGGER AS '
 BEGIN
-	NEW.moddate:=now();
+	NEW.moddate:=NOW();
 	RETURN NEW;
 END;
 ' LANGUAGE 'plpgsql';
@@ -183,7 +183,7 @@ BEGIN
 	OR NEW.card <> OLD.card
 	OR NEW.xcard <> OLD.xcard
 	THEN
-		NEW.moddate:=now();
+		NEW.moddate:=NOW();
 	END IF;
 	RETURN NEW;
 END;
@@ -214,9 +214,9 @@ SECURITY DEFINER;
 --NOCREATEDB NOCREATEUSER;
 --
 ---- i3x5 Card administrator
-INSERT INTO i3x5_userpass
-	(uid,username,passwd_admin,author,email) VALUES
-	(0,'root','dogstar','R.K. Owen,Ph.D.','rk@owen.sj.ca.us');
+--INSERT INTO i3x5_userpass
+--	(uid,username,passwd_admin,author,email) VALUES
+--	(0,'root','dogstar','R.K. Owen,Ph.D.','dr.rk.owen@gmail.com');
 
 GRANT SELECT,INSERT,UPDATE,DELETE ON i3x5_cards TO "www-data";
 GRANT SELECT,INSERT,UPDATE,DELETE ON i3x5_batch TO "www-data";
