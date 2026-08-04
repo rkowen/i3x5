@@ -210,7 +210,7 @@ SECURITY DEFINER;
 
 --
 --CREATE USER "www-data"
---WITH PASSWORD cardaccess
+--WITH PASSWORD 'cardaccess'
 --NOCREATEDB NOCREATEUSER;
 --
 ---- i3x5 Card administrator

@@ -56,13 +56,22 @@ procedural language manually with something like:
 Read src/pl/plpgsql/src/INSTALL in the PostgreSQL sources for further
 info.
 
+A necessary package is pgcrypto which is found in the Ubuntu postgres-contrib
+package.
+
+To make yourself a superuser
+	createuser --superuser --inherit --createdb --createrole  my_uname
+
+or after the fact
+	ALTER USER my_uname WITH SUPERUSER INHERIT CREATEDB CREATEROLE;
+
 Create the database with (must be a user that can do this ... if
 not as yourself, then as the postgres user.)
 	createdb i3x5
 
 Create a user "www-data", the default user the httpd daemon user,
 which will be given access to the i3x5 schema:
-	createuser -D -A www-data
+	createuser -D www-data
 
 Create tables by starting the PostgreSQL interactive terminal
 and invoking the sql scripts.  The prompt is given as "i3x5=#".
