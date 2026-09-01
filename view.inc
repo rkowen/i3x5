@@ -301,6 +301,8 @@ if ($this->edit == "edit" && count(array_keys($user->bids))) {
 	,"class=\"cardview\"")))."\n";
 //}
 }
+	$bn = $db->bids_num($user->uid);
+
 	foreach ($cards as $k => $v) {
 		$c_nrid = $v["nrid"];
 		$c_rid = $v["rid"];
@@ -329,14 +331,21 @@ if ($this->edit == "edit" && count(array_keys($user->bids))) {
 		if (($this->group == "batch")
 		&& ((! isset($bheader))
 		|| $bheader != $user->bids[$v["bid"]]["batch"])) {
+			$bk = $bn[$v["bid"]];
+			$bcount = "Total: ".$bk["num"]
+				.", Related: ".$bk["numrid"]
+				.", Crypted: ".$bk["numcryp"];
 			$bheader = $user->bids[$v["bid"]]["batch"];
 			$text .= row(cell(
 			table( row( cell(
 				aname("bid_".$v["bid"],
 				senddesc($bheader,$v["bid"],"batch")
 				.ahref("#bid__",$xtop)),
-				"class=\"h_batch\" id=\"left\" colspan=5"))
-				,$entrytableopt)))."\n";
+			"class=\"h_batch\" id=\"left\" colspan=3")
+				.cell($bcount,
+			"class=\"h_batch\" id=\"right\" colspan=2")
+				)
+			,$entrytableopt)))."\n";
 		}
 if ($this->edit == "list") {					/* list */
 	$card = $this->br($v["card"]);

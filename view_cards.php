@@ -238,8 +238,13 @@ $hhead = sendhelp("{$user->project} - Card View","card view");
 $blist = "";
 foreach ($user->bids as $k => $v) {
 	if ($v["selected"]) {
+		if ($view->group == "batch") {
+			$bhref = ahref("#bid_".$v["bid"],$xshown);
+		} else {
+			$bhref = "";
+		}
 		$blist	.= " ".senddesc($v["batch"],$k,"batch")
-			.ahref("#bid_".$v["bid"],$xshown)."\n";
+			.$bhref."\n";
 	}
 }
 
